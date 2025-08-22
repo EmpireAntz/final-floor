@@ -1,0 +1,1454 @@
+fileFormatVersion: 2
+guid: bcd139ab82b52ed429522e3025fc7d19
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 100
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Icon Atlas Black_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2fec383317e7b8449c1123be649ad4b
+      internalID: 1879822496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdac761c7cb74a047bde90c9ffda3647
+      internalID: 1005401596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82ac05c15a0bca44085b9562e3f547d6
+      internalID: 941470603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f169d76146cf3364897bd9904a228090
+      internalID: 204811475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0b8883271be63c44a683121eabd23df
+      internalID: -669458366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_5
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0090c9c3c44062644a58923e5f09eaff
+      internalID: -2058218003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_6
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b050307250b67d14187cd3143bb64227
+      internalID: 588345364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_7
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad1f2d7abe37b934bbc23a7215950b08
+      internalID: -719374761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3359c330dab663b49a9c5b56ed186d0f
+      internalID: -1451065279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_9
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebaa28bf87caa3f4488c822eb31c1adb
+      internalID: -991280671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_10
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7097365d3f0d78e4ab4194beb22f87ea
+      internalID: 17139489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_11
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb9cb17301f55be439b53a13b1bfcf89
+      internalID: -1272763029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_12
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bea54ddd3ea01804bbc17c7823230db3
+      internalID: -262726199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_13
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed7e6be9c7c7d384495f7136c068a2c9
+      internalID: -1752361694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_14
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d41a2eb5b7499f74b8a3c9dfdf3e6062
+      internalID: 1916563600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_15
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1153c9a00d24c944e967e426350b43ba
+      internalID: 1415154200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 738365a76d93c8d4cb7ddbcda95239f4
+      internalID: 2030367771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_17
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 333ed80ede30bc94a84e1937b32985dc
+      internalID: 81777891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_18
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55a45bed023192d4f9d94aeecfcd442f
+      internalID: 332199494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_19
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b2fa37db133ced4681a2d5a179c40d6
+      internalID: 380555548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_20
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30aad3ade123a314399d12e0009e47f1
+      internalID: -1804559106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_21
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22f322d53cd0ffb4aabb0431a1fe9e40
+      internalID: -1131943335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_22
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a91c113c25a33b4468f96a3452294998
+      internalID: -571279509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_23
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7501aaf500daa354ab5555c6cbcf7c28
+      internalID: -1503736595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3d0ab8cafb9c2b49a319891cfb09bb0
+      internalID: 1378794036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_25
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92d34faa4a7a51e4bb767a583d03fcfd
+      internalID: -1669709475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_26
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf98c7434da84b045b5e93b4fa73c2bb
+      internalID: -1831140858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_27
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31c2205a2d09bf34f815e4d807782f6b
+      internalID: 1941720294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_28
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56131f0b6892e9d4b95b496577f730a2
+      internalID: 1266016023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_29
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3773d54f9e864fc4b8a0a17fa010b6e0
+      internalID: -483008573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_30
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2617eb098e278f4e9eb0570bc94b1a6
+      internalID: -1594825802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_31
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dca5b3e01f948964d95715276547244a
+      internalID: -658916937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5b7e4c6a6fc2594492a3b3b75faca9c
+      internalID: -1044226465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_33
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6f7a3c0e5e17b246b88bfd21a6ca035
+      internalID: 412909735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_34
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de0856ad7e4774644aafc35171df0150
+      internalID: -44967523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_35
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34223b7a0b9eb624a9a79f2bfe62cac4
+      internalID: 1876776402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_36
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af1c0ad5d8ab8c147920db0fbca33c8c
+      internalID: -527450593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_37
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61398f8c83e998a4d94830012756b1c8
+      internalID: -1368167899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_38
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92b294fd42c403d4fb20c36013c9bf23
+      internalID: 265469675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_39
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef2bf551483e6b04483c7f1a052488a5
+      internalID: 670840118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97479f45a056db74f8117b476fa20879
+      internalID: -1801005302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_41
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d7321fdc370b024f92929ebf9754e9a
+      internalID: -359128403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_42
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d213628097213ed4eaeead8d0e22f729
+      internalID: 289875238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_43
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dd2a1b143546f7478a3850eccbafbbf
+      internalID: 1027311041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_44
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89157d7fd3578e24096b3315f6818c46
+      internalID: 176896370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_45
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fd0a0b194966f547be4b9f0361c14a6
+      internalID: 1830118831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_46
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1353bb6365ffee54c9926db4fc094dce
+      internalID: 1969769048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_47
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7137e17c2a16ded46bdc43c8fac6569d
+      internalID: -682821560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4666bb9602e18554788717b9298f083e
+      internalID: -941529643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_49
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6aa2bfa13cd86d24db4b406295523427
+      internalID: 1553792317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_50
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2440c6c860ca83e4696073151c609335
+      internalID: 2097749299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_51
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b938d28539f23e0408a18037f5865064
+      internalID: -505912461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_52
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df8ebc7c7ea668947928cf5a491d7d4f
+      internalID: -2053125015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_53
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f4fa02a9d0adb2469ea6c0681b633b9
+      internalID: 1088396308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_54
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98601ee2f45dce046aafb7cafeebf57f
+      internalID: 1208563371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_55
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e397d1c6efb47c641881875992052801
+      internalID: -1172752500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4babe7feff3087f43a87cd0fc565d06b
+      internalID: 1256812624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_57
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 234856adaf5594348becf60ffd8a2a94
+      internalID: 1130960823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_58
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 957e90b7ecf7d8d408f43e60b990d97f
+      internalID: 1783728152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas Black_59
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d80b8c8e3cffdf4c8d70a204f9414ef
+      internalID: 191116195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Icon Atlas Black_0: 1879822496
+      Icon Atlas Black_1: 1005401596
+      Icon Atlas Black_10: 17139489
+      Icon Atlas Black_11: -1272763029
+      Icon Atlas Black_12: -262726199
+      Icon Atlas Black_13: -1752361694
+      Icon Atlas Black_14: 1916563600
+      Icon Atlas Black_15: 1415154200
+      Icon Atlas Black_16: 2030367771
+      Icon Atlas Black_17: 81777891
+      Icon Atlas Black_18: 332199494
+      Icon Atlas Black_19: 380555548
+      Icon Atlas Black_2: 941470603
+      Icon Atlas Black_20: -1804559106
+      Icon Atlas Black_21: -1131943335
+      Icon Atlas Black_22: -571279509
+      Icon Atlas Black_23: -1503736595
+      Icon Atlas Black_24: 1378794036
+      Icon Atlas Black_25: -1669709475
+      Icon Atlas Black_26: -1831140858
+      Icon Atlas Black_27: 1941720294
+      Icon Atlas Black_28: 1266016023
+      Icon Atlas Black_29: -483008573
+      Icon Atlas Black_3: 204811475
+      Icon Atlas Black_30: -1594825802
+      Icon Atlas Black_31: -658916937
+      Icon Atlas Black_32: -1044226465
+      Icon Atlas Black_33: 412909735
+      Icon Atlas Black_34: -44967523
+      Icon Atlas Black_35: 1876776402
+      Icon Atlas Black_36: -527450593
+      Icon Atlas Black_37: -1368167899
+      Icon Atlas Black_38: 265469675
+      Icon Atlas Black_39: 670840118
+      Icon Atlas Black_4: -669458366
+      Icon Atlas Black_40: -1801005302
+      Icon Atlas Black_41: -359128403
+      Icon Atlas Black_42: 289875238
+      Icon Atlas Black_43: 1027311041
+      Icon Atlas Black_44: 176896370
+      Icon Atlas Black_45: 1830118831
+      Icon Atlas Black_46: 1969769048
+      Icon Atlas Black_47: -682821560
+      Icon Atlas Black_48: -941529643
+      Icon Atlas Black_49: 1553792317
+      Icon Atlas Black_5: -2058218003
+      Icon Atlas Black_50: 2097749299
+      Icon Atlas Black_51: -505912461
+      Icon Atlas Black_52: -2053125015
+      Icon Atlas Black_53: 1088396308
+      Icon Atlas Black_54: 1208563371
+      Icon Atlas Black_55: -1172752500
+      Icon Atlas Black_56: 1256812624
+      Icon Atlas Black_57: 1130960823
+      Icon Atlas Black_58: 1783728152
+      Icon Atlas Black_59: 191116195
+      Icon Atlas Black_6: 588345364
+      Icon Atlas Black_7: -719374761
+      Icon Atlas Black_8: -1451065279
+      Icon Atlas Black_9: -991280671
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 285331
+  packageName: Game Weapon Icons Package
+  packageVersion: 1.0.1
+  assetPath: Assets/Navidtbt/Game Weapon Icon Pack/Optimized Atlases/Icon Atlas Black.png
+  uploadId: 665037

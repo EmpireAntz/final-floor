@@ -1,0 +1,1454 @@
+fileFormatVersion: 2
+guid: 7161dacd95f877846aef5e77f65453dc
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 100
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Icon Atlas White_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a890e5777156b724f9304f71c433ab55
+      internalID: 1317680634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2bc9b4f57bb555458ce56220e680a48
+      internalID: -650303114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99be4b519dfb9294fb66e56f691a4ae6
+      internalID: 587671329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faf7bda771482f845ae744bd28548063
+      internalID: 515281487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eeafe1445b60b3d4fa3b1eb57bb13864
+      internalID: 792964351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_5
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44460aa2460a9504f937cc6a8398449b
+      internalID: -1373422149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_6
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac43583c8e7712e46af94d66062a9c9e
+      internalID: -496277932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_7
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1797
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecc4553108e5c6b4aaed6ba2faea6dab
+      internalID: 581027435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a63a42eef9cb6774a8a29f4befd50ed6
+      internalID: 379687369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_9
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0feeb11a1dd5d1b4190263d4232bfc71
+      internalID: 1679640958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_10
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e032fd30586d3d5458a2fbf018d9bc0c
+      internalID: -60736277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_11
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa4897da36e431a4e9233bbdfaff6607
+      internalID: -1204573271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_12
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48d6eeab96defe74abc54a3215a4ec45
+      internalID: 1086489846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_13
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a788dc465dae5ba4f887286e91cb027d
+      internalID: 1326139453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_14
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33e206622ddfc434dab2bb3c9407b4fc
+      internalID: -545542539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_15
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1541
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef37f8772b618ac4687d382b03a64720
+      internalID: -719454742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d230bd26edbdaaf43acdc6e24996d9cd
+      internalID: 1453293564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_17
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 429a24f24e42c5949b319380d69323c6
+      internalID: -293634600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_18
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed95696470c178c4eb87196f8aac73b8
+      internalID: 1277439487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_19
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35d91cf9e8561ff45b88da716c70da7b
+      internalID: -977626794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_20
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c683dc0f0015c93458f6a7213a141ded
+      internalID: 1822661910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_21
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8da601c65692d774982ad3c0a8eaa580
+      internalID: -1383733062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_22
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b991559975c2463468ea229a9e099f3c
+      internalID: 1295152383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_23
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1285
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 746dbd2e26364ce48b8674b82c90713c
+      internalID: -1032084677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a11b71114898ac4581e8773b6a1d3c0
+      internalID: 87029401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_25
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a9c45ae0e3edc6429268d6c1b62f73e
+      internalID: 698661860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_26
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 227552f938511b84084a4a2528ffd877
+      internalID: -96913757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_27
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee8891fce3b263469fc98e6c1fc6112
+      internalID: -1196542907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_28
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00ffad3491ec812418977e623ba489f0
+      internalID: 451001799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_29
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2420780691222374199e4cccea036ccd
+      internalID: 616656464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_30
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e94940cca31ba249940ed80be41290f
+      internalID: -4176427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_31
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1029
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d14a0a9b29c6d2640bc973c091c814ad
+      internalID: -1842831286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab7b244e4c905544bb8965aecf1f81d0
+      internalID: -111436867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_33
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48f207dce7fd8cf4c81cd3083897f802
+      internalID: -1521336587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_34
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2de6b1687f416124db9e4b768d78099b
+      internalID: -1315800724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_35
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 088634da778450747b57886e99d02064
+      internalID: -958974443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_36
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fe008df4b63b2e4eb25c8d43dae26f2
+      internalID: -108021382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_37
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14f2e2182660f5f4aac3538fc853d515
+      internalID: -2039373255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_38
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c27c129fdce9d184ab121cb5951c0096
+      internalID: 703615106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_39
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 773
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 621814a9f23dff34990579b19ffc0bba
+      internalID: 1861186621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 506b23a9610715941b947b3c659c313a
+      internalID: 1077826628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_41
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 473700b6b3807da4ab537234ae9872be
+      internalID: -33048257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_42
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22aa31c57085cd84280d6fa6d2ea8536
+      internalID: 1251856754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_43
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75f3de30a10dc7a41ac193f8d602f4f7
+      internalID: 994519297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_44
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a65e5b85cb5c5744685b5ad66e08e77b
+      internalID: -1237241306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_45
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b33082030d97f5b498fcb9ef26f494eb
+      internalID: -930760576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_46
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4f436666ffb4294585c64f61d08bf83
+      internalID: 1250639029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_47
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 517
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deb78b7c1e6947e419afd0be1b77ccdf
+      internalID: -1606057932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f6a13e162842a74abeaccb6c40a9ca4
+      internalID: 2125249824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_49
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b98058b6f8a3ee4285cb7f484c0a127
+      internalID: 2006618091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_50
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 198450a212fb8694aaba08f8e26c4c24
+      internalID: 412620288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_51
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad61d0a573b4e5a40a5c90e7aa081480
+      internalID: -1394703129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_52
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57e853fd16734204ebba4ca086205be6
+      internalID: 847007742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_53
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ec56ef95d6b1c449bd344d5b1d81915
+      internalID: 2135890291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_54
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57e9c0442da30964ab3c1421cb07a374
+      internalID: 450851685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_55
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 261
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 188225d16ad31d34eb50a21941440a78
+      internalID: -58830903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17da1ddf76699c948abe740f9eed9e9c
+      internalID: 201082139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_57
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20afd9a2a982c6949911df6baa73eac3
+      internalID: 1552042863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_58
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c372b0a6e2a5016459d19f91c439d93a
+      internalID: -1254495057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon Atlas White_59
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 5
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f0168ac1658c6e49a12fc9ee0761d79
+      internalID: 1491982506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Icon Atlas White_0: 1317680634
+      Icon Atlas White_1: -650303114
+      Icon Atlas White_10: -60736277
+      Icon Atlas White_11: -1204573271
+      Icon Atlas White_12: 1086489846
+      Icon Atlas White_13: 1326139453
+      Icon Atlas White_14: -545542539
+      Icon Atlas White_15: -719454742
+      Icon Atlas White_16: 1453293564
+      Icon Atlas White_17: -293634600
+      Icon Atlas White_18: 1277439487
+      Icon Atlas White_19: -977626794
+      Icon Atlas White_2: 587671329
+      Icon Atlas White_20: 1822661910
+      Icon Atlas White_21: -1383733062
+      Icon Atlas White_22: 1295152383
+      Icon Atlas White_23: -1032084677
+      Icon Atlas White_24: 87029401
+      Icon Atlas White_25: 698661860
+      Icon Atlas White_26: -96913757
+      Icon Atlas White_27: -1196542907
+      Icon Atlas White_28: 451001799
+      Icon Atlas White_29: 616656464
+      Icon Atlas White_3: 515281487
+      Icon Atlas White_30: -4176427
+      Icon Atlas White_31: -1842831286
+      Icon Atlas White_32: -111436867
+      Icon Atlas White_33: -1521336587
+      Icon Atlas White_34: -1315800724
+      Icon Atlas White_35: -958974443
+      Icon Atlas White_36: -108021382
+      Icon Atlas White_37: -2039373255
+      Icon Atlas White_38: 703615106
+      Icon Atlas White_39: 1861186621
+      Icon Atlas White_4: 792964351
+      Icon Atlas White_40: 1077826628
+      Icon Atlas White_41: -33048257
+      Icon Atlas White_42: 1251856754
+      Icon Atlas White_43: 994519297
+      Icon Atlas White_44: -1237241306
+      Icon Atlas White_45: -930760576
+      Icon Atlas White_46: 1250639029
+      Icon Atlas White_47: -1606057932
+      Icon Atlas White_48: 2125249824
+      Icon Atlas White_49: 2006618091
+      Icon Atlas White_5: -1373422149
+      Icon Atlas White_50: 412620288
+      Icon Atlas White_51: -1394703129
+      Icon Atlas White_52: 847007742
+      Icon Atlas White_53: 2135890291
+      Icon Atlas White_54: 450851685
+      Icon Atlas White_55: -58830903
+      Icon Atlas White_56: 201082139
+      Icon Atlas White_57: 1552042863
+      Icon Atlas White_58: -1254495057
+      Icon Atlas White_59: 1491982506
+      Icon Atlas White_6: -496277932
+      Icon Atlas White_7: 581027435
+      Icon Atlas White_8: 379687369
+      Icon Atlas White_9: 1679640958
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 285331
+  packageName: Game Weapon Icons Package
+  packageVersion: 1.0.1
+  assetPath: Assets/Navidtbt/Game Weapon Icon Pack/Optimized Atlases/Icon Atlas White.png
+  uploadId: 665037
