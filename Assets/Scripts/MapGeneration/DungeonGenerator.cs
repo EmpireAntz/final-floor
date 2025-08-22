@@ -55,6 +55,9 @@ public class DungeonGenerator : MonoBehaviour
     private Transform startRoomInstance;
     private readonly List<Transform> allRoomInstances = new List<Transform>();
 
+    // NEW: keep a reference to each spawned RoomBehaviour (index = i + j * size.x)
+    private RoomBehaviour[] roomRefs;
+
     void Start()
     {
         MazeGenerator();
@@ -64,6 +67,9 @@ public class DungeonGenerator : MonoBehaviour
     {
         startRoomInstance = null;
         allRoomInstances.Clear();
+
+        // NEW: allocate room reference array
+        roomRefs = new RoomBehaviour[size.x * size.y];
 
         for (int i = 0; i < size.x; i++)
         {
@@ -101,6 +107,9 @@ public class DungeonGenerator : MonoBehaviour
 
                 allRoomInstances.Add(roomGO.transform);
                 if (idx == startPos) startRoomInstance = roomGO.transform;
+
+                // NEW: remember this room for deduplication
+                roomRefs[idx] = roomBehaviour;
             }
         }
 
@@ -144,6 +153,9 @@ public class DungeonGenerator : MonoBehaviour
             player.position = spawnPos + Vector3.up * 0.02f;
             if (cc) cc.enabled = true;
         }
+
+        // NEW: remove overlapping door leaves (keep one per shared doorway)
+        DeduplicateSharedDoors();
 
         // ---------- spawn boxes after rooms & player ----------
         SpawnBoxesInRooms();
@@ -385,5 +397,46 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         return hasAny;
+    }
+
+    // NEW: keep only one door leaf per shared doorway.
+    // Rule: the LEFT/UP room "owns" the door; RIGHT/DOWN neighbor disables theirs.
+    void DeduplicateSharedDoors()
+    {
+        if (roomRefs == null || board == null) return;
+
+        for (int y = 0; y < size.y; y++)
+        for (int x = 0; x < size.x; x++)
+        {
+            int idx = x + y * size.x;
+            if (!board[idx].visited) continue;
+
+            var room = roomRefs[idx];
+            if (room == null) continue;
+
+            // status indices: 0 Up, 1 Down, 2 Right, 3 Left
+
+            // If connected RIGHT, disable the LEFT door on the right neighbor.
+            if (board[idx].status[2] && x + 1 < size.x)
+            {
+                int rightIdx = (x + 1) + y * size.x;
+                if (board[rightIdx].visited && roomRefs[rightIdx] != null)
+                {
+                    room.SetDoorEnabled(2, true);               // ensure THIS room keeps its Right leaf
+                    roomRefs[rightIdx].SetDoorEnabled(3, false); // neighbor loses its Left leaf
+                }
+            }
+
+            // If connected DOWN, disable the UP door on the below neighbor.
+            if (board[idx].status[1] && y + 1 < size.y)
+            {
+                int downIdx = x + (y + 1) * size.x;
+                if (board[downIdx].visited && roomRefs[downIdx] != null)
+                {
+                    room.SetDoorEnabled(1, true);               // ensure THIS room keeps its Down leaf
+                    roomRefs[downIdx].SetDoorEnabled(0, false);  // neighbor loses its Up leaf
+                }
+            }
+        }
     }
 }
