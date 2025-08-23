@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Sprint Camera")]
     public Camera playerCamera;                   
-    public float sprintFOVBoost = 7f;              // added FOV when sprinting
+    public float sprintFOVBoost = 7f;// added FOV when sprinting
     public float fovLerpSpeed = 8f;
     private float _baseFOV;
 
@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     readonly int HashSpeed = Animator.StringToHash("Speed");
     readonly int HashIsJumping = Animator.StringToHash("isJumping");
     readonly int HashIsSprinting = Animator.StringToHash("isSprinting");
+    readonly int HashMoveX = Animator.StringToHash("MoveX");
+    readonly int HashMoveZ = Animator.StringToHash("MoveZ");
 
     void Awake()
     {
@@ -63,18 +65,21 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && velocity.y < 0f)
             velocity.y = -2f;
 
-        // ----- Horizontal movement (skip if punching) -----
-        float x = 0f, z = 0f;
+        // ----- Horizontal input (Diagonal Normalize) -----
+        float ix = 0f, iz = 0f; //local input x/z
         if (!blockMove)
         {
-            if (Keyboard.current.aKey.isPressed) x = -1f;
-            if (Keyboard.current.dKey.isPressed) x = 1f;
-            if (Keyboard.current.wKey.isPressed) z = 1f;
-            if (Keyboard.current.sKey.isPressed) z = -1f;
+            bool a = Keyboard.current.aKey.isPressed;
+            bool d = Keyboard.current.dKey.isPressed;
+            bool w = Keyboard.current.wKey.isPressed;
+            bool s = Keyboard.current.sKey.isPressed;
+
+            ix = (d ? 1f : 0f) + (a ? -1f : 0f); // right(+), left(-)
+            iz = (w ? 1f : 0f) + (s ? -1f : 0f); // forward(+), back(-)
         }
 
         // Normalize so diagonals aren't faster
-        Vector3 input = new Vector3(x, 0f, z);
+        Vector3 input = new Vector3(ix, 0f, iz);
         Vector3 move = (transform.right * input.x + transform.forward * input.z);
         if (move.sqrMagnitude > 1f) move.Normalize();
 
@@ -92,7 +97,9 @@ public class PlayerMovement : MonoBehaviour
         // Move horizontally
         controller.Move(move * currentSpeed * Time.deltaTime);
 
-        // Animator(force 0 while punching so idle plays)
+        // Animator params 
+        animator.SetFloat(HashMoveX, blockMove ? 0f : input.x, 0.1f, Time.deltaTime); // Strafe
+        animator.SetFloat(HashMoveZ, blockMove ? 0f : input.z, 0.1f, Time.deltaTime); //Forward/Back
         animator.SetFloat(HashSpeed, blockMove ? 0f : Mathf.Clamp01(move.magnitude));
         animator.SetBool(HashIsSprinting, isSprinting);
 
@@ -115,8 +122,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (afterMoveGround && !wasGroundedPrev && animator.GetBool(HashIsJumping))
             animator.SetBool(HashIsJumping, false);
-        
-        if (playerCamera != null)                                                    // NEW
+            
+        // ----- Sprint FOV effect -----
+        if (playerCamera != null)
         {
             float targetFOV = _baseFOV + (isSprinting ? sprintFOVBoost : 0f);
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * fovLerpSpeed);

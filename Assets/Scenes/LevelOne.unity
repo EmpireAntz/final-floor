@@ -1394,10 +1394,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce55a5bbab2aaa84c93f66c2612cf87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 2.5
+  speed: 2.7
   gravity: -19.62
   jumpHeight: 1.5
-  sprintMultiplier: 2
+  sprintMultiplier: 1.8
   sprintOnlyOnGround: 1
   playerCamera: {fileID: 330585545}
   sprintFOVBoost: 7
