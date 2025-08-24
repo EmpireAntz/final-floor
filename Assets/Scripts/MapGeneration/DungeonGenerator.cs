@@ -148,10 +148,19 @@ public class DungeonGenerator : MonoBehaviour
                 spawnPos.y = 0f;
             }
 
+            // --- face an open doorway of the start cell ---
+            Vector3 faceDir = GetFacingTowardOpenDoor(spawnPos);
+            Quaternion lookRot = Quaternion.LookRotation(faceDir, Vector3.up);
+
             var cc = player.GetComponent<CharacterController>();
             if (cc) cc.enabled = false;
-            player.position = spawnPos + Vector3.up * 0.02f;
+            player.SetPositionAndRotation(spawnPos + Vector3.up * 0.02f, lookRot);
             if (cc) cc.enabled = true;
+
+            // sync mouse look to this rotation so it doesn't snap back to 0°
+            var look = FindObjectOfType<MouseMovement>();
+            if (look) look.SyncToTransforms();
+
         }
 
         // NEW: remove overlapping door leaves (keep one per shared doorway)
@@ -439,4 +448,51 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
+
+    // World center of a cell by linear index (matches your placement new Vector3(i*offset.x, 0, -j*offset.y))
+    Vector3 CellCenterWorld(int idx)
+    {
+        int x = idx % size.x;
+        int y = idx / size.x;
+        return new Vector3(
+            x * offset.x + 0.5f * offset.x,
+            0f,
+            -y * offset.y - 0.5f * offset.y
+        );
+    }
+
+    // Pick a facing direction from the start cell's OPEN sides (status[0..3]) toward the nearest doorway midpoint
+    Vector3 GetFacingTowardOpenDoor(Vector3 fromPos)
+    {
+        // start cell center
+        Vector3 center = CellCenterWorld(startPos);
+        bool[] s = board[startPos].status;
+
+        // Your grid mapping (because z = -j * offset.y):
+        // Up => +Z, Down => -Z, Right => +X, Left => -X.
+        // Use midpoints on each edge as aim targets.
+        var targets = new System.Collections.Generic.List<Vector3>(4);
+        if (s[0]) targets.Add(center + new Vector3(0f, 0f,  0.5f * offset.y)); // Up
+        if (s[1]) targets.Add(center + new Vector3(0f, 0f, -0.5f * offset.y)); // Down
+        if (s[2]) targets.Add(center + new Vector3( 0.5f * offset.x, 0f, 0f)); // Right
+        if (s[3]) targets.Add(center + new Vector3(-0.5f * offset.x, 0f, 0f)); // Left
+
+        // Choose the nearest open edge to where we're spawning
+        float best = float.PositiveInfinity;
+        Vector3 bestDir = Vector3.forward; // default
+        foreach (var t in targets)
+        {
+            Vector3 dir = t - fromPos;
+            dir.y = 0f;
+            float d2 = dir.sqrMagnitude;
+            if (d2 > 0.0001f && d2 < best)
+            {
+                best = d2;
+                bestDir = dir.normalized;
+            }
+        }
+
+        return bestDir;
+    }
+
 }

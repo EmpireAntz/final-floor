@@ -4,38 +4,69 @@ using UnityEngine.InputSystem;
 public class MouseMovement : MonoBehaviour
 {
     [Header("References")]
-    public Transform playerRoot;     // The body that should yaw (usually the Player object)
-    public Transform cameraPivot;    // Empty parent of the Camera that should pitch
+    public Transform playerRoot;     // yaw on this (body)
+    public Transform cameraPivot;    // pitch on this (parent of Camera)
 
     [Header("Look Settings")]
-    public float mouseSensitivity = 0.12f; // tune to taste; no Time.deltaTime for mouse delta
+    public float mouseSensitivity = 0.12f;
     public float maxPitchUp = 70f;
     public float maxPitchDown = 80f;
 
-    float yaw;    // around Y (body)
-    float pitch;  // around X (camera only)
+    float yaw;    // degrees around Y
+    float pitch;  // degrees around X
+    bool _syncedOnce;
 
-    void Start()
+    void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    void OnEnable()  { SyncToTransforms(); }   // in case this enables after spawn
+    void Start()     { SyncToTransforms(); }   // double safety
+
+    // Call this if you ever programmatically rotate the player/camera
+    public void SyncToTransforms()
+    {
+        if (playerRoot) yaw = playerRoot.eulerAngles.y;
+        if (cameraPivot) pitch = NormalizeAngle(cameraPivot.localEulerAngles.x);
+        _syncedOnce = true;
     }
 
     void Update()
     {
         if (Mouse.current == null) return;
 
-        // Mouse delta is pixels THIS FRAME; no Time.deltaTime needed
         Vector2 md = Mouse.current.delta.ReadValue() * mouseSensitivity;
 
-        // Yaw the player root (keeps feet planted)
-        yaw += md.x;
-        if (playerRoot != null)
-            playerRoot.rotation = Quaternion.Euler(0f, yaw, 0f);
+        // If some other script rotated us and the mouse hasn't moved yet, resync once
+        if (!_syncedOnce && Mathf.Approximately(md.x, 0f) && playerRoot)
+        {
+            yaw = playerRoot.eulerAngles.y;
+        }
+        if (!_syncedOnce && Mathf.Approximately(md.y, 0f) && cameraPivot)
+        {
+            pitch = NormalizeAngle(cameraPivot.localEulerAngles.x);
+        }
+        if (!Mathf.Approximately(md.x, 0f) || !Mathf.Approximately(md.y, 0f))
+            _syncedOnce = true;
 
-        // Pitch the camera pivot only
+        // Accumulate look
+        yaw += md.x;
         pitch -= md.y;
         pitch = Mathf.Clamp(pitch, -maxPitchDown, maxPitchUp);
-        if (cameraPivot != null)
+
+        // Apply
+        if (playerRoot)
+            playerRoot.rotation = Quaternion.Euler(0f, yaw, 0f);
+        if (cameraPivot)
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+    }
+
+    static float NormalizeAngle(float a)
+    {
+        a %= 360f;
+        if (a > 180f) a -= 360f;
+        return a;
     }
 }
