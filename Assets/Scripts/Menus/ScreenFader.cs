@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,15 +11,19 @@ public class ScreenFader : MonoBehaviour
     [Header("Defaults")]
     [Range(0.05f, 3f)] public float defaultFadeDuration = 0.6f;
     public Color fadeColor = Color.black;
-    public TMP_FontAsset titleFont;               
-    public float titleFontSize = 64f;            
-    public Color titleColor = Color.white;         
-    public Vector2 titleMargins = new Vector2(64, 64); 
 
+    [Header("Title Defaults")]
+    public TMP_FontAsset titleFont;
+    public float titleFontSize = 64f;
+    public Color titleColor = Color.white;
+    public Vector2 titleMargins = new Vector2(64, 64);
+    [Range(0.05f, 3f)] public float defaultTitleFadeIn = 0.4f;
+    [Range(0.05f, 3f)] public float defaultTitleFadeOut = 0.3f;
 
     CanvasGroup _group;
     Image _img;
     TextMeshProUGUI _titleTMP;
+    CanvasGroup _titleGroup;
 
     void Awake()
     {
@@ -44,32 +47,34 @@ public class ScreenFader : MonoBehaviour
         imgGO.transform.SetParent(canvasGO.transform, false);
         _img = imgGO.GetComponent<Image>();
         _img.color = fadeColor;
-        _img.raycastTarget = false;
+        _img.raycastTarget = false;   // ← removed stray text
 
         var rt = (RectTransform)imgGO.transform;
         rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
         rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
 
-        // Title TMP (centered)
-        var titleGO = new GameObject("LevelTitle", typeof(RectTransform), typeof(TextMeshProUGUI));
+        // Title (TMP + CanvasGroup)
+        var titleGO = new GameObject("LevelTitle", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(CanvasGroup));
         titleGO.transform.SetParent(canvasGO.transform, false);
         _titleTMP = titleGO.GetComponent<TextMeshProUGUI>();
+        _titleGroup = titleGO.GetComponent<CanvasGroup>();
+        _titleGroup.alpha = 0f;
+        _titleGroup.interactable = false;
+        _titleGroup.blocksRaycasts = false;
+
         _titleTMP.alignment = TextAlignmentOptions.Center;
-        _titleTMP.fontSize = 64f;
-        _titleTMP.color = Color.white;
-        _titleTMP.text = "";
         _titleTMP.enableWordWrapping = false;
         _titleTMP.raycastTarget = false;
+        if (titleFont) _titleTMP.font = titleFont;
+        _titleTMP.fontSize = titleFontSize;
+        _titleTMP.color = titleColor;
+        _titleTMP.text = "";
         _titleTMP.enabled = false;
 
-         if (titleFont) _titleTMP.font = titleFont;
-        _titleTMP.fontSize = titleFontSize;
-        _titleTMP.color    = titleColor;
-
         var trt = (RectTransform)titleGO.transform;
-        trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; // fill screen
-        trt.offsetMin = new Vector2(64, 64);
-        trt.offsetMax = new Vector2(-64, -64);
+        trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one;
+        trt.offsetMin = new Vector2(titleMargins.x, titleMargins.y);
+        trt.offsetMax = new Vector2(-titleMargins.x, -titleMargins.y);
     }
 
     // Simple fade → load → fade in
@@ -78,14 +83,16 @@ public class ScreenFader : MonoBehaviour
             outDur < 0 ? defaultFadeDuration : outDur,
             inDur  < 0 ? defaultFadeDuration : inDur));
 
-    // Title card version (fade to black, show title, load, fade in)
+    // Title version (adds title fade in/out)
     public void FadeToSceneWithTitle(
         string sceneName,
         string title,
         float outDur = -1f,
         float holdBeforeLoad = 0.75f,
         float holdAfterLoad  = 0.25f,
-        float inDur = -1f)
+        float inDur = -1f,
+        float titleFadeIn = -1f,
+        float titleFadeOut = -1f)
     {
         StartCoroutine(LoadSequenceWithTitle(
             sceneName,
@@ -93,7 +100,9 @@ public class ScreenFader : MonoBehaviour
             outDur < 0 ? defaultFadeDuration : outDur,
             Mathf.Max(0f, holdBeforeLoad),
             Mathf.Max(0f, holdAfterLoad),
-            inDur < 0 ? defaultFadeDuration : inDur));
+            inDur < 0 ? defaultFadeDuration : inDur,
+            titleFadeIn  < 0 ? defaultTitleFadeIn  : titleFadeIn,
+            titleFadeOut < 0 ? defaultTitleFadeOut : titleFadeOut));
     }
 
     public Coroutine FadeOut(float duration) => StartCoroutine(FadeRoutine(1f, duration));
@@ -108,30 +117,46 @@ public class ScreenFader : MonoBehaviour
         yield return FadeIn(inDur);
     }
 
-    IEnumerator LoadSequenceWithTitle(string sceneName, string title, float outDur, float holdBefore, float holdAfter, float inDur)
+    IEnumerator LoadSequenceWithTitle(
+        string sceneName,
+        string title,
+        float outDur,
+        float holdBefore,
+        float holdAfter,
+        float inDur,     // ← was 'inDu' before
+        float titleIn,
+        float titleOut)
     {
         // Fade to black
         yield return FadeOut(outDur);
 
-        // Show title on black
+        // Show title and fade it in
         if (_titleTMP)
         {
             _titleTMP.text = title;
             _titleTMP.enabled = true;
+            _titleGroup.alpha = 0f;
+            yield return FadeTitle(1f, titleIn);
         }
 
-        // Hold before loading (still black)
+        // Hold before loading
         if (holdBefore > 0f) yield return new WaitForSecondsRealtime(holdBefore);
 
-        // Load scene while staying black with title visible
+        // Load scene
         var op = SceneManager.LoadSceneAsync(sceneName);
         while (!op.isDone) yield return null;
 
-        // Optional short hold after load (still black)
+        // Optional hold after load
         if (holdAfter > 0f) yield return new WaitForSecondsRealtime(holdAfter);
 
-        // Hide title and fade back to gameplay
-        if (_titleTMP) _titleTMP.enabled = false;
+        // Fade out title
+        if (_titleTMP)
+        {
+            yield return FadeTitle(0f, titleOut);
+            _titleTMP.enabled = false;
+        }
+
+        // Fade back to gameplay
         yield return FadeIn(inDur);
     }
 
@@ -143,12 +168,29 @@ public class ScreenFader : MonoBehaviour
         float t = 0f;
         while (t < 1f)
         {
-            t += Time.unscaledDeltaTime / duration; // unaffected by timeScale
+            t += Time.unscaledDeltaTime / duration;
             _group.alpha = Mathf.Lerp(start, target, t);
-            _img.raycastTarget = _group.alpha > 0.001f; // block clicks while visible
+            _img.raycastTarget = _group.alpha > 0.001f;
             yield return null;
         }
         _group.alpha = target;
         _img.raycastTarget = _group.alpha > 0.001f;
+    }
+
+    // Fade the title CanvasGroup alpha
+    IEnumerator FadeTitle(float target, float duration)
+    {
+        if (!_titleGroup) yield break;
+        if (duration <= 0f) { _titleGroup.alpha = target; yield break; }
+
+        float start = _titleGroup.alpha;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / duration;
+            _titleGroup.alpha = Mathf.Lerp(start, target, t);
+            yield return null;
+        }
+        _titleGroup.alpha = target;
     }
 }

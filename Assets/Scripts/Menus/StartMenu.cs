@@ -21,10 +21,12 @@ public class StartMenu : MonoBehaviour
     {  ScreenFader.Instance.FadeToSceneWithTitle(
         sceneName: gameSceneName,
         title: "First Floor",
-        outDur: 2.2f,
+        outDur: 2f,
+        inDur: 1f,
         holdBeforeLoad: 1f,
         holdAfterLoad: 1f,
-        inDur: 2.2f
+        titleFadeIn: 1f,   
+        titleFadeOut: 1f 
     );
     }
 
