@@ -18,8 +18,16 @@ public class StartMenu : MonoBehaviour
     }
 
     public void OnPlay()
-    {
-        SceneManager.LoadScene(gameSceneName);
+    {  ScreenFader.Instance.FadeToSceneWithTitle(
+        sceneName: gameSceneName,
+        title: "First Floor",
+        outDur: 2f,
+        inDur: 1f,
+        holdBeforeLoad: 1f,
+        holdAfterLoad: 1f,
+        titleFadeIn: 1f,   
+        titleFadeOut: 1f 
+    );
     }
 
     public void OnQuit()
