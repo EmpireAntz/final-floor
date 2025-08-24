@@ -5,7 +5,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private CharacterController controller;
     private Animator animator;
-    private PlayerCombat combat; 
+    private PlayerCombat combat;
+    private PlayerStats stats;
 
     [Header("Movement")]
     public float speed = 5f;
@@ -42,6 +43,8 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         combat = GetComponent<PlayerCombat>();
+        stats = GetComponent<PlayerStats>();
+
 
         if (playerCamera != null)
             _baseFOV = playerCamera.fieldOfView;
@@ -89,9 +92,13 @@ public class PlayerMovement : MonoBehaviour
 
         bool canSprint = !blockMove
             && move.sqrMagnitude > 0.0001f
-            && (!sprintOnlyOnGround || isGrounded);
+            && (!sprintOnlyOnGround || isGrounded)
+            && (stats == null || stats.CanSprint());          
 
         bool isSprinting = canSprint && shiftHeld;
+        stats?.TickStamina(isSprinting, Time.deltaTime); 
+
+
         float currentSpeed = speed * (isSprinting ? sprintMultiplier : 1f);
 
         // Move horizontally
