@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: 
+  displayName: Sword
   icon: {fileID: 995127839, guid: 7bf1b65a015f82049b7a1d7549dfe217, type: 3}
-  category: 0
+  category: 1
+  equipSlot: 1
+  heldPrefab: {fileID: 5766980432384555104, guid: 9f9f9023a71fe8c44a658e49b0535516, type: 3}
+  localPosition: {x: 0.057425085, y: 0.22649771, z: 0.14947581}
+  localEulerAngles: {x: 306.42368, y: 147.98178, z: 38.36085}
+  localScale: {x: 0.8, y: 0.8, z: 0.8}

@@ -1240,6 +1240,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1176336706 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8588122464579329139, guid: 26884749826e6774aa58a039de667f50, type: 3}
+  m_PrefabInstance: {fileID: 938185668}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1276311788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1528,9 @@ MonoBehaviour:
   slotPrefab: {fileID: 5335620381377344248, guid: bc460582f04ef84428b9b8a3f60dc63f, type: 3}
   inventory: {fileID: 2107169977}
   pauseWhenOpen: 0
+  filledBgColor: {r: 1, g: 1, b: 1, a: 1}
+  emptyBgColor: {r: 1, g: 1, b: 1, a: 1}
+  enableDebugSeed: 0
   debugTestItem: {fileID: 0}
 --- !u!1 &1471338049
 GameObject:
@@ -2099,6 +2107,7 @@ GameObject:
   - component: {fileID: 2107169977}
   - component: {fileID: 2107169978}
   - component: {fileID: 2107169979}
+  - component: {fileID: 2107169980}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2295,6 +2304,21 @@ MonoBehaviour:
   promptAnchor: {x: 0.5, y: 0.85}
   promptPixelOffset: {x: 0, y: -100}
   promptFormat: '{0}  [{1}]'
+--- !u!114 &2107169980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107169968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9cb4363a72afd46975280ba37f1c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentBinder
+  inventory: {fileID: 2107169977}
+  rightHandBone: {fileID: 1176336706}
+  leftHandBone: {fileID: 0}
 --- !u!1001 &313049726023188958
 PrefabInstance:
   m_ObjectHideFlags: 0
