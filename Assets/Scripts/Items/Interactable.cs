@@ -1,4 +1,3 @@
-// Interactable.cs
 using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
