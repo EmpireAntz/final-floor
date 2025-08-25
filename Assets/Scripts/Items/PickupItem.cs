@@ -1,4 +1,3 @@
-// PickupItem.cs
 using UnityEngine;
 
 public class PickupItem : Interactable
@@ -17,34 +16,29 @@ public class PickupItem : Interactable
     {
         if (!itemData || !itemData.icon)
         {
-            Debug.LogWarning("PickupItem missing ItemData or icon.");
+            Debug.LogWarning("PickupItem missing ItemData or its icon.");
             return;
         }
 
-        // Find player inventory
         Inventory inv = interactor.GetComponentInParent<Inventory>();
         if (!inv) inv = Object.FindObjectOfType<Inventory>();
-        if (!inv) { Debug.LogWarning("No Inventory found."); return; }
+        if (!inv) { Debug.LogWarning("No Inventory found on interactor or scene."); return; }
 
-        // Add to inventory
         bool added = inv.TryAddItemData(itemData);
         if (!added)
         {
-            Debug.Log("Inventory full.");
+            Debug.Log("Inventory full. Could not pick up.");
             return;
         }
 
-        // Optional quick auto-equip (puts the newly added item into first empty equipment slot)
         if (autoEquipIfPossible)
         {
             int newIdx = inv.items.Count - 1;
             inv.MoveInventoryIndexToEquipmentFirstEmpty(newIdx);
         }
 
-        if (pickupSfx)
-            AudioSource.PlayClipAtPoint(pickupSfx, transform.position);
+        if (pickupSfx) AudioSource.PlayClipAtPoint(pickupSfx, transform.position);
 
-        // Refresh UI if open
         var ui = Object.FindObjectOfType<InventoryUI>();
         if (ui && ui.panel && ui.panel.activeSelf) ui.RefreshAll();
 

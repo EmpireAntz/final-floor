@@ -1,26 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInteract : MonoBehaviour
+public class PlayerInteractor : MonoBehaviour
 {
-    [Header("Wiring")] public Camera cam;
+    [Header("Wiring")]
+    public Camera cam;
 
-    [Header("Settings")] public float range = 3f;
+    [Header("Settings")]
+    public float range = 3f;
     public LayerMask interactMask = ~0;
     public Key interactKey = Key.E;
 
     [Header("Prompt UI")]
-    public Font promptFont;                              // drag a .ttf/.otf from Project
-    [Range(8, 96)] public int promptFontSize = 28;      // size slider
-    public Color promptColor = Color.white;             // text color
+    public Font promptFont;
+    [Range(8, 96)] public int promptFontSize = 28;
+    public Color promptColor = Color.white;
     public Color promptOutlineColor = new Color(0,0,0,0.8f);
-    [Range(0, 8)] public int promptOutline = 2;         // 0 = no outline
-    [Tooltip("Normalized screen position (0..1). (0.5, 0.85) = centered near bottom")]
+    [Range(0, 8)] public int promptOutline = 2;
+    [Tooltip("Normalized (0..1). (0.5, 0.85) = centered near bottom")]
     public Vector2 promptAnchor = new Vector2(0.5f, 0.85f);
-    public Vector2 promptPixelOffset = Vector2.zero;    // fine-tune in pixels
+    public Vector2 promptPixelOffset = Vector2.zero;
     [Tooltip("{0} = prompt text, {1} = key")]
-    public string promptFormat = "{0}  [{1}]";          // e.g., "Pick up  [E]"
-
+    public string promptFormat = "{0}  [{1}]";
 
     private Interactable lookingAt;
 
@@ -39,45 +40,40 @@ public class PlayerInteract : MonoBehaviour
     }
 
     void OnGUI()
-{
-    if (lookingAt == null) return;
-
-    string keyName = interactKey.ToString();
-    string label = string.Format(promptFormat, lookingAt.prompt, keyName);
-
-    // Build style
-    GUIStyle style = new GUIStyle(GUI.skin.label)
     {
-        alignment = TextAnchor.MiddleCenter,
-        font = promptFont ? promptFont : GUI.skin.font,
-        fontSize = promptFontSize,
-        wordWrap = false,
-        richText = false,
-    };
+        if (lookingAt == null) return;
 
-    // Measure and position from normalized anchor
-    Vector2 size = style.CalcSize(new GUIContent(label));
-    float x = Screen.width  * promptAnchor.x + promptPixelOffset.x;
-    float y = Screen.height * promptAnchor.y + promptPixelOffset.y;
-    Rect r = new Rect(x - size.x * 0.5f, y - size.y * 0.5f, size.x, size.y);
+        string keyName = interactKey.ToString();
+        string label = string.Format(promptFormat, lookingAt.prompt, keyName);
 
-    // Optional outline
-    if (promptOutline > 0)
-    {
-        Color old = style.normal.textColor;
-        style.normal.textColor = promptOutlineColor;
-        for (int dx = -promptOutline; dx <= promptOutline; dx++)
-        for (int dy = -promptOutline; dy <= promptOutline; dy++)
+        GUIStyle style = new GUIStyle(GUI.skin.label)
         {
-            if (dx == 0 && dy == 0) continue;
-            GUI.Label(new Rect(r.x + dx, r.y + dy, r.width, r.height), label, style);
+            alignment = TextAnchor.MiddleCenter,
+            font = promptFont ? promptFont : GUI.skin.font,
+            fontSize = promptFontSize,
+            wordWrap = false,
+            richText = false
+        };
+
+        Vector2 size = style.CalcSize(new GUIContent(label));
+        float x = Screen.width  * promptAnchor.x + promptPixelOffset.x;
+        float y = Screen.height * promptAnchor.y + promptPixelOffset.y;
+        Rect r = new Rect(x - size.x * 0.5f, y - size.y * 0.5f, size.x, size.y);
+
+        if (promptOutline > 0)
+        {
+            Color old = style.normal.textColor;
+            style.normal.textColor = promptOutlineColor;
+            for (int dx = -promptOutline; dx <= promptOutline; dx++)
+            for (int dy = -promptOutline; dy <= promptOutline; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+                GUI.Label(new Rect(r.x + dx, r.y + dy, r.width, r.height), label, style);
+            }
+            style.normal.textColor = old;
         }
-        style.normal.textColor = old;
+
+        style.normal.textColor = promptColor;
+        GUI.Label(r, label, style);
     }
-
-    // Main text
-    style.normal.textColor = promptColor;
-    GUI.Label(r, label, style);
-}
-
 }

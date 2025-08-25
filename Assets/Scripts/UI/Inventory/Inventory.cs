@@ -1,11 +1,10 @@
-// Inventory.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class SimpleItem
 {
-    public ItemData data;  // scalable: name, icon, type
+    public ItemData data;  // scalable: name/icon/category/equip slot/held prefab, etc.
 }
 
 public enum ContainerType { Inventory, Equipment }
@@ -20,7 +19,9 @@ public class Inventory : MonoBehaviour
     public int equipmentCapacity = 5;
     public List<SimpleItem> equipment = new List<SimpleItem>();
 
-    // empty if no object OR its data/icon is null
+    // Fired whenever items/equipment change (UI & binders can listen)
+    public System.Action OnChanged;
+
     public static bool IsEmpty(SimpleItem it) => it == null || it.data == null || it.data.icon == null;
 
     void Awake()
@@ -34,16 +35,19 @@ public class Inventory : MonoBehaviour
         if (items.Count > capacity) items.RemoveRange(capacity, items.Count - capacity);
     }
 
-    // Add an item (by ItemData)
+    void NotifyChanged() => OnChanged?.Invoke();
+
+    // --- Add ---
     public bool TryAddItemData(ItemData data)
     {
         if (data == null || data.icon == null) return false;
         if (items.Count >= capacity) return false;
         items.Add(new SimpleItem { data = data });
+        NotifyChanged();
         return true;
     }
 
-    // --- moves ---
+    // --- Moves ---
     public bool MoveInventoryIndexToEquipmentFirstEmpty(int invIndex)
     {
         if (invIndex < 0 || invIndex >= items.Count) return false;
@@ -52,10 +56,11 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < equipmentCapacity; i++)
             if (IsEmpty(equipment[i])) { emptyEq = i; break; }
 
-        if (emptyEq == -1) return false; // equipment full
+        if (emptyEq == -1) return false;
 
         equipment[emptyEq] = items[invIndex];
-        items.RemoveAt(invIndex); // keep compact
+        items.RemoveAt(invIndex);
+        NotifyChanged();
         return true;
     }
 
@@ -68,6 +73,16 @@ public class Inventory : MonoBehaviour
 
         items.Add(itm);
         equipment[eqIndex] = null;
+        NotifyChanged();
         return true;
+    }
+
+    // Debug helper
+    public void DebugPrintInventory()
+    {
+        for (int i = 0; i < items.Count; i++)
+            Debug.Log($"Inventory[{i}] = {items[i]?.data?.displayName ?? "(null)"}");
+        for (int i = 0; i < equipment.Count; i++)
+            Debug.Log($"Equipment[{i}] = {equipment[i]?.data?.displayName ?? "(empty)"}");
     }
 }
