@@ -1,10 +1,11 @@
+// Inventory.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class SimpleItem
 {
-    public Sprite icon;   // no quantity anymore
+    public ItemData data;  // scalable: name, icon, type
 }
 
 public enum ContainerType { Inventory, Equipment }
@@ -19,8 +20,8 @@ public class Inventory : MonoBehaviour
     public int equipmentCapacity = 5;
     public List<SimpleItem> equipment = new List<SimpleItem>();
 
-    // empty if no object OR its icon is null
-    public static bool IsEmpty(SimpleItem it) => it == null || it.icon == null;
+    // empty if no object OR its data/icon is null
+    public static bool IsEmpty(SimpleItem it) => it == null || it.data == null || it.data.icon == null;
 
     void Awake()
     {
@@ -33,11 +34,13 @@ public class Inventory : MonoBehaviour
         if (items.Count > capacity) items.RemoveRange(capacity, items.Count - capacity);
     }
 
-    // quick test helper
-    public void AddTestItem(Sprite icon)
+    // Add an item (by ItemData)
+    public bool TryAddItemData(ItemData data)
     {
-        if (items.Count >= capacity) return;
-        items.Add(new SimpleItem { icon = icon });
+        if (data == null || data.icon == null) return false;
+        if (items.Count >= capacity) return false;
+        items.Add(new SimpleItem { data = data });
+        return true;
     }
 
     // --- moves ---
