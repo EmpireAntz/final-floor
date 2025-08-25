@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 493005602709378157}
   - component: {fileID: 8842759008292871013}
   - component: {fileID: 2975763015670892426}
+  - component: {fileID: 259097082801660529}
   m_Layer: 0
   m_Name: FIrst Sword
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1372583057008974992}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.547, y: 1.115, z: 15.985}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
@@ -112,3 +113,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5ea9424bc07b1b6478279129eb3813df, type: 3}
+--- !u!114 &259097082801660529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372583057008974992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a3b543664c3d648a6cc9f6afd4b85a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickupItem
+  prompt: Pick up
+  itemData: {fileID: 11400000, guid: 80ab9b9da7c588343802867dcff507f2, type: 2}
+  autoEquipIfPossible: 0
+  pickupSfx: {fileID: 0}
+  destroyOnPickUp: 1

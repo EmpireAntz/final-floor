@@ -1,3 +1,4 @@
+// InventoryUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
@@ -15,16 +16,15 @@ public class InventoryUI : MonoBehaviour
     public bool pauseWhenOpen = false;
 
     [Header("Debug Seed (optional)")]
-    public Sprite debugTestSprite; // drag any sprite to auto-seed one item at play
+    public ItemData debugTestItem; // assign an ItemData to auto-seed
 
     void Awake()
     {
         if (panel) panel.SetActive(false);
         if (!inventory) inventory = FindObjectOfType<Inventory>();
 
-        // seed one test item if empty, for quick visual testing
-        if (Application.isPlaying && inventory != null && inventory.items.Count == 0 && debugTestSprite != null)
-            inventory.AddTestItem(debugTestSprite);
+        if (Application.isPlaying && inventory != null && inventory.items.Count == 0 && debugTestItem != null)
+            inventory.TryAddItemData(debugTestItem);
     }
 
     void Update()
@@ -50,7 +50,6 @@ public class InventoryUI : MonoBehaviour
     {
         if (!slotPrefab || inventory == null) return;
 
-        // Inventory
         if (invGridParent)
         {
             Clear(invGridParent);
@@ -61,7 +60,6 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(invGridParent, ContainerType.Inventory, i, null);
         }
 
-        // Equipment (fixed-size)
         if (equipGridParent)
         {
             Clear(equipGridParent);
@@ -77,47 +75,42 @@ public class InventoryUI : MonoBehaviour
     }
 
     void BuildSlot(Transform parent, ContainerType container, int index, SimpleItem item)
+{
+    var go = Instantiate(slotPrefab, parent);
+
+    // background (keep prefab visuals)
+    var btn = go.GetComponent<Button>() ?? go.AddComponent<Button>();
+    var bg  = go.GetComponent<Image>()  ?? go.AddComponent<Image>();
+    bg.raycastTarget = true;  // do NOT change bg.color here
+
+    // ensure we have a child "Icon" Image for the item sprite
+    Image iconImg = go.transform.Find("Icon")?.GetComponent<Image>();
+    if (!iconImg)
     {
-        var go = Instantiate(slotPrefab, parent);
-
-        // root needs Button + Image
-        var btn = go.GetComponent<Button>();
-        if (!btn) btn = go.AddComponent<Button>();
-        var bg = go.GetComponent<Image>();
-        if (!bg) { bg = go.AddComponent<Image>(); bg.color = new Color(0,0,0,0); }
-        bg.raycastTarget = true;
-
-        // find Icon image (child named "Icon" or first child Image)
-        Image iconImg = null;
-        var iconTf = go.transform.Find("Icon");
-        if (iconTf) iconImg = iconTf.GetComponent<Image>();
-        if (!iconImg)
-        {
-            var imgs = go.GetComponentsInChildren<Image>(true);
-            foreach (var im in imgs) { if (im.gameObject != go) { iconImg = im; break; } }
-        }
-
-        bool empty = Inventory.IsEmpty(item);
-
-        if (iconImg)
-        {
-            // stretch to fill slot
-            var rt = iconImg.rectTransform;
-            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
-            rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
-
-            iconImg.sprite = empty ? null : item.icon;
-            iconImg.enabled = !empty && item.icon != null;
-            iconImg.preserveAspect = true;
-            iconImg.color = Color.white;
-            iconImg.raycastTarget = false; // let Button receive clicks
-        }
-
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => OnSlotClicked(container, index));
+        var iconGO = new GameObject("Icon", typeof(RectTransform), typeof(Image));
+        iconGO.transform.SetParent(go.transform, false);
+        iconImg = iconGO.GetComponent<Image>();
+        var rt = iconImg.rectTransform;
+        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
     }
 
-    // click: Inventory -> Equipment (first empty), Equipment -> Inventory (first empty)
+    bool empty = Inventory.IsEmpty(item);
+
+    // icon handling
+    var sprite = (!empty) ? item.data.icon : null;
+    iconImg.sprite = sprite;
+    iconImg.enabled = sprite != null;
+    iconImg.preserveAspect = true;
+    iconImg.color = Color.white;
+    iconImg.raycastTarget = false; // let the Button receive clicks
+
+    // click handler
+    btn.onClick.RemoveAllListeners();
+    btn.onClick.AddListener(() => OnSlotClicked(container, index));
+}
+
+
     void OnSlotClicked(ContainerType container, int index)
     {
         if (!inventory) return;
@@ -125,7 +118,7 @@ public class InventoryUI : MonoBehaviour
         bool moved = false;
         if (container == ContainerType.Inventory)
         {
-            if (index >= inventory.items.Count) return; // clicked padded empty
+            if (index >= inventory.items.Count) return;
             moved = inventory.MoveInventoryIndexToEquipmentFirstEmpty(index);
             if (!moved) Debug.Log("Equipment is full.");
         }
