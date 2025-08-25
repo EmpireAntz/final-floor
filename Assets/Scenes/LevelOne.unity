@@ -1433,6 +1433,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 5335620381377344248, guid: bc460582f04ef84428b9b8a3f60dc63f, type: 3}
   inventory: {fileID: 2107169977}
   pauseWhenOpen: 0
+  debugTestSprite: {fileID: 0}
 --- !u!1 &1471338049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,7 +2061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce55a5bbab2aaa84c93f66c2612cf87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 2.4
+  speed: 2.5
   gravity: -19.62
   jumpHeight: 1.5
   sprintMultiplier: 2
@@ -2163,19 +2164,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   capacity: 16
-  items: []
+  items:
+  - icon: {fileID: 21300000, guid: 5e1bfc1bb74a96240912c88dbfc19194, type: 3}
   equipmentCapacity: 5
   equipment:
   - icon: {fileID: 0}
-    quantity: 1
   - icon: {fileID: 0}
-    quantity: 1
   - icon: {fileID: 0}
-    quantity: 1
   - icon: {fileID: 0}
-    quantity: 1
   - icon: {fileID: 0}
-    quantity: 1
 --- !u!114 &2107169978
 MonoBehaviour:
   m_ObjectHideFlags: 0

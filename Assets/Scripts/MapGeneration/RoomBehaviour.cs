@@ -9,7 +9,7 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject[] builtInDoors = new GameObject[4];
 
     [Header("Torch Spawning (socket-based)")]
-    public GameObject torchPrefab;                  //LitTorch prefab
+    public GameObject torchPrefab;                  // LitTorch prefab
     public bool spawnBothSides = true;              // spawn L & R, else prefer Right then Left
     public Transform[] leftTorchSockets  = new Transform[4]; // Up,Down,Right,Left
     public Transform[] rightTorchSockets = new Transform[4]; // Up,Down,Right,Left
@@ -21,7 +21,6 @@ public class RoomBehaviour : MonoBehaviour
 
     void Start()
     {
-        // Optional: lets you preview in the editor if you fill testStatus (size must be 4)
         if (testStatus != null && testStatus.Length == 4)
             UpdateRoom(testStatus);
     }
@@ -34,59 +33,48 @@ public class RoomBehaviour : MonoBehaviour
             return;
         }
 
-        // ===== Per-side geometry =====
-        // walls[]        => solid wall (no hole)
-        // doors[]        => entryway/frame (hole in wall you placed)
-        // builtInDoors[] => actual door leaf you placed
+        // Walls / doors / door leaves
         for (int i = 0; i < 4; i++)
         {
-            bool open = status[i]; // true => doorway on this side
+            bool open = status[i];
 
-            if (i < walls.Length && walls[i] != null)
-                walls[i].SetActive(!open);   // solid wall ON when closed
-
-            if (i < doors.Length && doors[i] != null)
-                doors[i].SetActive(open);    // entryway/frame ON when open
-
-            if (builtInDoors != null && i < builtInDoors.Length && builtInDoors[i] != null)
-                builtInDoors[i].SetActive(open); // door leaf ON when open (for now)
+            if (i < walls.Length && walls[i]) walls[i].SetActive(!open);
+            if (i < doors.Length && doors[i]) doors[i].SetActive(open);
+            if (i < builtInDoors.Length && builtInDoors[i]) builtInDoors[i].SetActive(open);
         }
 
-        // ===== Torch spawning =====
+        // Clear old torches
         for (int i = 0; i < spawnedTorches.Count; i++)
-            if (spawnedTorches[i] != null) Destroy(spawnedTorches[i]);
+            if (spawnedTorches[i]) Destroy(spawnedTorches[i]);
         spawnedTorches.Clear();
 
-        if (torchPrefab == null) return;
+        if (!torchPrefab) return;
 
+        // Spawn torches only on open sides
         for (int i = 0; i < 4; i++)
         {
-            if (!status[i]) continue; // only spawn torches at open sides
+            if (!status[i]) continue;
 
             Transform L = (leftTorchSockets != null && i < leftTorchSockets.Length)  ? leftTorchSockets[i]  : null;
             Transform R = (rightTorchSockets != null && i < rightTorchSockets.Length) ? rightTorchSockets[i] : null;
 
             if (spawnBothSides)
             {
-                if (L != null) spawnedTorches.Add(Instantiate(torchPrefab, L.position, L.rotation, transform));
-                if (R != null) spawnedTorches.Add(Instantiate(torchPrefab, R.position, R.rotation, transform));
+                if (L) spawnedTorches.Add(Instantiate(torchPrefab, L.position, L.rotation, transform));
+                if (R) spawnedTorches.Add(Instantiate(torchPrefab, R.position, R.rotation, transform));
             }
             else
             {
                 Transform S = (R != null) ? R : L; // prefer Right
-                if (S != null) spawnedTorches.Add(Instantiate(torchPrefab, S.position, S.rotation, transform));
+                if (S) spawnedTorches.Add(Instantiate(torchPrefab, S.position, S.rotation, transform));
             }
         }
     }
 
-   // Lets the generator enable/disable a single side's door leaf to avoid overlaps
+    // Lets the generator enable/disable a single side's door leaf to avoid overlaps
     public void SetDoorEnabled(int sideIndex, bool enabled)
     {
-        if (builtInDoors != null &&
-            sideIndex >= 0 && sideIndex < builtInDoors.Length &&
-            builtInDoors[sideIndex] != null)
-        {
-            builtInDoors[sideIndex].SetActive(enabled);
-        }
+        if (sideIndex < 0 || sideIndex >= builtInDoors.Length || !builtInDoors[sideIndex]) return;
+        builtInDoors[sideIndex].SetActive(enabled);
     }
 }

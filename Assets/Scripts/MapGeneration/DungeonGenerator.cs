@@ -26,36 +26,45 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    public Vector2Int size;
+    [Header("Layout")]
+    public Vector2Int size = new Vector2Int(5, 5);
     public int startPos = 0;
     public Rule[] rooms;
-    public Vector2 offset;
+    public Vector2 offset = new Vector2(10f, 10f);
 
-    // Player spawn
+    [Header("Player")]
     public Transform player;
     public float playerSpawnHeight = 0.1f;
-
     public LayerMask groundMask;
 
-    // Extra connections
+    [Header("Extra Connections")]
     [Range(0f, 1f)]
-    public float extraDoorChance = 0.25f;  // try 0.1–0.2 if you want fewer loops
+    public float extraDoorChance = 0.25f;
 
-    // ---------- Boxes ----------
-    [Header("Box Spawning")]
-    public GameObject[] boxPrefabs;                 // assign crate/box prefabs here
-    [Range(0f, 1f)] public float boxSpawnChance = 0.15f; // chance per visited room
+    [Header("Boxes")]
+    public GameObject[] boxPrefabs;
+    [Range(0f, 1f)] public float boxSpawnChance = 0.15f;
     public Vector2Int boxesPerRoomRange = new Vector2Int(1, 2);
     public bool skipStartRoomForBoxes = true;
-    public float spawnMargin = 1.0f;                // keep away from walls/doorways (meters)
-    public LayerMask boxGroundMask;                 // set to your Ground layer
+    public float spawnMargin = 1.0f;
+    public LayerMask boxGroundMask;
+
+    [Header("Starting Room Props")]
+    public GameObject tablePrefab;
+    public GameObject swordPrefab;
+    public LayerMask propGroundMask; // set to Ground
+
+    [Header("Sword Placement (on table)")]
+    public float swordSurfaceLift = 0.01f;   // tiny lift to avoid z-fighting
+    public float swordYawOnTable = 30f;      // rotate around table up (degrees)
+    public Vector2 swordEdgeOffset = new Vector2(0.2f, 0.05f); // (right, forward) meters
+    public bool useSwordSocketIfPresent = true; // if the table has a "SwordSocket"
+
 
     // Internals
     private List<Cell> board;
     private Transform startRoomInstance;
     private readonly List<Transform> allRoomInstances = new List<Transform>();
-
-    // NEW: keep a reference to each spawned RoomBehaviour (index = i + j * size.x)
     private RoomBehaviour[] roomRefs;
 
     void Start()
@@ -63,12 +72,76 @@ public class DungeonGenerator : MonoBehaviour
         MazeGenerator();
     }
 
+    // -------- Core Generation --------
+
+    void MazeGenerator()
+    {
+        board = new List<Cell>();
+        for (int i = 0; i < size.x; i++)
+            for (int j = 0; j < size.y; j++)
+                board.Add(new Cell());
+
+        int currentCell = startPos;
+        Stack<int> path = new Stack<int>();
+        int guard = 0;
+
+        while (guard++ < 5000)
+        {
+            board[currentCell].visited = true;
+            if (currentCell == board.Count - 1) break;
+
+            List<int> neighbors = CheckNeighbors(currentCell);
+            if (neighbors.Count == 0)
+            {
+                if (path.Count == 0) break;
+                currentCell = path.Pop();
+            }
+            else
+            {
+                path.Push(currentCell);
+                int newCell = neighbors[Random.Range(0, neighbors.Count)];
+
+                if (newCell > currentCell)
+                {
+                    if (newCell - 1 == currentCell)
+                    {
+                        board[currentCell].status[2] = true; // right
+                        currentCell = newCell;
+                        board[currentCell].status[3] = true; // left
+                    }
+                    else
+                    {
+                        board[currentCell].status[1] = true; // down
+                        currentCell = newCell;
+                        board[currentCell].status[0] = true; // up
+                    }
+                }
+                else
+                {
+                    if (newCell + 1 == currentCell)
+                    {
+                        board[currentCell].status[3] = true; // left
+                        currentCell = newCell;
+                        board[currentCell].status[2] = true; // right
+                    }
+                    else
+                    {
+                        board[currentCell].status[0] = true; // up
+                        currentCell = newCell;
+                        board[currentCell].status[1] = true; // down
+                    }
+                }
+            }
+        }
+
+        AddExtraConnections();
+        GenerateDungeon();
+    }
+
     void GenerateDungeon()
     {
         startRoomInstance = null;
         allRoomInstances.Clear();
-
-        // NEW: allocate room reference array
         roomRefs = new RoomBehaviour[size.x * size.y];
 
         for (int i = 0; i < size.x; i++)
@@ -96,60 +169,30 @@ public class DungeonGenerator : MonoBehaviour
 
                 var roomGO = Instantiate(
                     rooms[randomRoom].room,
-                    new Vector3(i * offset.x, 0f, -j * offset.y), // -j on Z as before
+                    new Vector3(i * offset.x, 0f, -j * offset.y),
                     Quaternion.identity,
                     transform
                 );
 
                 var roomBehaviour = roomGO.GetComponent<RoomBehaviour>();
-                roomBehaviour.UpdateRoom(currentCell.status);
+                if (!roomBehaviour)
+                    Debug.LogWarning($"{roomGO.name} has no RoomBehaviour component.");
+                else
+                    roomBehaviour.UpdateRoom(currentCell.status);
+
                 roomGO.name += $" {i}-{j}";
-
                 allRoomInstances.Add(roomGO.transform);
-                if (idx == startPos) startRoomInstance = roomGO.transform;
 
-                // NEW: remember this room for deduplication
+                if (idx == startPos) startRoomInstance = roomGO.transform;
                 roomRefs[idx] = roomBehaviour;
             }
         }
 
-        // Spawn player at the actual start room center (or SpawnPoint), then raycast to floor
-        if (player != null && startRoomInstance != null)
+        // Spawn & orient player
+        if (player && startRoomInstance)
         {
-            Vector3 spawnPos;
-
-            var marker = startRoomInstance.Find("SpawnPoint");
-            if (marker != null)
-            {
-                spawnPos = marker.position;
-            }
-            else if (TryGetWorldBounds(startRoomInstance, out Bounds b))
-            {
-                spawnPos = b.center;
-            }
-            else
-            {
-                int sx = startPos % size.x;
-                int sy = startPos / size.x;
-                spawnPos = new Vector3(
-                    sx * offset.x + offset.x * 0.5f,
-                    2f,
-                    -sy * offset.y - offset.y * 0.5f
-                );
-            }
-
-            Vector3 rayStart = spawnPos + Vector3.up * 1f;
-            if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, 3f, groundMask, QueryTriggerInteraction.Ignore))
-            {
-                spawnPos = hit.point;
-            }
-            else
-            {
-                spawnPos.y = 0f;
-            }
-
-            // --- face an open doorway of the start cell ---
-            Vector3 faceDir = GetFacingTowardOpenDoor(spawnPos);
+            Vector3 spawnPos = FindStartSpawnPosition();
+            Vector3 faceDir  = GetFacingTowardOpenDoor(spawnPos);
             Quaternion lookRot = Quaternion.LookRotation(faceDir, Vector3.up);
 
             var cc = player.GetComponent<CharacterController>();
@@ -157,87 +200,19 @@ public class DungeonGenerator : MonoBehaviour
             player.SetPositionAndRotation(spawnPos + Vector3.up * 0.02f, lookRot);
             if (cc) cc.enabled = true;
 
-            // sync mouse look to this rotation so it doesn't snap back to 0°
             var look = FindObjectOfType<MouseMovement>();
             if (look) look.SyncToTransforms();
-
         }
 
-        // NEW: remove overlapping door leaves (keep one per shared doorway)
+        // Door dedupe, then content
         DeduplicateSharedDoors();
-
-        // ---------- spawn boxes after rooms & player ----------
         SpawnBoxesInRooms();
+
+        // NEW: Spawn start-room props (table + sword)
+        SpawnStartRoomProps();
     }
 
-    void MazeGenerator()
-    {
-        board = new List<Cell>();
-        for (int i = 0; i < size.x; i++)
-            for (int j = 0; j < size.y; j++)
-                board.Add(new Cell());
-
-        int currentCell = startPos;
-        Stack<int> path = new Stack<int>();
-        int k = 0;
-
-        while (k < 1000)
-        {
-            k++;
-            board[currentCell].visited = true;
-            if (currentCell == board.Count - 1) break;
-
-            List<int> neighbors = CheckNeighbors(currentCell);
-            if (neighbors.Count == 0)
-            {
-                if (path.Count == 0) break;
-                currentCell = path.Pop();
-            }
-            else
-            {
-                path.Push(currentCell);
-                int newCell = neighbors[Random.Range(0, neighbors.Count)];
-
-                if (newCell > currentCell)
-                {
-                    // down or right
-                    if (newCell - 1 == currentCell)
-                    {
-                        board[currentCell].status[2] = true; // right
-                        currentCell = newCell;
-                        board[currentCell].status[3] = true; // left
-                    }
-                    else
-                    {
-                        board[currentCell].status[1] = true; // down
-                        currentCell = newCell;
-                        board[currentCell].status[0] = true; // up
-                    }
-                }
-                else
-                {
-                    // up or left
-                    if (newCell + 1 == currentCell)
-                    {
-                        board[currentCell].status[3] = true; // left
-                        currentCell = newCell;
-                        board[currentCell].status[2] = true; // right
-                    }
-                    else
-                    {
-                        board[currentCell].status[0] = true; // up
-                        currentCell = newCell;
-                        board[currentCell].status[1] = true; // down
-                    }
-                }
-            }
-        }
-
-        // Add extra connections between already-visited neighbors (randomized)
-        AddExtraConnections();
-
-        GenerateDungeon();
-    }
+    // -------- Neighbors / Connections --------
 
     List<int> CheckNeighbors(int cell)
     {
@@ -251,7 +226,6 @@ public class DungeonGenerator : MonoBehaviour
         return neighbors;
     }
 
-    // Open a bidirectional connection between two adjacent cells
     void ConnectCells(int aIdx, int bIdx)
     {
         if (aIdx < 0 || aIdx >= board.Count || bIdx < 0 || bIdx >= board.Count) return;
@@ -277,28 +251,24 @@ public class DungeonGenerator : MonoBehaviour
             int idx = x + y * size.x;
             if (!board[idx].visited) continue;
 
-            // Up neighbor (x, y-1)
             if (y - 1 >= 0)
             {
                 int n = x + (y - 1) * size.x;
                 if (board[n].visited && !board[idx].status[0] && Random.value < extraDoorChance)
                     ConnectCells(idx, n);
             }
-            // Down neighbor (x, y+1)
             if (y + 1 < size.y)
             {
                 int n = x + (y + 1) * size.x;
                 if (board[n].visited && !board[idx].status[1] && Random.value < extraDoorChance)
                     ConnectCells(idx, n);
             }
-            // Right neighbor (x+1, y)
             if (x + 1 < size.x)
             {
                 int n = (x + 1) + y * size.x;
                 if (board[n].visited && !board[idx].status[2] && Random.value < extraDoorChance)
                     ConnectCells(idx, n);
             }
-            // Left neighbor (x-1, y)
             if (x - 1 >= 0)
             {
                 int n = (x - 1) + y * size.x;
@@ -308,7 +278,8 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    // ---------- BOX SPAWNING ----------
+    // -------- Boxes --------
+
     void SpawnBoxesInRooms()
     {
         if (boxPrefabs == null || boxPrefabs.Length == 0) return;
@@ -316,9 +287,8 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach (var room in allRoomInstances)
         {
-            if (room == null) continue;
+            if (!room) continue;
             if (skipStartRoomForBoxes && room == startRoomInstance) continue;
-
             if (Random.value > boxSpawnChance) continue;
 
             int count = Mathf.Clamp(Random.Range(boxesPerRoomRange.x, boxesPerRoomRange.y + 1), 0, 32);
@@ -345,24 +315,18 @@ public class DungeonGenerator : MonoBehaviour
 
     void SpawnOneBoxAt(Vector3 worldPos)
     {
-        // Flat floor height (change if your floor isn't at 0)
         const float floorY = 0f;
-
         var prefab = boxPrefabs[Random.Range(0, boxPrefabs.Length)];
         if (!prefab) return;
 
-        // Spawn roughly at floor (we'll correct precisely below)
         worldPos.y = floorY;
-
         Quaternion rot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
         var box = Instantiate(prefab, worldPos, rot, transform);
 
-        // Adjust so the bottom of the box sits on the floor
         if (TryGetWorldBounds(box.transform, out Bounds b))
         {
-            // Move so bounds.min.y == floorY
             float deltaY = floorY - b.min.y;
-            box.transform.position += new Vector3(0f, deltaY + 0.01f, 0f); // +tiny lift to avoid z-fighting
+            box.transform.position += new Vector3(0f, deltaY + 0.01f, 0f);
         }
     }
 
@@ -378,11 +342,111 @@ public class DungeonGenerator : MonoBehaviour
 
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
-        float y = b.center.y + b.extents.y; // we raycast down anyway
+        float y = b.center.y + b.extents.y;
         return new Vector3(x, y, z);
     }
 
-    // ---------- Helpers ----------
+    // -------- Start Room Props (table + sword) --------
+
+    void SpawnStartRoomProps()
+    {
+        if (!startRoomInstance)
+        {
+            Debug.LogWarning("[StartProps] No startRoomInstance. Skipping table/sword.");
+            return;
+        }
+        if (!tablePrefab)
+        {
+            Debug.LogWarning("[StartProps] tablePrefab is NULL. Assign it in the Inspector.");
+            return;
+        }
+
+        // 1) Find socket inside START ROOM
+        Transform socket = startRoomInstance.Find("StartTableSocket");
+        if (!socket)
+            Debug.LogWarning("[StartProps] No 'StartTableSocket' found under start room; using room center.");
+
+        // 2) Base position (socket -> bounds center -> transform)
+        Vector3 basePos = socket ? socket.position :
+                         (TryGetWorldBounds(startRoomInstance, out Bounds roomB) ? roomB.center : startRoomInstance.position);
+
+        // 3) Grounding via raycast
+        Vector3 rayStart = basePos + Vector3.up * 5f;
+        if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, 20f, propGroundMask, QueryTriggerInteraction.Ignore))
+            basePos = hit.point;
+
+        // 4) Spawn table
+        Quaternion tableRot = socket ? socket.rotation : Quaternion.identity;
+        GameObject table = Instantiate(tablePrefab, basePos, tableRot, startRoomInstance);
+        table.name = "[StartRoom] Table";
+
+        // 4a) Lift table to sit on floor
+        if (TryGetWorldBounds(table.transform, out Bounds tb))
+        {
+            float lift = basePos.y - tb.min.y + 0.01f;
+            table.transform.position += new Vector3(0f, lift, 0f);
+        }
+
+        // 5) Spawn sword (prefer table's SwordSocket)
+        if (swordPrefab)
+        {
+            // Prefer a socket on the table if present
+            Transform swordSocket = useSwordSocketIfPresent ? table.transform.Find("SwordSocket") : null;
+
+            Vector3 swordPos;
+            Quaternion swordRot;
+
+            if (swordSocket)
+            {
+                // Exact authoring via socket
+                swordPos = swordSocket.position;
+                swordRot = swordSocket.rotation;
+            }
+            else
+            {
+                // Compute a clean placement from table bounds
+                // Start at the top surface, then slide toward an edge
+                Vector3 tableUp = table.transform.up;
+                Vector3 tableRight = table.transform.right;
+                Vector3 tableForward = table.transform.forward;
+
+                // Top center of the table (world)
+                Vector3 topCenter = new Vector3(tb.center.x, tb.max.y, tb.center.z);
+
+                // Slide along surface toward an edge for better look
+                Vector3 slide = tableRight * swordEdgeOffset.x + tableForward * swordEdgeOffset.y;
+
+                swordPos = topCenter + slide + tableUp * swordSurfaceLift;
+
+                // Align sword's up to the table's up, then yaw around table up
+                // We’ll instantiate identity first, then set rotation
+                swordRot = Quaternion.identity;
+            }
+
+            GameObject sword = Instantiate(swordPrefab, swordPos, swordRot, table.transform);
+
+            // If we didn't use a dedicated socket, do the alignment now
+            if (!swordSocket)
+            {
+                Transform s = sword.transform;
+                Vector3 tableUp = table.transform.up;
+
+                // Align sword's up-vector to table's up-vector
+                Quaternion alignUp = Quaternion.FromToRotation(s.up, tableUp) * s.rotation;
+                s.rotation = alignUp;
+
+                // Optional: yaw around table up to get the angle you like (e.g., 30°)
+                s.Rotate(tableUp, swordYawOnTable, Space.World);
+            }
+
+            // Optional safety: keep it from sliding if it has physics
+            var rb = sword.GetComponent<Rigidbody>();
+            if (rb) rb.isKinematic = true;
+        }
+    }
+
+    // -------- Helpers --------
+
     bool TryGetWorldBounds(Transform root, out Bounds bounds)
     {
         bounds = new Bounds();
@@ -408,8 +472,6 @@ public class DungeonGenerator : MonoBehaviour
         return hasAny;
     }
 
-    // NEW: keep only one door leaf per shared doorway.
-    // Rule: the LEFT/UP room "owns" the door; RIGHT/DOWN neighbor disables theirs.
     void DeduplicateSharedDoors()
     {
         if (roomRefs == null || board == null) return;
@@ -421,35 +483,31 @@ public class DungeonGenerator : MonoBehaviour
             if (!board[idx].visited) continue;
 
             var room = roomRefs[idx];
-            if (room == null) continue;
+            if (!room) continue;
 
-            // status indices: 0 Up, 1 Down, 2 Right, 3 Left
-
-            // If connected RIGHT, disable the LEFT door on the right neighbor.
+            // Right neighbor: keep this Right leaf, disable neighbor's Left
             if (board[idx].status[2] && x + 1 < size.x)
             {
                 int rightIdx = (x + 1) + y * size.x;
-                if (board[rightIdx].visited && roomRefs[rightIdx] != null)
+                if (board[rightIdx].visited && roomRefs[rightIdx])
                 {
-                    room.SetDoorEnabled(2, true);               // ensure THIS room keeps its Right leaf
-                    roomRefs[rightIdx].SetDoorEnabled(3, false); // neighbor loses its Left leaf
+                    room.SetDoorEnabled(2, true);
+                    roomRefs[rightIdx].SetDoorEnabled(3, false);
                 }
             }
-
-            // If connected DOWN, disable the UP door on the below neighbor.
+            // Down neighbor: keep this Down leaf, disable neighbor's Up
             if (board[idx].status[1] && y + 1 < size.y)
             {
                 int downIdx = x + (y + 1) * size.x;
-                if (board[downIdx].visited && roomRefs[downIdx] != null)
+                if (board[downIdx].visited && roomRefs[downIdx])
                 {
-                    room.SetDoorEnabled(1, true);               // ensure THIS room keeps its Down leaf
-                    roomRefs[downIdx].SetDoorEnabled(0, false);  // neighbor loses its Up leaf
+                    room.SetDoorEnabled(1, true);
+                    roomRefs[downIdx].SetDoorEnabled(0, false);
                 }
             }
         }
     }
 
-    // World center of a cell by linear index (matches your placement new Vector3(i*offset.x, 0, -j*offset.y))
     Vector3 CellCenterWorld(int idx)
     {
         int x = idx % size.x;
@@ -461,25 +519,20 @@ public class DungeonGenerator : MonoBehaviour
         );
     }
 
-    // Pick a facing direction from the start cell's OPEN sides (status[0..3]) toward the nearest doorway midpoint
     Vector3 GetFacingTowardOpenDoor(Vector3 fromPos)
     {
-        // start cell center
         Vector3 center = CellCenterWorld(startPos);
         bool[] s = board[startPos].status;
 
-        // Your grid mapping (because z = -j * offset.y):
-        // Up => +Z, Down => -Z, Right => +X, Left => -X.
-        // Use midpoints on each edge as aim targets.
-        var targets = new System.Collections.Generic.List<Vector3>(4);
-        if (s[0]) targets.Add(center + new Vector3(0f, 0f,  0.5f * offset.y)); // Up
-        if (s[1]) targets.Add(center + new Vector3(0f, 0f, -0.5f * offset.y)); // Down
-        if (s[2]) targets.Add(center + new Vector3( 0.5f * offset.x, 0f, 0f)); // Right
-        if (s[3]) targets.Add(center + new Vector3(-0.5f * offset.x, 0f, 0f)); // Left
+        var targets = new List<Vector3>(4);
+        if (s[0]) targets.Add(center + new Vector3(0f, 0f,  0.5f * offset.y)); // Up => +Z
+        if (s[1]) targets.Add(center + new Vector3(0f, 0f, -0.5f * offset.y)); // Down => -Z
+        if (s[2]) targets.Add(center + new Vector3( 0.5f * offset.x, 0f, 0f)); // Right => +X
+        if (s[3]) targets.Add(center + new Vector3(-0.5f * offset.x, 0f, 0f)); // Left => -X
 
-        // Choose the nearest open edge to where we're spawning
         float best = float.PositiveInfinity;
-        Vector3 bestDir = Vector3.forward; // default
+        Vector3 bestDir = Vector3.forward;
+
         foreach (var t in targets)
         {
             Vector3 dir = t - fromPos;
@@ -495,4 +548,53 @@ public class DungeonGenerator : MonoBehaviour
         return bestDir;
     }
 
+    Vector3 FindStartSpawnPosition()
+    {
+        Vector3 spawnPos;
+
+        var marker = startRoomInstance.Find("SpawnPoint");
+        if (marker)
+        {
+            spawnPos = marker.position;
+        }
+        else if (TryGetWorldBounds(startRoomInstance, out Bounds b))
+        {
+            spawnPos = b.center;
+        }
+        else
+        {
+            int sx = startPos % size.x;
+            int sy = startPos / size.x;
+            spawnPos = new Vector3(
+                sx * offset.x + offset.x * 0.5f,
+                2f,
+                -sy * offset.y - offset.y * 0.5f
+            );
+        }
+
+        Vector3 rayStart = spawnPos + Vector3.up * 1f;
+        if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, 3f, groundMask, QueryTriggerInteraction.Ignore))
+            spawnPos = hit.point;
+        else
+            spawnPos.y = playerSpawnHeight;
+
+        return spawnPos;
+    }
+
+    // -------- Visual Gizmos (optional) --------
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        if (startRoomInstance)
+        {
+            var socket = startRoomInstance.Find("StartTableSocket");
+            if (socket)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(socket.position, 0.25f);
+                Gizmos.DrawLine(socket.position, socket.position + Vector3.up * 0.6f);
+            }
+        }
+    }
+#endif
 }
