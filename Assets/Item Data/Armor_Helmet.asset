@@ -17,6 +17,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 0f0398f3f6b52184f8bfba4a1853c848, type: 3}
   category: 2
   equipSlot: 3
+  addDamage: 0
+  addMaxHealth: 0
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

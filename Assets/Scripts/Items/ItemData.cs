@@ -16,6 +16,14 @@ public class ItemData : ScriptableObject
     [Header("Equipping")]
     public EquipSlot equipSlot = EquipSlot.None;
 
+    [Header("Stat Bonuses")]
+    [Tooltip("Extra damage the item grants when equipped (use on weapons).")]
+    public float addDamage = 0f;
+
+    [Tooltip("Extra max health the item grants when equipped (use on armor).")]
+    public float addMaxHealth = 0f;
+
+
     // Weapons (hand-held)
     public GameObject heldPrefab;
     public Vector3 localPosition;
