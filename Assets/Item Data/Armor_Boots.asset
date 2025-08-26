@@ -10,9 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44e1780edb136b041b4e0da313ce0bd9, type: 3}
-  m_Name: Sword
+  m_Name: Armor_Boots
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: 
-  icon: {fileID: 995127839, guid: 7bf1b65a015f82049b7a1d7549dfe217, type: 3}
+  displayName: Item
+  icon: {fileID: 0}
   category: 0
+  equipSlot: 0
+  heldPrefab: {fileID: 0}
+  localPosition: {x: 0, y: 0, z: 0}
+  localEulerAngles: {x: 0, y: 0, z: 0}
+  localScale: {x: 1, y: 1, z: 1}
+  skinnedPrefab: {fileID: 0}
