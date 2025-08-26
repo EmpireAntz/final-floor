@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Item
-  icon: {fileID: 0}
-  category: 0
-  equipSlot: 0
+  icon: {fileID: 21300000, guid: 0f0398f3f6b52184f8bfba4a1853c848, type: 3}
+  category: 2
+  equipSlot: 3
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}
   localScale: {x: 1, y: 1, z: 1}
-  skinnedPrefab: {fileID: 0}
+  skinnedPrefab: {fileID: 7280233179359329790, guid: 6659bec17c58fa14d880acaf2ff54b14, type: 3}
