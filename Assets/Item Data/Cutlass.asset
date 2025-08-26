@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44e1780edb136b041b4e0da313ce0bd9, type: 3}
-  m_Name: First-Sword
+  m_Name: Cutlass
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Sword
+  displayName: Cutlass
   icon: {fileID: 21300000, guid: 0e00ab24300b6914580681a07825fd10, type: 3}
   category: 1
   equipSlot: 1
