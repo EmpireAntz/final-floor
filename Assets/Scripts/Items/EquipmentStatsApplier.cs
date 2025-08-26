@@ -3,16 +3,23 @@ using UnityEngine;
 public class EquipmentStatsApplier : MonoBehaviour
 {
     [Header("Refs")]
-    public Inventory inventory;          // your existing Inventory
-    public PlayerStats playerStats;       // your PlayerStats from the message
+    public Inventory inventory;
+    public PlayerStats playerStats;
 
     [Header("Behavior")]
     [Tooltip("Preserve current health % when Max Health changes.")]
     public bool keepHealthRatioOnMaxChange = true;
 
-    // Snapshot of base stats (what you set on PlayerStats in the Inspector)
-    float baseDamage;
-    float baseMaxHealth;
+    // Snapshot of the player's base stats (what you set in the inspector)
+    [SerializeField] float baseDamage;
+    [SerializeField] float baseMaxHealth;
+
+    // === Exposed to UI ===
+    public float BaseDamage        => baseDamage;
+    public float BaseMaxHealth     => baseMaxHealth;
+    public float LastBonusDamage   { get; private set; }
+    public float LastBonusMaxHealth{ get; private set; }
+    public System.Action OnRecalculated;   // UI can subscribe
 
     void Awake()
     {
@@ -21,20 +28,20 @@ public class EquipmentStatsApplier : MonoBehaviour
 
         if (playerStats != null)
         {
-            baseDamage   = playerStats.damage;
+            baseDamage    = playerStats.damage;
             baseMaxHealth = playerStats.maxHealth;
         }
     }
 
     void OnEnable()
     {
-        if (inventory != null) inventory.OnChanged += Recalculate;
-        Recalculate(); // compute once on enable
+        if (inventory) inventory.OnChanged += Recalculate;
+        Recalculate();
     }
 
     void OnDisable()
     {
-        if (inventory != null) inventory.OnChanged -= Recalculate;
+        if (inventory) inventory.OnChanged -= Recalculate;
     }
 
     public void Recalculate()
@@ -44,7 +51,7 @@ public class EquipmentStatsApplier : MonoBehaviour
         float bonusDmg = 0f;
         float bonusHP  = 0f;
 
-        // Sum ONLY equipped items
+        // Sum equipped items’ bonuses
         for (int i = 0; i < inventory.equipment.Count; i++)
         {
             var it = inventory.equipment[i];
@@ -54,10 +61,9 @@ public class EquipmentStatsApplier : MonoBehaviour
             bonusHP  += d.addMaxHealth;
         }
 
-        // Apply to PlayerStats
         float prevMax = playerStats.maxHealth;
 
-        playerStats.damage    = baseDamage   + bonusDmg;
+        playerStats.damage    = baseDamage    + bonusDmg;
         playerStats.maxHealth = baseMaxHealth + bonusHP;
 
         if (keepHealthRatioOnMaxChange && prevMax > 0f)
@@ -70,10 +76,16 @@ public class EquipmentStatsApplier : MonoBehaviour
             playerStats.health = Mathf.Min(playerStats.health, playerStats.maxHealth);
         }
 
-        Debug.Log($"[EquipStats] +DMG {bonusDmg}, +HP {bonusHP}  →  Totals: DMG {playerStats.damage}, MaxHP {playerStats.maxHealth}");
+        // store for UI and notify
+        LastBonusDamage    = bonusDmg;
+        LastBonusMaxHealth = bonusHP;
+        OnRecalculated?.Invoke();
+
+        // Debug log (optional)
+        // Debug.Log($"[EquipStats] +DMG {bonusDmg}, +HP {bonusHP} → DMG {playerStats.damage}, MaxHP {playerStats.maxHealth}");
     }
 
-    // Optional: call this if you ever change PlayerStats base values at runtime
+    // Call this if you change base values at runtime and want to resnapshot them
     public void ResnapshotBaseFromPlayer()
     {
         if (!playerStats) return;
