@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Chest
-  icon: {fileID: 21300000, guid: 16749c897f28a094eb8e955a2cac9790, type: 3}
-  category: 0
+  icon: {fileID: 21300000, guid: 83a284ccf482f334ebd6b71eaf3deae5, type: 3}
+  category: 2
   equipSlot: 4
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}
   localScale: {x: 1, y: 1, z: 1}
-  skinnedPrefab: {fileID: 0}
+  skinnedPrefab: {fileID: 4705652903776579157, guid: b3122fa40c474ec4d80388ad124a5db8, type: 3}
