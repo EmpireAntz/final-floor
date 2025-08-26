@@ -70,10 +70,6 @@ public class EquipmentBinder : MonoBehaviour
             leftHandBone = anim.GetBoneTransform(HumanBodyBones.LeftHand);
         }
 
-        if (debugLogging)
-        {
-            Debug.Log($"[Binder] AutoBones → skeletonRoot={NameOf(skeletonRoot)}, RHand={NameOf(rightHandBone)}, LHand={NameOf(leftHandBone)}");
-        }
     }
 
     void BuildBoneMap()
@@ -82,13 +78,10 @@ public class EquipmentBinder : MonoBehaviour
         if (!skeletonRoot) return;
         foreach (var t in skeletonRoot.GetComponentsInChildren<Transform>(true))
             if (!boneMap.ContainsKey(t.name)) boneMap.Add(t.name, t);
-        if (debugLogging) Debug.Log($"[Binder] BoneMap built with {boneMap.Count} entries.");
     }
 
     public void Refresh()
     {
-        if (debugLogging) Debug.Log("[Binder] Refresh()");
-
         // Hands (weapons)
         BindHand(EquipSlot.HandRight, rightHandBone);
         BindHand(EquipSlot.HandLeft,  leftHandBone);
@@ -114,7 +107,6 @@ public class EquipmentBinder : MonoBehaviour
 
         if (item == null || handBone == null || item.heldPrefab == null)
         {
-            if (debugLogging) Debug.Log($"[Binder] {slot}: nothing to bind (item/hand/prefab missing).");
             return;
         }
 
@@ -127,7 +119,6 @@ public class EquipmentBinder : MonoBehaviour
         foreach (var c in inst.GetComponentsInChildren<Collider>(true)) c.enabled = false;
 
         spawned[slot] = inst;
-        if (debugLogging) Debug.Log($"[Binder] {slot}: spawned heldPrefab '{inst.name}'.");
     }
 
     // ====== ARMOR / WEARABLES ======
@@ -141,7 +132,6 @@ public class EquipmentBinder : MonoBehaviour
 
         if (item == null)
         {
-            if (debugLogging) Debug.Log($"[Binder] {slot}: cleared.");
             return;
         }
 
@@ -151,20 +141,17 @@ public class EquipmentBinder : MonoBehaviour
             var targetBone = GetBoneForSlot(slot);
             if (!targetBone)
             {
-                if (debugLogging) Debug.LogWarning($"[Binder] {slot}: no skinnedPrefab and no target bone; skipping.");
                 return;
             }
 
             var staticInst = InstantiateFallbackStatic(item.skinnedPrefab, targetBone);
             spawned[slot] = staticInst;
-            if (debugLogging) Debug.Log($"[Binder] {slot}: spawned STATIC prefab under bone '{targetBone.name}'.");
             return;
         }
 
         // Normal path: skinned prefab → retarget to our skeleton
         var inst = Instantiate(item.skinnedPrefab, transform, false);
         int smrs = RetargetSkinnedToSkeleton(inst);
-        if (debugLogging) Debug.Log($"[Binder] {slot}: spawned SKINNED prefab '{inst.name}', SMRs retargeted = {smrs}.");
         spawned[slot] = inst;
     }
 
@@ -204,7 +191,6 @@ public class EquipmentBinder : MonoBehaviour
             if (!newRoot) newRoot = skeletonRoot;
             smr.rootBone = newRoot;
 
-            if (debugLogging) Debug.Log($"[Binder]   SMR '{smr.name}': bones {matched}/{srcBones.Length} matched, root='{NameOf(newRoot)}'.");
 
             smr.updateWhenOffscreen = false;
             count++;
@@ -218,7 +204,6 @@ public class EquipmentBinder : MonoBehaviour
         // very slow path; only used when not in map
         foreach (var t in skeletonRoot.GetComponentsInChildren<Transform>(true))
             if (t.name == name) return t;
-        if (debugLogging) Debug.LogWarning($"[Binder]   Fallback bone NOT FOUND for '{name}', using skeletonRoot.");
         return skeletonRoot;
     }
 
