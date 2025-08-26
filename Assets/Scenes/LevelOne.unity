@@ -1527,7 +1527,7 @@ MonoBehaviour:
   equipGridParent: {fileID: 1276311789}
   slotPrefab: {fileID: 5335620381377344248, guid: bc460582f04ef84428b9b8a3f60dc63f, type: 3}
   inventory: {fileID: 2107169977}
-  pauseWhenOpen: 0
+  pauseWhenOpen: 1
   filledBgColor: {r: 1, g: 1, b: 1, a: 1}
   emptyBgColor: {r: 1, g: 1, b: 1, a: 1}
   enableDebugSeed: 0
@@ -2175,6 +2175,9 @@ MonoBehaviour:
   mouseSensitivity: 0.2
   maxPitchUp: 70
   maxPitchDown: 80
+  stopWhenTimeScaleZero: 1
+  stopWhenCursorUnlocked: 1
+  stopWhenAppUnfocused: 1
 --- !u!143 &2107169973
 CharacterController:
   m_ObjectHideFlags: 0
