@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: 'Iron Helmet '
-  icon: {fileID: 21300000, guid: 5651c23d2c3bb2c43a7a72751ad6950a, type: 3}
+  icon: {fileID: 21300000, guid: f5ef4aea3d121504989c8f4384e4c97b, type: 3}
   category: 2
   equipSlot: 3
   addDamage: 0

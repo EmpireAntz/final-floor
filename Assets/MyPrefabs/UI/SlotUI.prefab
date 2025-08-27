@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2cbd4557352c9a046a94e6ed8a06c71c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63cd3bb7c831aab148360da51f056f2d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 3077231766933352593}
   - component: {fileID: 7093451177855532423}
   - component: {fileID: 8769157095883600629}
-  - component: {fileID: 3547867344767967883}
   m_Layer: 5
   m_Name: SlotUI
   m_TagString: Untagged
@@ -142,7 +141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2cbd4557352c9a046a94e6ed8a06c71c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63cd3bb7c831aab148360da51f056f2d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -152,31 +151,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3547867344767967883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335620381377344248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65fd58a48b54e7542b904ca47858d5b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SlotTooltipSource
-  showName: 1
-  nameFormat: '<b>{Name}</b>
-
-'
-  roundValues: 1
-  hideZeroValues: 1
-  showDamage: 1
-  damageFormat: 'Damage: <color=#50FF50>+{Damage}</color>
-
-'
-  showHealth: 1
-  healthFormat: 'Health: <color=#50B0FF>+{Health}</color>
-
-'
-  prefix: 
-  suffix: 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Iron Armor
-  icon: {fileID: 21300000, guid: fa7696f1144ce6b44a4cf1c3918553d8, type: 3}
+  icon: {fileID: 21300000, guid: 7c43dfca71b2e924cbb8908d554c6fe6, type: 3}
   category: 2
   equipSlot: 4
   addDamage: 0
