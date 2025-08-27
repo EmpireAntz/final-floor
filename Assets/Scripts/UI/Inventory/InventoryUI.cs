@@ -119,7 +119,6 @@ public class InventoryUI : MonoBehaviour
         iconImg.color = Color.white;
         iconImg.raycastTarget = false;
 
-        // optional bg color tweak
         bg.color = empty ? emptyBgColor : filledBgColor;
 
         btn.onClick.RemoveAllListeners();
@@ -130,19 +129,20 @@ public class InventoryUI : MonoBehaviour
     {
         if (!inventory) return;
 
-        bool moved = false;
         if (container == ContainerType.Inventory)
         {
             if (index >= inventory.items.Count) return; // clicked padded empty
-            moved = inventory.MoveInventoryIndexToEquipmentFirstEmpty(index);
-            if (!moved) Debug.Log("Equipment is full.");
-        }
-        else
-        {
-            moved = inventory.MoveEquipmentIndexToInventoryFirstEmpty(index);
-            if (!moved) Debug.Log("Inventory is full.");
-        }
 
-        if (moved) RefreshAll();
+            // *** Minimal change: equip ONLY to matching slot ***
+            bool moved = inventory.TryEquipToMatchingSlot(index);
+            if (!moved) Debug.Log("No matching free slot for this item.");
+            else RefreshAll();
+        }
+        else // Equipment → back to inventory
+        {
+            bool moved = inventory.MoveEquipmentIndexToInventoryFirstEmpty(index);
+            if (!moved) Debug.Log("Inventory is full.");
+            if (moved) RefreshAll();
+        }
     }
 }
