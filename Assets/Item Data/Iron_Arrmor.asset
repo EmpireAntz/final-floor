@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e1780edb136b041b4e0da313ce0bd9, type: 3}
+  m_Name: Iron_Arrmor
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  id: 
+  displayName: Iron Armor
+  icon: {fileID: 21300000, guid: fa7696f1144ce6b44a4cf1c3918553d8, type: 3}
+  category: 2
+  equipSlot: 4
+  addDamage: 0
+  addMaxHealth: 100
+  heldPrefab: {fileID: 0}
+  localPosition: {x: 0, y: 0, z: 0}
+  localEulerAngles: {x: 0, y: 0, z: 0}
+  localScale: {x: 1, y: 1, z: 1}
+  skinnedPrefab: {fileID: 7804720670229736991, guid: f22b5b929d64a5542afcbdeacf32c58e, type: 3}
