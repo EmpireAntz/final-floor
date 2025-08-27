@@ -18,6 +18,14 @@ public class InventoryUI : MonoBehaviour
     public Color filledBgColor = Color.white;
     public Color emptyBgColor  = Color.white;
 
+    [Header("Equipment Placeholders")]
+    public Sprite defaultEquipPlaceholder;      // shown if specific one not set
+    public Sprite weaponPlaceholder;            // EquipSlot.HandRight
+    public Sprite headPlaceholder;              // EquipSlot.Head
+    public Sprite chestPlaceholder;             // EquipSlot.Chest
+    public Sprite feetPlaceholder;              // EquipSlot.Feet
+    public Color  placeholderTint = new Color(1f,1f,1f,0.35f);
+
     [Header("Debug Seed (optional)")]
     public bool enableDebugSeed = false;
     public ItemData debugTestItem;
@@ -67,6 +75,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (!slotPrefab || inventory == null) return;
 
+        // Inventory grid
         if (invGridParent)
         {
             Clear(invGridParent);
@@ -76,6 +85,7 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(invGridParent, ContainerType.Inventory, i, null);
         }
 
+        // Equipment grid
         if (equipGridParent)
         {
             Clear(equipGridParent);
@@ -111,18 +121,45 @@ public class InventoryUI : MonoBehaviour
         }
 
         bool empty = Inventory.IsEmpty(item);
-        var sprite = (!empty) ? item.data.icon : null;
+        Sprite sprite = null;
+
+        // real item icon if present
+        if (!empty) sprite = item.data.icon;
+
+        // equipment placeholder if empty
+        if (container == ContainerType.Equipment && sprite == null)
+            sprite = GetEquipPlaceholderForIndex(index);
 
         iconImg.sprite = sprite;
-        iconImg.enabled = sprite != null;
+        iconImg.enabled = (sprite != null);
         iconImg.preserveAspect = true;
-        iconImg.color = Color.white;
-        iconImg.raycastTarget = false;
 
+        // tint placeholders a bit so real items pop
+        bool isPlaceholder = (container == ContainerType.Equipment) && empty && sprite != null;
+        iconImg.color = isPlaceholder ? placeholderTint : Color.white;
+
+        // optional bg color
         bg.color = empty ? emptyBgColor : filledBgColor;
 
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => OnSlotClicked(container, index));
+    }
+
+    // Pick the right placeholder per equipment slot
+    Sprite GetEquipPlaceholderForIndex(int index)
+    {
+        if (inventory == null || inventory.slotOrder == null ||
+            index < 0 || index >= inventory.slotOrder.Length)
+            return defaultEquipPlaceholder;
+
+        switch (inventory.slotOrder[index])
+        {
+            case EquipSlot.HandRight: return weaponPlaceholder ? weaponPlaceholder : defaultEquipPlaceholder;
+            case EquipSlot.Head:      return headPlaceholder   ? headPlaceholder   : defaultEquipPlaceholder;
+            case EquipSlot.Chest:     return chestPlaceholder  ? chestPlaceholder  : defaultEquipPlaceholder;
+            case EquipSlot.Feet:      return feetPlaceholder   ? feetPlaceholder   : defaultEquipPlaceholder;
+            default:                  return defaultEquipPlaceholder;
+        }
     }
 
     void OnSlotClicked(ContainerType container, int index)
@@ -132,13 +169,11 @@ public class InventoryUI : MonoBehaviour
         if (container == ContainerType.Inventory)
         {
             if (index >= inventory.items.Count) return; // clicked padded empty
-
-            // *** Minimal change: equip ONLY to matching slot ***
             bool moved = inventory.TryEquipToMatchingSlot(index);
             if (!moved) Debug.Log("No matching free slot for this item.");
             else RefreshAll();
         }
-        else // Equipment → back to inventory
+        else
         {
             bool moved = inventory.MoveEquipmentIndexToInventoryFirstEmpty(index);
             if (!moved) Debug.Log("Inventory is full.");
