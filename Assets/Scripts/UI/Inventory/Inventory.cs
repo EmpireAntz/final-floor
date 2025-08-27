@@ -15,13 +15,19 @@ public class Inventory : MonoBehaviour
     public int capacity = 20;
     public List<SimpleItem> items = new List<SimpleItem>();
 
-    [Header("Equipment (fixed 4 slots)")]
-    // Set these once in Inspector to the 4 you want
+    [Header("Equipment")]
     public EquipSlot[] slotOrder = new[] {
         EquipSlot.HandRight, EquipSlot.Head, EquipSlot.Chest, EquipSlot.Feet
     };
+    
+    [Header("Equipment Placeholders")]
+    public Sprite defaultEquipPlaceholder;      // used if a specific one isn't set
+    public Sprite weaponPlaceholder;            // HandRight
+    public Sprite headPlaceholder;              // Head
+    public Sprite chestPlaceholder;             // Chest
+    public Sprite feetPlaceholder;              // Feet
+    public Color placeholderTint = new Color(1f,1f,1f,0.35f); // slight fade
 
-    // Keep this so your UI code can still size the grid
     public int equipmentCapacity = 4;
     public List<SimpleItem> equipment = new List<SimpleItem>();
 
