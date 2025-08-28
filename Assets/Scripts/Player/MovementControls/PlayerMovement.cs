@@ -5,7 +5,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private CharacterController controller;
     private Animator animator;
-    private PlayerCombat combat;
     private PlayerStats stats;
 
     [Header("Movement")]
@@ -14,12 +13,12 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 2f;
 
     [Header("Sprint")]
-    public float sprintMultiplier = 1.6f; // how much faster than walk
-    public bool sprintOnlyOnGround = true; // disable sprint in air      
+    public float sprintMultiplier = 1.6f;     // how much faster than walk
+    public bool sprintOnlyOnGround = true;    // disable sprint in air      
 
     [Header("Sprint Camera")]
-    public Camera playerCamera;                   
-    public float sprintFOVBoost = 7f;// added FOV when sprinting
+    public Camera playerCamera;               
+    public float sprintFOVBoost = 7f;         // added FOV when sprinting
     public float fovLerpSpeed = 8f;
     private float _baseFOV;
 
@@ -32,19 +31,17 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool wasGrounded;
 
-    readonly int HashSpeed = Animator.StringToHash("Speed");
-    readonly int HashIsJumping = Animator.StringToHash("isJumping");
-    readonly int HashIsSprinting = Animator.StringToHash("isSprinting");
-    readonly int HashMoveX = Animator.StringToHash("MoveX");
-    readonly int HashMoveZ = Animator.StringToHash("MoveZ");
+    readonly int HashSpeed        = Animator.StringToHash("Speed");
+    readonly int HashIsJumping    = Animator.StringToHash("isJumping");
+    readonly int HashIsSprinting  = Animator.StringToHash("isSprinting");
+    readonly int HashMoveX        = Animator.StringToHash("MoveX");
+    readonly int HashMoveZ        = Animator.StringToHash("MoveZ");
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
-        combat = GetComponent<PlayerCombat>();
-        stats = GetComponent<PlayerStats>();
-
+        animator   = GetComponent<Animator>();
+        stats      = GetComponent<PlayerStats>();
 
         if (playerCamera != null)
             _baseFOV = playerCamera.fieldOfView;
@@ -52,9 +49,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // ----- Combat gate -----
-        bool blockMove = combat != null && combat.isPunching;
-
         // ----- Ground check (pre-move) -----
         bool wasGroundedPrev = wasGrounded;
         bool sphereHit = Physics.CheckSphere(
@@ -70,16 +64,13 @@ public class PlayerMovement : MonoBehaviour
 
         // ----- Horizontal input (Diagonal Normalize) -----
         float ix = 0f, iz = 0f; //local input x/z
-        if (!blockMove)
-        {
-            bool a = Keyboard.current.aKey.isPressed;
-            bool d = Keyboard.current.dKey.isPressed;
-            bool w = Keyboard.current.wKey.isPressed;
-            bool s = Keyboard.current.sKey.isPressed;
+        bool a = Keyboard.current.aKey.isPressed;
+        bool d = Keyboard.current.dKey.isPressed;
+        bool w = Keyboard.current.wKey.isPressed;
+        bool s = Keyboard.current.sKey.isPressed;
 
-            ix = (d ? 1f : 0f) + (a ? -1f : 0f); // right(+), left(-)
-            iz = (w ? 1f : 0f) + (s ? -1f : 0f); // forward(+), back(-)
-        }
+        ix = (d ? 1f : 0f) + (a ? -1f : 0f); // right(+), left(-)
+        iz = (w ? 1f : 0f) + (s ? -1f : 0f); // forward(+), back(-)
 
         // Normalize so diagonals aren't faster
         Vector3 input = new Vector3(ix, 0f, iz);
@@ -88,16 +79,14 @@ public class PlayerMovement : MonoBehaviour
 
         // ----- Sprint (Shift) -----
         bool shiftHeld = (Keyboard.current.leftShiftKey?.isPressed ?? false)
-            || (Keyboard.current.rightShiftKey?.isPressed ?? false);
+                      || (Keyboard.current.rightShiftKey?.isPressed ?? false);
 
-        bool canSprint = !blockMove
-            && move.sqrMagnitude > 0.0001f
-            && (!sprintOnlyOnGround || isGrounded)
-            && (stats == null || stats.CanSprint());          
+        bool canSprint = move.sqrMagnitude > 0.0001f
+                      && (!sprintOnlyOnGround || isGrounded)
+                      && (stats == null || stats.CanSprint());
 
         bool isSprinting = canSprint && shiftHeld;
         stats?.TickStamina(isSprinting, Time.deltaTime); 
-
 
         float currentSpeed = speed * (isSprinting ? sprintMultiplier : 1f);
 
@@ -105,13 +94,13 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Animator params 
-        animator.SetFloat(HashMoveX, blockMove ? 0f : input.x, 0.1f, Time.deltaTime); // Strafe
-        animator.SetFloat(HashMoveZ, blockMove ? 0f : input.z, 0.1f, Time.deltaTime); //Forward/Back
-        animator.SetFloat(HashSpeed, blockMove ? 0f : Mathf.Clamp01(move.magnitude));
+        animator.SetFloat(HashMoveX, input.x, 0.1f, Time.deltaTime); // Strafe
+        animator.SetFloat(HashMoveZ, input.z, 0.1f, Time.deltaTime); // Forward/Back
+        animator.SetFloat(HashSpeed, Mathf.Clamp01(move.magnitude));
         animator.SetBool(HashIsSprinting, isSprinting);
 
-        // ----- Jump (disabled while punching) -----
-        if (!blockMove && Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
+        // ----- Jump -----
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             animator.SetBool(HashIsJumping, true);
@@ -129,13 +118,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (afterMoveGround && !wasGroundedPrev && animator.GetBool(HashIsJumping))
             animator.SetBool(HashIsJumping, false);
-            
+
         // ----- Sprint FOV effect -----
         if (playerCamera != null)
         {
             float targetFOV = _baseFOV + (isSprinting ? sprintFOVBoost : 0f);
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * fovLerpSpeed);
         }
-}
-
+    }
 }

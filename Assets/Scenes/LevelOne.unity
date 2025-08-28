@@ -582,14 +582,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.06140983, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.062745094, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6f7a5918acdd56a46a63378569560b70, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 511939f58229851bfaf5847de3382e5b, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2175,7 +2175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2cbd4557352c9a046a94e6ed8a06c71c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63cd3bb7c831aab148360da51f056f2d, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2822,6 +2822,7 @@ GameObject:
   - component: {fileID: 2107169979}
   - component: {fileID: 2107169980}
   - component: {fileID: 2107169981}
+  - component: {fileID: 2107169982}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3062,6 +3063,23 @@ MonoBehaviour:
   keepHealthRatioOnMaxChange: 1
   baseDamage: 0
   baseMaxHealth: 0
+--- !u!114 &2107169982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107169968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a9d936c74ea41408078f6362fd649b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipAnimationSwitcher
+  inventory: {fileID: 2107169977}
+  animator: {fileID: 2107169974}
+  baseController: {fileID: 9100000, guid: 2dbfab2aa602108458d113d62ff13f9f, type: 2}
+  swordOverride: {fileID: 22100000, guid: 656fa760bbdc44c4db53f525148a3dfd, type: 2}
+  weaponSlot: 1
 --- !u!1001 &2882996401563460767
 PrefabInstance:
   m_ObjectHideFlags: 0
