@@ -24,7 +24,7 @@ public class PlayerCombat : MonoBehaviour
     [Header("Cooldown")]
     public float swordCooldown = 0.05f;
 
-    // ---- internals ----
+    // ---- internals ---- 
     int   _upperLayerIndex = -1;
     int   _hashAttack;
     int   _attackTagHash;
