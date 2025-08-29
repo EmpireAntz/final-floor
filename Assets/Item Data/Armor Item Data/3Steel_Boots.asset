@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Steel Boots Tier 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 325e9578015c7074d966796bf0f8654c, type: 3}
   category: 2
   equipSlot: 6
   addDamage: 0

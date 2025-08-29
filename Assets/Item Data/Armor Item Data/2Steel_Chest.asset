@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Steel Armor Tier 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 25b9231dd1a688f47a0b08b179a2f029, type: 3}
   category: 2
   equipSlot: 4
   addDamage: 0

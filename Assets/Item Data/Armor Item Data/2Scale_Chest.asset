@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Scale Armor Tier 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 41770950928eab74c9a5c896d0b6f7b5, type: 3}
   category: 2
   equipSlot: 4
   addDamage: 0

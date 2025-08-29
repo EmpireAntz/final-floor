@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Iron Armor Tier 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c633d6a32b506b143a7493aaeb6d3a71, type: 3}
   category: 2
   equipSlot: 4
   addDamage: 0
