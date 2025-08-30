@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Scale Boots Tier 1
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ffc9c9900b4e71746860739735423ae6, type: 3}
   category: 2
   equipSlot: 6
   addDamage: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Drake Armor Tier 1
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9a7bbf8e45ce9a34786237161917d442, type: 3}
   category: 2
   equipSlot: 4
   addDamage: 0

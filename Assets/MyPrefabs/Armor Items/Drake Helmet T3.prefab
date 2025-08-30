@@ -15752,7 +15752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   prompt: Pick up
-  itemData: {fileID: 0}
+  itemData: {fileID: 11400000, guid: 4f41fdf51c6af3a41836a2c0d4215a5d, type: 2}
   autoEquipIfPossible: 0
   pickupSfx: {fileID: 0}
   destroyOnPickUp: 1

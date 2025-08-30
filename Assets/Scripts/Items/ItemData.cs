@@ -2,7 +2,8 @@
 using UnityEngine;
 
 public enum ItemCategory { Misc, Weapon, Armor, Consumable, KeyItem }
-public enum EquipSlot     { None, HandRight, HandLeft, Head, Chest, Legs, Feet, Back }
+public enum EquipSlot { None, HandRight, HandLeft, Head, Chest, Legs, Feet, Back }
+public enum ItemTier { Tier1 = 1, Tier2 = 2, Tier3 = 3 }
 
 [CreateAssetMenu(menuName = "Game/Item Data", fileName = "NewItemData")]
 public class ItemData : ScriptableObject
@@ -15,6 +16,9 @@ public class ItemData : ScriptableObject
 
     [Header("Equipping")]
     public EquipSlot equipSlot = EquipSlot.None;
+
+    [Header("Tier")]
+    public ItemTier tier = ItemTier.Tier1;
 
     [Header("Stat Bonuses")]
     [Tooltip("Extra damage the item grants when equipped (use on weapons).")]

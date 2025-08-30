@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
   displayName: Drake Boots Tier 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f22677733ba28ae4aaeb7aabe3d59cea, type: 3}
   category: 2
   equipSlot: 6
   addDamage: 0
