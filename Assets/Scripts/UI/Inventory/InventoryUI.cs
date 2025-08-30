@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;      // NEW input system
+using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Text;
@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
 
     [Header("Slot Styling (optional)")]
     public Color filledBgColor = Color.white;
-    public Color emptyBgColor  = Color.white;
+    public Color emptyBgColor = Color.white;
 
     [Header("Equipment Placeholders")]
     public Sprite defaultEquipPlaceholder;
@@ -27,31 +27,50 @@ public class InventoryUI : MonoBehaviour
     public Sprite headPlaceholder;     // EquipSlot.Head
     public Sprite chestPlaceholder;    // EquipSlot.Chest
     public Sprite feetPlaceholder;     // EquipSlot.Feet
-    public Color  placeholderTint = new Color(1f,1f,1f,0.35f);
+    public Color placeholderTint = new Color(1f, 1f, 1f, 0.35f);
 
     [Header("Tooltip (Inspector-wired)")]
     public RectTransform tooltipRoot;     // Panel under your InventoryUI Canvas
-    public TMP_Text      tooltipLabel;    // TMP text inside the tooltip
-    public Vector2       tooltipOffset = new Vector2(16,-16);
-    public bool          tooltipFollowCursor = true;
+    public TMP_Text tooltipLabel;    // TMP text inside the tooltip
+
+    [Header("Tooltip Layout")]
+    public bool tooltipFollowCursor = true;
+    public Vector2 tooltipOffset = new Vector2(16, -16);
+    public Vector2 tooltipPivot = new Vector2(0f, 1f); // top-left
+    [Range(0.25f, 3f)]
+    public float tooltipScale = 1f;
+
+    [Header("Tooltip Colors")]
+    public Color nameColor = Color.white;
+    public Color damageColor = new Color(0.31f, 1f, 0.31f, 1f);
+    public Color healthColor = new Color(0.31f, 0.69f, 1f, 1f);
+
+    [Header("Tier Colors")]
+    public Color tier1Color = new Color(0.80f, 0.80f, 0.80f, 1f);
+    public Color tier2Color = new Color(0.40f, 0.85f, 1.00f, 1f);
+    public Color tier3Color = new Color(1.00f, 0.84f, 0.31f, 1f);
 
     [Header("Tooltip Formatting (editable)")]
     public bool showName = true;
-    [TextArea] public string nameFormat   = "<b>{Name}</b>\n";
+    public bool showTier = true;
     public bool roundValues = true;
     public bool hideZeroValues = true;
-    [TextArea] public string damageFormat = "Damage: <color=#50FF50>+{Damage}</color>\n";
-    [TextArea] public string healthFormat = "Health: <color=#50B0FF>+{Health}</color>\n";
+
+    [TextArea] public string nameFormat = "<color={NameColor}><b>{Name}</b></color>\n";
+    [TextArea] public string tierFormat = "Tier: <color={TierColor}>{Tier}</color>\n";
+    [TextArea] public string damageFormat = "Damage: <color={DamageColor}>+{Damage}</color>\n";
+    [TextArea] public string healthFormat = "Health: <color={HealthColor}>+{Health}</color>\n";
+    public bool tierAsRoman = true; // I, II, III or 1,2,3
 
     [Header("Debug Seed (optional)")]
-    public bool   enableDebugSeed = false;
+    public bool enableDebugSeed = false;
     public ItemData debugTestItem;
 
     // --- internals ---
     Canvas _canvas;
     RectTransform _canvasRT;
     CanvasGroup _tipCG;
-    Vector2 _lastPointerPos;            // NEW: cached pointer position (Input System)
+    Vector2 _lastPointerPos;
 
     void Awake()
     {
@@ -74,11 +93,9 @@ public class InventoryUI : MonoBehaviour
 
     void Update()
     {
-        // open/close
         if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
             Toggle();
 
-        // follow cursor while tooltip visible (NEW input system)
         if (tooltipFollowCursor && _tipCG != null && _tipCG.alpha > 0.001f)
         {
             if (Mouse.current != null)
@@ -99,7 +116,7 @@ public class InventoryUI : MonoBehaviour
         panel.SetActive(show);
 
         Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible   = show;
+        Cursor.visible = show;
         if (pauseWhenOpen) Time.timeScale = show ? 0f : 1f;
 
         if (show) RefreshAll();
@@ -110,7 +127,6 @@ public class InventoryUI : MonoBehaviour
     {
         if (!slotPrefab || inventory == null) return;
 
-        // Inventory
         if (invGridParent)
         {
             Clear(invGridParent);
@@ -120,7 +136,6 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(invGridParent, ContainerType.Inventory, i, null);
         }
 
-        // Equipment
         if (equipGridParent)
         {
             Clear(equipGridParent);
@@ -128,7 +143,7 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(equipGridParent, ContainerType.Equipment, i, inventory.equipment[i]);
         }
 
-        HideTooltip(); // ensure no stale tooltip after rebuild
+        HideTooltip();
     }
 
     void Clear(Transform t)
@@ -142,7 +157,7 @@ public class InventoryUI : MonoBehaviour
         var go = Instantiate(slotPrefab, parent);
 
         var btn = go.GetComponent<Button>() ?? go.AddComponent<Button>();
-        var bg  = go.GetComponent<Image>()  ?? go.AddComponent<Image>();
+        var bg = go.GetComponent<Image>() ?? go.AddComponent<Image>();
         bg.raycastTarget = true;
 
         // ensure Icon child exists
@@ -160,10 +175,8 @@ public class InventoryUI : MonoBehaviour
         bool empty = Inventory.IsEmpty(item);
         Sprite sprite = null;
 
-        // real item icon if present
         if (!empty) sprite = item.data.icon;
 
-        // equipment placeholder if empty
         if (container == ContainerType.Equipment && sprite == null)
             sprite = GetEquipPlaceholderForIndex(index);
 
@@ -171,28 +184,25 @@ public class InventoryUI : MonoBehaviour
         iconImg.enabled = (sprite != null);
         iconImg.preserveAspect = true;
 
-        // tint placeholders a bit so real items pop
         bool isPlaceholder = (container == ContainerType.Equipment) && empty && sprite != null;
         iconImg.color = isPlaceholder ? placeholderTint : Color.white;
-
-        // optional bg color
         bg.color = empty ? emptyBgColor : filledBgColor;
 
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => OnSlotClicked(container, index));
 
-        // --- Tooltip bindings (no PointerMove; we follow in Update) ---
+        // Tooltip bindings
         var trigger = go.GetComponent<EventTrigger>();
         if (!trigger) trigger = go.AddComponent<EventTrigger>();
         trigger.triggers ??= new System.Collections.Generic.List<EventTrigger.Entry>();
         trigger.triggers.Clear();
 
-        if (!empty) // only bind hover for real items
+        if (!empty) // only hover real items
         {
             AddTrigger(trigger, EventTriggerType.PointerEnter, e =>
             {
                 var p = (PointerEventData)e;
-                _lastPointerPos = p.position; // seed cached position
+                _lastPointerPos = p.position;
                 ShowTooltip(BuildTooltipText(item), p.position);
             });
 
@@ -200,7 +210,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // Pick the right placeholder per equipment slot
+    // ---- Placeholders ----
     Sprite GetEquipPlaceholderForIndex(int index)
     {
         if (inventory == null || inventory.slotOrder == null ||
@@ -210,10 +220,10 @@ public class InventoryUI : MonoBehaviour
         switch (inventory.slotOrder[index])
         {
             case EquipSlot.HandRight: return weaponPlaceholder ? weaponPlaceholder : defaultEquipPlaceholder;
-            case EquipSlot.Head:      return headPlaceholder   ? headPlaceholder   : defaultEquipPlaceholder;
-            case EquipSlot.Chest:     return chestPlaceholder  ? chestPlaceholder  : defaultEquipPlaceholder;
-            case EquipSlot.Feet:      return feetPlaceholder   ? feetPlaceholder   : defaultEquipPlaceholder;
-            default:                  return defaultEquipPlaceholder;
+            case EquipSlot.Head: return headPlaceholder ? headPlaceholder : defaultEquipPlaceholder;
+            case EquipSlot.Chest: return chestPlaceholder ? chestPlaceholder : defaultEquipPlaceholder;
+            case EquipSlot.Feet: return feetPlaceholder ? feetPlaceholder : defaultEquipPlaceholder;
+            default: return defaultEquipPlaceholder;
         }
     }
 
@@ -223,7 +233,7 @@ public class InventoryUI : MonoBehaviour
 
         if (container == ContainerType.Inventory)
         {
-            if (index >= inventory.items.Count) return; // clicked padded empty
+            if (index >= inventory.items.Count) return;
             bool moved = inventory.TryEquipToMatchingSlot(index);
             if (!moved) Debug.Log("No matching free slot for this item.");
             else RefreshAll();
@@ -246,14 +256,18 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        _canvas   = tooltipRoot.GetComponentInParent<Canvas>();
+        _canvas = tooltipRoot.GetComponentInParent<Canvas>();
         _canvasRT = _canvas ? _canvas.GetComponent<RectTransform>() : null;
-        _tipCG    = tooltipRoot.GetComponent<CanvasGroup>();
+        _tipCG = tooltipRoot.GetComponent<CanvasGroup>();
         if (!_tipCG) _tipCG = tooltipRoot.gameObject.AddComponent<CanvasGroup>();
+
+        // layout / transform from inspector
+        tooltipRoot.pivot = tooltipPivot;
+        tooltipRoot.localScale = Vector3.one * Mathf.Max(0.01f, tooltipScale);
 
         // invisible & non-blocking
         _tipCG.alpha = 0f;
-        _tipCG.interactable   = false;
+        _tipCG.interactable = false;
         _tipCG.blocksRaycasts = false;
 
         var img = tooltipRoot.GetComponent<Image>();
@@ -266,6 +280,11 @@ public class InventoryUI : MonoBehaviour
         if (!_tipCG || tooltipLabel == null || string.IsNullOrEmpty(text)) return;
         tooltipLabel.text = text;
         _tipCG.alpha = 1f;
+
+        // apply current scale in case you change it at runtime
+        tooltipRoot.localScale = Vector3.one * Mathf.Max(0.01f, tooltipScale);
+        tooltipRoot.pivot = tooltipPivot;
+
         MoveTooltip(screenPos);
     }
 
@@ -280,10 +299,11 @@ public class InventoryUI : MonoBehaviour
             out var lp
         );
 
-        // clamp to canvas
+        // measure & clamp
         LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRoot);
         Vector2 size = tooltipRoot.sizeDelta;
         Vector2 half = _canvasRT.rect.size * 0.5f;
+
         lp.x = Mathf.Clamp(lp.x, -half.x, half.x - size.x);
         lp.y = Mathf.Clamp(lp.y, -half.y + size.y, half.y);
 
@@ -308,16 +328,80 @@ public class InventoryUI : MonoBehaviour
         var d = it.data;
         string F(float v) => roundValues ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
 
+        // color hex tokens
+        string nameHex = ToHex(nameColor);
+        string dmgHex = ToHex(damageColor);
+        string hpHex = ToHex(healthColor);
+        string tierHex = ToHex(GetTierColor(d));
+
         var sb = new StringBuilder(128);
+
         if (showName && !string.IsNullOrEmpty(d.displayName))
-            sb.Append(nameFormat.Replace("{Name}", d.displayName));
+        {
+            string line = nameFormat
+                .Replace("{NameColor}", nameHex)
+                .Replace("{Name}", d.displayName);
+            sb.Append(line);
+        }
+
+        if (showTier)
+        {
+            string tStr = tierAsRoman ? TierToRoman(d) : TierToNumber(d);
+            string line = tierFormat
+                .Replace("{TierColor}", tierHex)
+                .Replace("{Tier}", tStr);
+            sb.Append(line);
+        }
 
         if (!hideZeroValues || Mathf.Abs(d.addDamage) > 0.0001f)
-            sb.Append(damageFormat.Replace("{Damage}", F(d.addDamage)));
+        {
+            string line = damageFormat
+                .Replace("{DamageColor}", dmgHex)
+                .Replace("{Damage}", F(d.addDamage));
+            sb.Append(line);
+        }
 
         if (!hideZeroValues || Mathf.Abs(d.addMaxHealth) > 0.0001f)
-            sb.Append(healthFormat.Replace("{Health}", F(d.addMaxHealth)));
+        {
+            string line = healthFormat
+                .Replace("{HealthColor}", hpHex)
+                .Replace("{Health}", F(d.addMaxHealth));
+            sb.Append(line);
+        }
 
         return sb.ToString().TrimEnd('\n', '\r', ' ');
     }
+
+    static string ToHex(Color c)
+    {
+        Color32 c32 = c;
+        return $"#{c32.r:X2}{c32.g:X2}{c32.b:X2}{c32.a:X2}";
+    }
+
+    static string TierToRoman(ItemData d)
+    {
+        // expects enum ItemTier { Tier1=1, Tier2=2, Tier3=3 }
+        int n = (int)d.tier;
+        return n switch { 1 => "I", 2 => "II", 3 => "III", _ => n.ToString() };
+    }
+
+    static string TierToNumber(ItemData d)
+    {
+        int n = (int)d.tier;
+        return n.ToString();
+    }
+
+    Color GetTierColor(ItemData d)
+    {
+        switch (d.tier)
+        {
+            case ItemTier.Tier1: return tier1Color;
+            case ItemTier.Tier2: return tier2Color;
+            case ItemTier.Tier3: return tier3Color;
+            default:             return tier1Color; // fallback
+        }
+    }
+
+    
+    
 }
