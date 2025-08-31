@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 3Scale_Boots
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Scale Boots Tier 3
+  displayName: Scale Boots
   icon: {fileID: 21300000, guid: 5b6a35c9880d39c4da04f36543e4804c, type: 3}
   category: 2
   equipSlot: 6
+  tier: 3
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}

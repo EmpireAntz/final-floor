@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 1Iron_Helmet
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Iron Helmet Tier 1
+  displayName: Iron Helmet
   icon: {fileID: 21300000, guid: de3f871b3b3290e4b821830f21a170e2, type: 3}
   category: 2
   equipSlot: 3
+  tier: 1
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}

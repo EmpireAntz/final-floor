@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 1Scale_Helmet
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Scale Helmet Tier 1
+  displayName: Scale Helmet
   icon: {fileID: 21300000, guid: 9823c7b18f610a3439166b87f215f614, type: 3}
   category: 2
   equipSlot: 3
+  tier: 1
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 1Drake_Helmet
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Drake Helmet Tier 1
+  displayName: Drake Helmet
   icon: {fileID: 21300000, guid: f1c1837ee9e560346bb0ad116e0bda8f, type: 3}
   category: 2
   equipSlot: 3
+  tier: 1
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}

@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
 
     [Header("Slot Styling (optional)")]
     public Color filledBgColor = Color.white;
-    public Color emptyBgColor = Color.white;
+    public Color emptyBgColor  = Color.white;
 
     [Header("Equipment Placeholders")]
     public Sprite defaultEquipPlaceholder;
@@ -27,68 +27,56 @@ public class InventoryUI : MonoBehaviour
     public Sprite headPlaceholder;     // EquipSlot.Head
     public Sprite chestPlaceholder;    // EquipSlot.Chest
     public Sprite feetPlaceholder;     // EquipSlot.Feet
-    public Color placeholderTint = new Color(1f, 1f, 1f, 0.35f);
+    public Color  placeholderTint = new Color(1f,1f,1f,0.35f);
 
+    // -------- Chest UI --------
+    [Header("Chest UI")]
+    public GameObject chestSectionRoot; // enable/disable this when chest is open/closed
+    public Transform chestGridParent;   // grid (2x2) under chest section
+    public Color chestEmptyBg = new Color(1,1,1,0.08f);
+    ChestContainer _activeChest;
+
+    // -------- Tooltip (optional) --------
     [Header("Tooltip (Inspector-wired)")]
-    public RectTransform tooltipRoot;     // Panel under your InventoryUI Canvas
-    public TMP_Text tooltipLabel;    // TMP text inside the tooltip
-
+    public RectTransform tooltipRoot;
+    public TMP_Text tooltipLabel;
     [Header("Tooltip Layout")]
     public bool tooltipFollowCursor = true;
     public Vector2 tooltipOffset = new Vector2(16, -16);
-    public Vector2 tooltipPivot = new Vector2(0f, 1f); // top-left
-    [Range(0.25f, 3f)]
-    public float tooltipScale = 1f;
-
+    public Vector2 tooltipPivot = new Vector2(0f, 1f);
+    [Range(0.25f, 3f)] public float tooltipScale = 1f;
     [Header("Tooltip Colors")]
     public Color nameColor = Color.white;
     public Color damageColor = new Color(0.31f, 1f, 0.31f, 1f);
     public Color healthColor = new Color(0.31f, 0.69f, 1f, 1f);
-
     [Header("Tier Colors")]
     public Color tier1Color = new Color(0.80f, 0.80f, 0.80f, 1f);
     public Color tier2Color = new Color(0.40f, 0.85f, 1.00f, 1f);
     public Color tier3Color = new Color(1.00f, 0.84f, 0.31f, 1f);
-
-    [Header("Tooltip Formatting (editable)")]
-    public bool showName = true;
-    public bool showTier = true;
-    public bool roundValues = true;
-    public bool hideZeroValues = true;
-
-    [TextArea] public string nameFormat = "<color={NameColor}><b>{Name}</b></color>\n";
-    [TextArea] public string tierFormat = "Tier: <color={TierColor}>{Tier}</color>\n";
+    [Header("Tooltip Formatting")]
+    public bool showName = true, showTier = true, roundValues = true, hideZeroValues = true;
+    [TextArea] public string nameFormat   = "<b><color={NameColor}>{Name}</color></b>\n";
+    [TextArea] public string tierFormat   = "Tier: <color={TierColor}>{Tier}</color>\n";
     [TextArea] public string damageFormat = "Damage: <color={DamageColor}>+{Damage}</color>\n";
     [TextArea] public string healthFormat = "Health: <color={HealthColor}>+{Health}</color>\n";
-    public bool tierAsRoman = true; // I, II, III or 1,2,3
+    public bool tierAsRoman = true;
 
-    [Header("Debug Seed (optional)")]
-    public bool enableDebugSeed = false;
-    public ItemData debugTestItem;
-
-    // --- internals ---
-    Canvas _canvas;
-    RectTransform _canvasRT;
-    CanvasGroup _tipCG;
-    Vector2 _lastPointerPos;
+    // internals
+    Canvas _canvas; RectTransform _canvasRT; CanvasGroup _tipCG; Vector2 _lastPointerPos;
 
     void Awake()
     {
         if (panel) panel.SetActive(false);
+        if (chestSectionRoot) chestSectionRoot.SetActive(false);
         if (!inventory) inventory = FindObjectOfType<Inventory>();
-
-        if (enableDebugSeed && Application.isPlaying && inventory != null &&
-            inventory.items.Count == 0 && debugTestItem != null)
-            inventory.TryAddItemData(debugTestItem);
-
         if (inventory) inventory.OnChanged += OnInventoryChanged;
-
         SetupTooltip();
     }
 
     void OnDestroy()
     {
         if (inventory) inventory.OnChanged -= OnInventoryChanged;
+        if (_activeChest) _activeChest.OnChanged -= OnChestChanged;
     }
 
     void Update()
@@ -98,17 +86,43 @@ public class InventoryUI : MonoBehaviour
 
         if (tooltipFollowCursor && _tipCG != null && _tipCG.alpha > 0.001f)
         {
-            if (Mouse.current != null)
-                _lastPointerPos = Mouse.current.position.ReadValue();
+            if (Mouse.current != null) _lastPointerPos = Mouse.current.position.ReadValue();
             MoveTooltip(_lastPointerPos);
         }
     }
 
-    void OnInventoryChanged()
+    void OnInventoryChanged() { if (panel && panel.activeSelf) RefreshAll(); }
+    void OnChestChanged()     { if (panel && panel.activeSelf) RefreshAll(); }
+
+    // -------- Public chest API --------
+    public void OpenChest(ChestContainer chest)
     {
-        if (panel && panel.activeSelf) RefreshAll();
+        if (_activeChest) _activeChest.OnChanged -= OnChestChanged;
+        _activeChest = chest;
+        if (_activeChest) _activeChest.OnChanged += OnChestChanged;
+
+        if (panel) panel.SetActive(true);
+        if (chestSectionRoot) chestSectionRoot.SetActive(true);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        if (pauseWhenOpen) Time.timeScale = 0f;
+
+        RefreshAll();
     }
 
+    public void CloseChest()
+    {
+        if (chestSectionRoot) chestSectionRoot.SetActive(false);
+        if (_activeChest)
+        {
+            _activeChest.OnChanged -= OnChestChanged;
+            _activeChest = null;
+        }
+        HideTooltip();
+    }
+
+    // -------- Toggle full panel --------
     public void Toggle()
     {
         if (!panel) return;
@@ -120,13 +134,15 @@ public class InventoryUI : MonoBehaviour
         if (pauseWhenOpen) Time.timeScale = show ? 0f : 1f;
 
         if (show) RefreshAll();
-        else HideTooltip();
+        else { CloseChest(); HideTooltip(); }
     }
 
+    // -------- Build all grids --------
     public void RefreshAll()
     {
         if (!slotPrefab || inventory == null) return;
 
+        // Inventory
         if (invGridParent)
         {
             Clear(invGridParent);
@@ -136,6 +152,7 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(invGridParent, ContainerType.Inventory, i, null);
         }
 
+        // Equipment
         if (equipGridParent)
         {
             Clear(equipGridParent);
@@ -143,13 +160,25 @@ public class InventoryUI : MonoBehaviour
                 BuildSlot(equipGridParent, ContainerType.Equipment, i, inventory.equipment[i]);
         }
 
+        // Chest (2x2)
+        if (chestSectionRoot && chestSectionRoot.activeSelf && chestGridParent)
+        {
+            Clear(chestGridParent);
+            int cap = (_activeChest ? Mathf.Clamp(_activeChest.capacity, 1, 4) : 4);
+            int count = _activeChest ? _activeChest.items.Count : 0;
+
+            for (int i = 0; i < count; i++)
+                BuildSlot(chestGridParent, ContainerType.Chest, i, _activeChest.items[i]);
+            for (int i = count; i < cap; i++)
+                BuildSlot(chestGridParent, ContainerType.Chest, i, null);
+        }
+
         HideTooltip();
     }
 
     void Clear(Transform t)
     {
-        for (int i = t.childCount - 1; i >= 0; i--)
-            Destroy(t.GetChild(i).gameObject);
+        for (int i = t.childCount - 1; i >= 0; i--) Destroy(t.GetChild(i).gameObject);
     }
 
     void BuildSlot(Transform parent, ContainerType container, int index, SimpleItem item)
@@ -157,10 +186,10 @@ public class InventoryUI : MonoBehaviour
         var go = Instantiate(slotPrefab, parent);
 
         var btn = go.GetComponent<Button>() ?? go.AddComponent<Button>();
-        var bg = go.GetComponent<Image>() ?? go.AddComponent<Image>();
+        var bg  = go.GetComponent<Image>()  ?? go.AddComponent<Image>();
         bg.raycastTarget = true;
 
-        // ensure Icon child exists
+        // ensure Icon child
         Image iconImg = go.transform.Find("Icon")?.GetComponent<Image>();
         if (!iconImg)
         {
@@ -173,31 +202,30 @@ public class InventoryUI : MonoBehaviour
         }
 
         bool empty = Inventory.IsEmpty(item);
-        Sprite sprite = null;
+        Sprite spr = (!empty) ? item.data.icon : null;
 
-        if (!empty) sprite = item.data.icon;
+        if (container == ContainerType.Equipment && spr == null)
+            spr = GetEquipPlaceholderForIndex(index);
 
-        if (container == ContainerType.Equipment && sprite == null)
-            sprite = GetEquipPlaceholderForIndex(index);
-
-        iconImg.sprite = sprite;
-        iconImg.enabled = (sprite != null);
+        iconImg.sprite = spr;
+        iconImg.enabled = (spr != null);
         iconImg.preserveAspect = true;
 
-        bool isPlaceholder = (container == ContainerType.Equipment) && empty && sprite != null;
+        bool isPlaceholder = (container == ContainerType.Equipment) && empty && spr != null;
         iconImg.color = isPlaceholder ? placeholderTint : Color.white;
-        bg.color = empty ? emptyBgColor : filledBgColor;
+
+        Color emptyCol = (container == ContainerType.Chest) ? chestEmptyBg : emptyBgColor;
+        bg.color = empty ? emptyCol : filledBgColor;
 
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => OnSlotClicked(container, index));
 
-        // Tooltip bindings
-        var trigger = go.GetComponent<EventTrigger>();
-        if (!trigger) trigger = go.AddComponent<EventTrigger>();
+        // tooltip
+        var trigger = go.GetComponent<EventTrigger>() ?? go.AddComponent<EventTrigger>();
         trigger.triggers ??= new System.Collections.Generic.List<EventTrigger.Entry>();
         trigger.triggers.Clear();
 
-        if (!empty) // only hover real items
+        if (!empty)
         {
             AddTrigger(trigger, EventTriggerType.PointerEnter, e =>
             {
@@ -205,115 +233,92 @@ public class InventoryUI : MonoBehaviour
                 _lastPointerPos = p.position;
                 ShowTooltip(BuildTooltipText(item), p.position);
             });
-
             AddTrigger(trigger, EventTriggerType.PointerExit, _ => HideTooltip());
         }
     }
 
-    // ---- Placeholders ----
     Sprite GetEquipPlaceholderForIndex(int index)
     {
-        if (inventory == null || inventory.slotOrder == null ||
-            index < 0 || index >= inventory.slotOrder.Length)
+        if (inventory == null || inventory.slotOrder == null || index < 0 || index >= inventory.slotOrder.Length)
             return defaultEquipPlaceholder;
 
         switch (inventory.slotOrder[index])
         {
             case EquipSlot.HandRight: return weaponPlaceholder ? weaponPlaceholder : defaultEquipPlaceholder;
-            case EquipSlot.Head: return headPlaceholder ? headPlaceholder : defaultEquipPlaceholder;
-            case EquipSlot.Chest: return chestPlaceholder ? chestPlaceholder : defaultEquipPlaceholder;
-            case EquipSlot.Feet: return feetPlaceholder ? feetPlaceholder : defaultEquipPlaceholder;
-            default: return defaultEquipPlaceholder;
+            case EquipSlot.Head:      return headPlaceholder   ? headPlaceholder   : defaultEquipPlaceholder;
+            case EquipSlot.Chest:     return chestPlaceholder  ? chestPlaceholder  : defaultEquipPlaceholder;
+            case EquipSlot.Feet:      return feetPlaceholder   ? feetPlaceholder   : defaultEquipPlaceholder;
+            default:                  return defaultEquipPlaceholder;
         }
     }
 
     void OnSlotClicked(ContainerType container, int index)
     {
         if (!inventory) return;
+        bool moved = false;
 
         if (container == ContainerType.Inventory)
         {
             if (index >= inventory.items.Count) return;
-            bool moved = inventory.TryEquipToMatchingSlot(index);
+            moved = inventory.TryEquipToMatchingSlot(index);
             if (!moved) Debug.Log("No matching free slot for this item.");
-            else RefreshAll();
         }
-        else
+        else if (container == ContainerType.Equipment)
         {
-            bool moved = inventory.MoveEquipmentIndexToInventoryFirstEmpty(index);
+            moved = inventory.MoveEquipmentIndexToInventoryFirstEmpty(index);
             if (!moved) Debug.Log("Inventory is full.");
-            if (moved) RefreshAll();
         }
+        else if (container == ContainerType.Chest)
+        {
+            if (!_activeChest) return;
+            moved = inventory.MoveFromChestToInventoryFirstEmpty(_activeChest, index);
+            if (!moved) Debug.Log("Inventory is full or slot empty.");
+        }
+
+        if (moved) RefreshAll();
     }
 
-    // ===================== Tooltip internals =====================
-
+    // -------- Tooltip internals (unchanged from your version) --------
     void SetupTooltip()
     {
-        if (!tooltipRoot || !tooltipLabel)
-        {
-            Debug.LogWarning("[InventoryUI] Tooltip references not set. No tooltips will be shown.");
-            return;
-        }
-
+        if (!tooltipRoot || !tooltipLabel) return;
         _canvas = tooltipRoot.GetComponentInParent<Canvas>();
         _canvasRT = _canvas ? _canvas.GetComponent<RectTransform>() : null;
-        _tipCG = tooltipRoot.GetComponent<CanvasGroup>();
-        if (!_tipCG) _tipCG = tooltipRoot.gameObject.AddComponent<CanvasGroup>();
+        _tipCG = tooltipRoot.GetComponent<CanvasGroup>() ?? tooltipRoot.gameObject.AddComponent<CanvasGroup>();
 
-        // layout / transform from inspector
         tooltipRoot.pivot = tooltipPivot;
         tooltipRoot.localScale = Vector3.one * Mathf.Max(0.01f, tooltipScale);
 
-        // invisible & non-blocking
-        _tipCG.alpha = 0f;
-        _tipCG.interactable = false;
-        _tipCG.blocksRaycasts = false;
-
-        var img = tooltipRoot.GetComponent<Image>();
-        if (img) img.raycastTarget = false;
+        _tipCG.alpha = 0f; _tipCG.interactable = false; _tipCG.blocksRaycasts = false;
+        var img = tooltipRoot.GetComponent<Image>(); if (img) img.raycastTarget = false;
         tooltipLabel.raycastTarget = false;
     }
 
     void ShowTooltip(string text, Vector2 screenPos)
     {
-        if (!_tipCG || tooltipLabel == null || string.IsNullOrEmpty(text)) return;
-        tooltipLabel.text = text;
-        _tipCG.alpha = 1f;
-
-        // apply current scale in case you change it at runtime
+        if (!_tipCG || !tooltipLabel || string.IsNullOrEmpty(text)) return;
+        tooltipLabel.text = text; _tipCG.alpha = 1f;
         tooltipRoot.localScale = Vector3.one * Mathf.Max(0.01f, tooltipScale);
         tooltipRoot.pivot = tooltipPivot;
-
         MoveTooltip(screenPos);
     }
 
     void MoveTooltip(Vector2 screenPos)
     {
         if (_canvasRT == null || tooltipRoot == null) return;
-
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            _canvasRT,
-            screenPos + tooltipOffset,
+            _canvasRT, screenPos + tooltipOffset,
             _canvas && _canvas.renderMode != RenderMode.ScreenSpaceOverlay ? _canvas.worldCamera : null,
             out var lp
         );
-
-        // measure & clamp
         LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRoot);
-        Vector2 size = tooltipRoot.sizeDelta;
-        Vector2 half = _canvasRT.rect.size * 0.5f;
-
+        Vector2 size = tooltipRoot.sizeDelta, half = _canvasRT.rect.size * 0.5f;
         lp.x = Mathf.Clamp(lp.x, -half.x, half.x - size.x);
         lp.y = Mathf.Clamp(lp.y, -half.y + size.y, half.y);
-
         tooltipRoot.anchoredPosition = lp;
     }
 
-    void HideTooltip()
-    {
-        if (_tipCG) _tipCG.alpha = 0f;
-    }
+    void HideTooltip() { if (_tipCG) _tipCG.alpha = 0f; }
 
     void AddTrigger(EventTrigger t, EventTriggerType type, System.Action<BaseEventData> cb)
     {
@@ -327,81 +332,24 @@ public class InventoryUI : MonoBehaviour
         if (Inventory.IsEmpty(it)) return "";
         var d = it.data;
         string F(float v) => roundValues ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
-
-        // color hex tokens
-        string nameHex = ToHex(nameColor);
-        string dmgHex = ToHex(damageColor);
-        string hpHex = ToHex(healthColor);
-        string tierHex = ToHex(GetTierColor(d));
+        string nameHex = ToHex(nameColor), dmgHex = ToHex(damageColor), hpHex = ToHex(healthColor), tierHex = ToHex(GetTierColor(d));
 
         var sb = new StringBuilder(128);
-
         if (showName && !string.IsNullOrEmpty(d.displayName))
-        {
-            string line = nameFormat
-                .Replace("{NameColor}", nameHex)
-                .Replace("{Name}", d.displayName);
-            sb.Append(line);
-        }
-
+            sb.Append(nameFormat.Replace("{NameColor}", nameHex).Replace("{Name}", d.displayName));
         if (showTier)
         {
-            string tStr = tierAsRoman ? TierToRoman(d) : TierToNumber(d);
-            string line = tierFormat
-                .Replace("{TierColor}", tierHex)
-                .Replace("{Tier}", tStr);
-            sb.Append(line);
+            string tStr = tierAsRoman ? TierToRoman(d) : ((int)d.tier).ToString();
+            sb.Append(tierFormat.Replace("{TierColor}", tierHex).Replace("{Tier}", tStr));
         }
-
         if (!hideZeroValues || Mathf.Abs(d.addDamage) > 0.0001f)
-        {
-            string line = damageFormat
-                .Replace("{DamageColor}", dmgHex)
-                .Replace("{Damage}", F(d.addDamage));
-            sb.Append(line);
-        }
-
+            sb.Append(damageFormat.Replace("{DamageColor}", dmgHex).Replace("{Damage}", F(d.addDamage)));
         if (!hideZeroValues || Mathf.Abs(d.addMaxHealth) > 0.0001f)
-        {
-            string line = healthFormat
-                .Replace("{HealthColor}", hpHex)
-                .Replace("{Health}", F(d.addMaxHealth));
-            sb.Append(line);
-        }
-
+            sb.Append(healthFormat.Replace("{HealthColor}", hpHex).Replace("{Health}", F(d.addMaxHealth)));
         return sb.ToString().TrimEnd('\n', '\r', ' ');
     }
 
-    static string ToHex(Color c)
-    {
-        Color32 c32 = c;
-        return $"#{c32.r:X2}{c32.g:X2}{c32.b:X2}{c32.a:X2}";
-    }
-
-    static string TierToRoman(ItemData d)
-    {
-        // expects enum ItemTier { Tier1=1, Tier2=2, Tier3=3 }
-        int n = (int)d.tier;
-        return n switch { 1 => "I", 2 => "II", 3 => "III", _ => n.ToString() };
-    }
-
-    static string TierToNumber(ItemData d)
-    {
-        int n = (int)d.tier;
-        return n.ToString();
-    }
-
-    Color GetTierColor(ItemData d)
-    {
-        switch (d.tier)
-        {
-            case ItemTier.Tier1: return tier1Color;
-            case ItemTier.Tier2: return tier2Color;
-            case ItemTier.Tier3: return tier3Color;
-            default:             return tier1Color; // fallback
-        }
-    }
-
-    
-    
+    static string ToHex(Color c){ Color32 x=c; return $"#{x.r:X2}{x.g:X2}{x.b:X2}{x.a:X2}"; }
+    static string TierToRoman(ItemData d){ int n=(int)d.tier; return n switch {1=>"I",2=>"II",3=>"III",_=>n.ToString()}; }
+    Color GetTierColor(ItemData d) => d.tier switch { ItemTier.Tier1 => tier1Color, ItemTier.Tier2 => tier2Color, ItemTier.Tier3 => tier3Color, _ => tier1Color };
 }
