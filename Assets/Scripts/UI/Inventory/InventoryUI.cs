@@ -13,6 +13,8 @@ public class InventoryUI : MonoBehaviour
     public Transform equipGridParent;
     public GameObject slotPrefab;
     public Inventory inventory;
+    public bool IsOpen => panel && panel.activeSelf;
+
 
     [Header("Behavior")]
     public bool pauseWhenOpen = false;

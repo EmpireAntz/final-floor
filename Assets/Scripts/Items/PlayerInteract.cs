@@ -6,6 +6,10 @@ public class PlayerInteractor : MonoBehaviour
     [Header("Wiring")]
     public Camera cam;
 
+    [Header("UI lock")]
+    public InventoryUI inventoryUI;          // <— drag your InventoryUI here in Inspector
+    public bool blockWhenUIOpen = true;      // optional toggle
+
     [Header("Settings")]
     public float range = 3f;
     public LayerMask interactMask = ~0;
@@ -17,17 +21,27 @@ public class PlayerInteractor : MonoBehaviour
     public Color promptColor = Color.white;
     public Color promptOutlineColor = new Color(0,0,0,0.8f);
     [Range(0, 8)] public int promptOutline = 2;
-    [Tooltip("Normalized (0..1). (0.5, 0.85) = centered near bottom")]
     public Vector2 promptAnchor = new Vector2(0.5f, 0.85f);
     public Vector2 promptPixelOffset = Vector2.zero;
-    [Tooltip("{0} = prompt text, {1} = key")]
     public string promptFormat = "{0}  [{1}]";
 
     private Interactable lookingAt;
 
+    void Awake()
+    {
+        if (!inventoryUI) inventoryUI = FindObjectOfType<InventoryUI>();
+    }
+
     void Update()
     {
         if (!cam) return;
+
+        // If UI is open, don't raycast or accept input
+        if (blockWhenUIOpen && inventoryUI && inventoryUI.IsOpen)
+        {
+            lookingAt = null;
+            return;
+        }
 
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         lookingAt = null;
@@ -41,7 +55,9 @@ public class PlayerInteractor : MonoBehaviour
 
     void OnGUI()
     {
+        // Hide prompt if UI is open or nothing to show
         if (lookingAt == null) return;
+        if (blockWhenUIOpen && inventoryUI && inventoryUI.IsOpen) return;
 
         string keyName = interactKey.ToString();
         string label = string.Format(promptFormat, lookingAt.prompt, keyName);
