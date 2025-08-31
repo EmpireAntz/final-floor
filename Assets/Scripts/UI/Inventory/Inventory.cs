@@ -2,12 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SimpleItem
-{
-    public ItemData data;  // name/icon/equipSlot/etc.
-}
+public class SimpleItem { public ItemData data; }
 
-public enum ContainerType { Inventory, Equipment }
+public enum ContainerType { Inventory, Equipment, Chest }
 
 public class Inventory : MonoBehaviour
 {
@@ -19,31 +16,17 @@ public class Inventory : MonoBehaviour
     public EquipSlot[] slotOrder = new[] {
         EquipSlot.HandRight, EquipSlot.Head, EquipSlot.Chest, EquipSlot.Feet
     };
-    
-    [Header("Equipment Placeholders")]
-    public Sprite defaultEquipPlaceholder;      // used if a specific one isn't set
-    public Sprite weaponPlaceholder;            // HandRight
-    public Sprite headPlaceholder;              // Head
-    public Sprite chestPlaceholder;             // Chest
-    public Sprite feetPlaceholder;              // Feet
-    public Color placeholderTint = new Color(1f,1f,1f,0.35f); // slight fade
-
     public int equipmentCapacity = 4;
     public List<SimpleItem> equipment = new List<SimpleItem>();
 
     public System.Action OnChanged;
 
-    // NOTE: icon-less items count as empty with this check
     public static bool IsEmpty(SimpleItem it) => it == null || it.data == null || it.data.icon == null;
 
-    void OnValidate()
-    {
-        equipmentCapacity = (slotOrder != null && slotOrder.Length > 0) ? slotOrder.Length : 4;
-    }
+    void OnValidate() => equipmentCapacity = (slotOrder != null && slotOrder.Length > 0) ? slotOrder.Length : 4;
 
     void Awake()
     {
-        // Ensure equipment list matches capacity
         if (equipment == null) equipment = new List<SimpleItem>(equipmentCapacity);
         if (equipment.Count > equipmentCapacity)
             equipment.RemoveRange(equipmentCapacity, equipment.Count - equipmentCapacity);
@@ -55,7 +38,6 @@ public class Inventory : MonoBehaviour
 
     void NotifyChanged() => OnChanged?.Invoke();
 
-    // -------- Add --------
     public bool TryAddItemData(ItemData data)
     {
         if (data == null || data.icon == null) return false;
@@ -65,7 +47,6 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    // -------- Equip (slot-specific) --------
     public bool TryEquipToMatchingSlot(int invIndex)
     {
         if (invIndex < 0 || invIndex >= items.Count) return false;
@@ -73,8 +54,8 @@ public class Inventory : MonoBehaviour
         if (IsEmpty(it)) return false;
 
         int target = FindSlotIndex(it.data.equipSlot);
-        if (target < 0) return false;                 // item has no valid slot
-        if (!IsEmpty(equipment[target])) return false; // slot already taken
+        if (target < 0) return false;
+        if (!IsEmpty(equipment[target])) return false;
 
         equipment[target] = it;
         items.RemoveAt(invIndex);
@@ -90,7 +71,6 @@ public class Inventory : MonoBehaviour
         return -1;
     }
 
-    // -------- Unequip (back to inventory first empty) --------
     public bool MoveEquipmentIndexToInventoryFirstEmpty(int eqIndex)
     {
         if (eqIndex < 0 || eqIndex >= equipment.Count) return false;
@@ -104,20 +84,24 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    // (Optional) debug
-    public void DebugPrintInventory()
+    // Chest -> Inventory
+    public bool MoveFromChestToInventoryFirstEmpty(ChestContainer chest, int chestIndex)
     {
-        for (int i = 0; i < items.Count; i++)
-            Debug.Log($"Inventory[{i}] = {items[i]?.data?.displayName ?? "(null)"}");
-        for (int i = 0; i < equipment.Count; i++)
-            Debug.Log($"Equipment[{i}] ({slotOrder[i]}) = {equipment[i]?.data?.displayName ?? "(empty)"}");
+        if (!chest) return false;
+        if (chestIndex < 0 || chestIndex >= chest.items.Count) return false;
+        if (items.Count >= capacity) return false;
+
+        var it = chest.items[chestIndex];
+        if (IsEmpty(it)) return false;
+
+        items.Add(it);
+        chest.items.RemoveAt(chestIndex);
+
+        NotifyChanged();
+        chest.OnChanged?.Invoke();
+        return true;
     }
 
-    // Back-compat for older code (now routes to slot-matching equip)
-    public bool MoveInventoryIndexToEquipmentFirstEmpty(int invIndex)
-    {
-        return TryEquipToMatchingSlot(invIndex);
-    }
-
-
+    // Back-compat for older calls
+    public bool MoveInventoryIndexToEquipmentFirstEmpty(int invIndex) => TryEquipToMatchingSlot(invIndex);
 }

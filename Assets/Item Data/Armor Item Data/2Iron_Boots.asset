@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 2Iron_Boots
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Iron Boots Tier 2
+  displayName: Iron Boots
   icon: {fileID: 21300000, guid: a5bedb9a104132a4cbbc289049e7270b, type: 3}
   category: 2
   equipSlot: 6
+  tier: 2
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}

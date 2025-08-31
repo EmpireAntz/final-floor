@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 2Drake_Boots
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 
-  displayName: Drake Boots Tier 2
+  displayName: Drake Boots
   icon: {fileID: 21300000, guid: f22677733ba28ae4aaeb7aabe3d59cea, type: 3}
   category: 2
   equipSlot: 6
+  tier: 2
   addDamage: 0
   addMaxHealth: 0
   heldPrefab: {fileID: 0}
