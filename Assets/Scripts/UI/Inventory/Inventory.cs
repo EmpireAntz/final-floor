@@ -1,8 +1,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#region SimpleItem with rolled stats (lives in this file)
 [System.Serializable]
-public class SimpleItem { public ItemData data; }
+public class SimpleItem
+{
+    public ItemData data;
+
+    // Rolled, per-instance stats
+    public bool  rolled;
+    public float addDamage;
+    public float addMaxHealth;
+    public float addMaxStamina;
+    public float addDefensePercent;
+    public float addCritChancePercent;
+
+    // Roll once from ItemData ranges
+    public void EnsureRolled()
+    {
+        if (rolled || data == null) return;
+        // These require ItemData to have StatRange fields with .Roll()
+        addDamage            = data.damage.Roll();
+        addMaxHealth         = data.maxHealth.Roll();
+        addMaxStamina        = data.maxStamina.Roll();
+        addDefensePercent    = data.defensePercent.Roll();
+        addCritChancePercent = data.critChancePercent.Roll();
+        rolled = true;
+    }
+
+    public static SimpleItem CreateRolled(ItemData d)
+    {
+        var it = new SimpleItem { data = d };
+        it.EnsureRolled();
+        return it;
+    }
+}
+#endregion
 
 public enum ContainerType { Inventory, Equipment, Chest }
 
@@ -21,9 +54,11 @@ public class Inventory : MonoBehaviour
 
     public System.Action OnChanged;
 
+    // icon-less counts as empty to keep your UI behavior
     public static bool IsEmpty(SimpleItem it) => it == null || it.data == null || it.data.icon == null;
 
-    void OnValidate() => equipmentCapacity = (slotOrder != null && slotOrder.Length > 0) ? slotOrder.Length : 4;
+    void OnValidate() =>
+        equipmentCapacity = (slotOrder != null && slotOrder.Length > 0) ? slotOrder.Length : 4;
 
     void Awake()
     {
@@ -34,24 +69,41 @@ public class Inventory : MonoBehaviour
 
         if (items == null) items = new List<SimpleItem>();
         if (items.Count > capacity) items.RemoveRange(capacity, items.Count - capacity);
+
+        // Safety: ensure anything already present is rolled once
+        EnsureAllRolled();
+    }
+
+    void EnsureAllRolled()
+    {
+        if (items != null)
+            foreach (var it in items) if (!IsEmpty(it)) it.EnsureRolled();
+        if (equipment != null)
+            for (int i = 0; i < equipment.Count; i++)
+                if (!IsEmpty(equipment[i])) equipment[i].EnsureRolled();
     }
 
     void NotifyChanged() => OnChanged?.Invoke();
 
+    // --- Add items to inventory (now rolled) ---
     public bool TryAddItemData(ItemData data)
     {
         if (data == null || data.icon == null) return false;
         if (items.Count >= capacity) return false;
-        items.Add(new SimpleItem { data = data });
+
+        items.Add(SimpleItem.CreateRolled(data)); // <-- roll once here
         NotifyChanged();
         return true;
     }
 
+    // --- Equip to the matching slot (unchanged externally) ---
     public bool TryEquipToMatchingSlot(int invIndex)
     {
         if (invIndex < 0 || invIndex >= items.Count) return false;
         var it = items[invIndex];
         if (IsEmpty(it)) return false;
+
+        it.EnsureRolled(); // safety
 
         int target = FindSlotIndex(it.data.equipSlot);
         if (target < 0) return false;
@@ -94,6 +146,8 @@ public class Inventory : MonoBehaviour
         var it = chest.items[chestIndex];
         if (IsEmpty(it)) return false;
 
+        it.EnsureRolled(); // in case chest added raw items
+
         items.Add(it);
         chest.items.RemoveAt(chestIndex);
 
@@ -102,6 +156,6 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    // Back-compat for older calls
+    // Back-compat
     public bool MoveInventoryIndexToEquipmentFirstEmpty(int invIndex) => TryEquipToMatchingSlot(invIndex);
 }

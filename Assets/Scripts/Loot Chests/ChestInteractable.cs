@@ -48,7 +48,7 @@ public class ChestInteractable : Interactable
         for (int i = 0; i < count; i++)
         {
             var data = DrawWeighted();
-            if (data) container.items.Add(new SimpleItem { data = data });
+            if (data) container.items.Add(SimpleItem.CreateRolled(data));
         }
 
         container.OnChanged?.Invoke();

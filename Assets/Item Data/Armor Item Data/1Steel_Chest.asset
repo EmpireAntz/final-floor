@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Steel Armor
   icon: {fileID: 21300000, guid: 414e28af6db0bf84f9d7ddb2a9a1e9a4, type: 3}
   category: 2
-  equipSlot: 4
   tier: 1
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 4
+  damage:
+    min: 5
+    max: 15
+  maxHealth:
+    min: 15
+    max: 25
+  maxStamina:
+    min: 15
+    max: 25
+  defensePercent:
+    min: 1
+    max: 5
+  critChancePercent:
+    min: 1
+    max: 5
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

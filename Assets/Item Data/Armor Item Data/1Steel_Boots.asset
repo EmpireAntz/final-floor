@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Steel Boots
   icon: {fileID: 21300000, guid: 3298d429006e1b14f9c648d31b6b9995, type: 3}
   category: 2
-  equipSlot: 6
   tier: 1
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 6
+  damage:
+    min: 1
+    max: 10
+  maxHealth:
+    min: 10
+    max: 25
+  maxStamina:
+    min: 10
+    max: 25
+  defensePercent:
+    min: 1
+    max: 5
+  critChancePercent:
+    min: 1
+    max: 5
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

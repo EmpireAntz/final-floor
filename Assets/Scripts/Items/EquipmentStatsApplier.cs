@@ -9,27 +9,43 @@ public class EquipmentStatsApplier : MonoBehaviour
     [Header("Behavior")]
     [Tooltip("Preserve current health % when Max Health changes.")]
     public bool keepHealthRatioOnMaxChange = true;
+    [Tooltip("Preserve current stamina % when Max Stamina changes.")]
+    public bool keepStaminaRatioOnMaxChange = true;
 
-    // Snapshot of the player's base stats (what you set in the inspector)
+    // ---- Base snapshots (what you set on PlayerStats in the inspector) ----
     [SerializeField] float baseDamage;
     [SerializeField] float baseMaxHealth;
+    [SerializeField] float baseMaxStamina;
+    [SerializeField] float baseDefensePct;
+    [SerializeField] float baseCritPct;
 
-    // === Exposed to UI ===
-    public float BaseDamage        => baseDamage;
-    public float BaseMaxHealth     => baseMaxHealth;
-    public float LastBonusDamage   { get; private set; }
-    public float LastBonusMaxHealth{ get; private set; }
-    public System.Action OnRecalculated;   // UI can subscribe
+    // ---- Expose to UI (read-only) ----
+    public float BaseDamage              => baseDamage;
+    public float BaseMaxHealth           => baseMaxHealth;
+    public float BaseMaxStamina          => baseMaxStamina;
+    public float BaseDefensePercent      => baseDefensePct;
+    public float BaseCritChancePercent   => baseCritPct;
+
+    public float LastBonusDamage         { get; private set; }
+    public float LastBonusMaxHealth      { get; private set; }
+    public float LastBonusMaxStamina     { get; private set; }
+    public float LastBonusDefensePercent { get; private set; }
+    public float LastBonusCritPercent    { get; private set; }
+
+    public System.Action OnRecalculated;
 
     void Awake()
     {
         if (!inventory)   inventory   = FindObjectOfType<Inventory>();
         if (!playerStats) playerStats = FindObjectOfType<PlayerStats>();
 
-        if (playerStats != null)
+        if (playerStats)
         {
-            baseDamage    = playerStats.damage;
-            baseMaxHealth = playerStats.maxHealth;
+            baseDamage      = playerStats.damage;
+            baseMaxHealth   = playerStats.maxHealth;
+            baseMaxStamina  = playerStats.maxStamina;
+            baseDefensePct  = playerStats.defensePercent;     // make sure these exist on PlayerStats
+            baseCritPct     = playerStats.critChancePercent;  // ^
         }
     }
 
@@ -38,7 +54,6 @@ public class EquipmentStatsApplier : MonoBehaviour
         if (inventory) inventory.OnChanged += Recalculate;
         Recalculate();
     }
-
     void OnDisable()
     {
         if (inventory) inventory.OnChanged -= Recalculate;
@@ -48,49 +63,67 @@ public class EquipmentStatsApplier : MonoBehaviour
     {
         if (!inventory || !playerStats) return;
 
-        float bonusDmg = 0f;
-        float bonusHP  = 0f;
+        // ---- Sum bonuses from EQUIPPED items (use instance values) ----
+        float bDmg = 0f, bHP = 0f, bSt = 0f, bDef = 0f, bCrit = 0f;
 
-        // Sum equipped items’ bonuses
         for (int i = 0; i < inventory.equipment.Count; i++)
         {
             var it = inventory.equipment[i];
             if (Inventory.IsEmpty(it)) continue;
-            var d = it.data;
-            bonusDmg += d.addDamage;
-            bonusHP  += d.addMaxHealth;
+
+            it.EnsureRolled(); // ensure this instance has its rolled values
+
+            bDmg += it.addDamage;
+            bHP  += it.addMaxHealth;
+            bSt  += it.addMaxStamina;
+            bDef += it.addDefensePercent;
+            bCrit+= it.addCritChancePercent;
         }
 
-        float prevMax = playerStats.maxHealth;
+        // ---- Apply to PlayerStats ----
+        float prevMaxHP  = playerStats.maxHealth;
+        float prevMaxSt  = playerStats.maxStamina;
 
-        playerStats.damage    = baseDamage    + bonusDmg;
-        playerStats.maxHealth = baseMaxHealth + bonusHP;
+        playerStats.damage            = baseDamage     + bDmg;
+        playerStats.maxHealth         = baseMaxHealth  + bHP;
+        playerStats.maxStamina        = baseMaxStamina + bSt;
+        playerStats.defensePercent    = baseDefensePct + bDef;
+        playerStats.critChancePercent = baseCritPct    + bCrit;
 
-        if (keepHealthRatioOnMaxChange && prevMax > 0f)
+        // preserve ratios if requested
+        if (keepHealthRatioOnMaxChange && prevMaxHP > 0f)
         {
-            float ratio = Mathf.Clamp01(playerStats.health / prevMax);
-            playerStats.health = Mathf.Min(playerStats.maxHealth, playerStats.maxHealth * ratio);
+            float r = Mathf.Clamp01(playerStats.health / prevMaxHP);
+            playerStats.health = Mathf.Min(playerStats.maxHealth, playerStats.maxHealth * r);
         }
-        else
-        {
-            playerStats.health = Mathf.Min(playerStats.health, playerStats.maxHealth);
-        }
+        else playerStats.health = Mathf.Min(playerStats.health, playerStats.maxHealth);
 
-        // store for UI and notify
-        LastBonusDamage    = bonusDmg;
-        LastBonusMaxHealth = bonusHP;
+        if (keepStaminaRatioOnMaxChange && prevMaxSt > 0f)
+        {
+            float r = Mathf.Clamp01(playerStats.stamina / prevMaxSt);
+            playerStats.stamina = Mathf.Min(playerStats.maxStamina, playerStats.maxStamina * r);
+        }
+        else playerStats.stamina = Mathf.Min(playerStats.stamina, playerStats.maxStamina);
+
+        // store for UI
+        LastBonusDamage         = bDmg;
+        LastBonusMaxHealth      = bHP;
+        LastBonusMaxStamina     = bSt;
+        LastBonusDefensePercent = bDef;
+        LastBonusCritPercent    = bCrit;
+
         OnRecalculated?.Invoke();
-
-        // Debug log (optional)
-        // Debug.Log($"[EquipStats] +DMG {bonusDmg}, +HP {bonusHP} → DMG {playerStats.damage}, MaxHP {playerStats.maxHealth}");
     }
 
-    // Call this if you change base values at runtime and want to resnapshot them
+    // If you edit PlayerStats base values at runtime and want to re-snapshot
     public void ResnapshotBaseFromPlayer()
     {
         if (!playerStats) return;
-        baseDamage    = playerStats.damage;
-        baseMaxHealth = playerStats.maxHealth;
+        baseDamage     = playerStats.damage;
+        baseMaxHealth  = playerStats.maxHealth;
+        baseMaxStamina = playerStats.maxStamina;
+        baseDefensePct = playerStats.defensePercent;
+        baseCritPct    = playerStats.critChancePercent;
         Recalculate();
     }
 }
