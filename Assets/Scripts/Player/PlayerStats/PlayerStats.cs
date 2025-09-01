@@ -3,77 +3,103 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     [Header("Health")]
-    public float maxHealth = 100f;
-    public float health = 100f;   // starts at max in Awake
+    public float maxHealth = 100f;   // base
+    public float health = 100f;      // current
 
     [Header("Stamina")]
-    public float maxStamina = 100f;
-    public float stamina = 100f;  // starts at max in Awake
-    [Tooltip("How fast stamina drains while sprinting (per second).")]
+    public float maxStamina = 100f;  // base
+    public float stamina = 100f;     // current
     public float staminaDrainPerSecond = 20f;
-    [Tooltip("How fast stamina regenerates while not sprinting (per second).")]
     public float staminaRegenPerSecond = 15f;
-    [Tooltip("Delay (seconds) after you stop sprinting before regen begins.")]
     public float staminaRegenDelay = 0.6f;
-    [Tooltip("You must have at least this much stamina to (re)start sprinting.")]
     public float sprintMinStamina = 10f;
-    [Tooltip("When stamina reaches 0, you must wait this many seconds before sprinting again.")]
-    public float exhaustionCooldown = 2.0f;    
+    public float exhaustionCooldown = 2.0f;
 
     [Header("Offense")]
-    public float damage = 10f;
+    public float damage = 10f;       // base damage
+    [Range(0f, 100f)] public float critChancePercent = 0f;
+    
+    [Header("Defense")]
+    [Range(0f,100f)] public float defensePercent = 0f;
+
+    // ---- Runtime bonuses (from equipment, buffs, etc.) ----
+    public float bonusMaxHealth = 0f;
+    public float bonusDamage = 0f;
+    public float bonusDefensePercent = 0f;
+    public float bonusCritChancePercent = 0f;
+
+    // Event so UI (and others) can refresh
+    public System.Action OnStatsChanged;
 
     float _lastStaminaSpendTime;
-    float _exhaustedUntil = -1f;    
+    float _exhaustedUntil = -1f;
 
-    public bool IsExhausted => Time.time < _exhaustedUntil; 
-    public float ExhaustionRemaining =>
-        Mathf.Max(0f, _exhaustedUntil - Time.time);
+    public bool IsExhausted => Time.time < _exhaustedUntil;
+    public float ExhaustionRemaining => Mathf.Max(0f, _exhaustedUntil - Time.time);
 
     void Awake()
     {
-        health = Mathf.Clamp(health <= 0 ? maxHealth : health, 0, maxHealth);
+        health  = Mathf.Clamp(health  <= 0 ? maxHealth  : health,  0, TotalMaxHealth);
         stamina = Mathf.Clamp(stamina <= 0 ? maxStamina : stamina, 0, maxStamina);
         _lastStaminaSpendTime = -999f;
-        _exhaustedUntil = -1f;  
+        _exhaustedUntil = -1f;
     }
 
+    // --------------- Totals (base + bonus) ---------------
+    public float TotalDamage        => Mathf.Max(0f, damage + bonusDamage);
+    public float TotalMaxHealth     => Mathf.Max(1f, maxHealth + bonusMaxHealth);
+    public float TotalDefensePct    => Mathf.Clamp(defensePercent + bonusDefensePercent, 0f, 100f);
+    public float TotalCritChancePct => Mathf.Clamp(critChancePercent + bonusCritChancePercent, 0f, 100f);
 
-    public bool CanSprint()
+    // If you change bonuses at runtime, call these (or set then CallChanged())
+    public void SetBonuses(float addHP, float addDMG, float addDEFpct, float addCRITpct)
     {
-      // Block sprint during cooldown, and require minimum stamina to (re)start
-        return !IsExhausted && stamina >= sprintMinStamina;
+        bonusMaxHealth        = addHP;
+        bonusDamage           = addDMG;
+        bonusDefensePercent   = addDEFpct;
+        bonusCritChancePercent= addCRITpct;
+        // keep current health in range if max changed
+        health = Mathf.Min(health, TotalMaxHealth);
+        CallChanged();
     }
+    public void CallChanged() => OnStatsChanged?.Invoke();
+
+    // -------- Stamina flow --------
+    public bool CanSprint() => !IsExhausted && stamina >= sprintMinStamina;
 
     public void TickStamina(bool sprinting, float dt)
     {
-        if (sprinting)
-        {
-            SpendStamina(staminaDrainPerSecond * dt);
-        }
+        if (sprinting) SpendStamina(staminaDrainPerSecond * dt);
         else if (Time.time >= _lastStaminaSpendTime + staminaRegenDelay)
-        {
             GainStamina(staminaRegenPerSecond * dt);
-        }
     }
 
     public void SpendStamina(float amount)
     {
-        float prev = stamina;                                 
+        float prev = stamina;
         stamina = Mathf.Max(0f, stamina - Mathf.Max(0f, amount));
         _lastStaminaSpendTime = Time.time;
-
-        // Start cooldown the moment we hit 0 from a positive value
-        if (prev > 0f && stamina <= 0f)                      
-            _exhaustedUntil = Time.time + exhaustionCooldown; 
+        if (prev > 0f && stamina <= 0f)
+            _exhaustedUntil = Time.time + exhaustionCooldown;
     }
-
     public void GainStamina(float amount)
     {
         stamina = Mathf.Min(maxStamina, stamina + Mathf.Max(0f, amount));
     }
 
-    // Health helpers for future use
-    public void TakeDamage(float amount)  => health  = Mathf.Max(0f, health  - Mathf.Max(0f, amount));
-    public void Heal(float amount)        => health  = Mathf.Min(maxHealth, health + Mathf.Max(0f, amount));
+    // -------- Health helpers --------
+    public void TakeDamage(float amount)
+    {
+    
+         float reduction = Mathf.Clamp01(TotalDefensePct / 100f);
+         amount *= (1f - reduction);
+
+        health = Mathf.Max(0f, health - Mathf.Max(0f, amount));
+        CallChanged();
+    }
+    public void Heal(float amount)
+    {
+        health = Mathf.Min(TotalMaxHealth, health + Mathf.Max(0f, amount));
+        CallChanged();
+    }
 }
