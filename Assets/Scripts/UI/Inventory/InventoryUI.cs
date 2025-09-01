@@ -51,6 +51,10 @@ public class InventoryUI : MonoBehaviour
     public Color nameColor = Color.white;
     public Color damageColor = new Color(0.31f, 1f, 0.31f, 1f);
     public Color healthColor = new Color(0.31f, 0.69f, 1f, 1f);
+    public Color staminaColor = new Color(0.75f, 1f, 0.5f, 1f);
+    public Color defenseColor = new Color(1f, 0.85f, 0.35f, 1f);
+    public Color critColor    = new Color(1f, 0.55f, 0.6f, 1f);
+    
     [Header("Tier Colors")]
     public Color tier1Color = new Color(0.80f, 0.80f, 0.80f, 1f);
     public Color tier2Color = new Color(0.40f, 0.85f, 1.00f, 1f);
@@ -61,6 +65,10 @@ public class InventoryUI : MonoBehaviour
     [TextArea] public string tierFormat   = "Tier: <color={TierColor}>{Tier}</color>\n";
     [TextArea] public string damageFormat = "Damage: <color={DamageColor}>+{Damage}</color>\n";
     [TextArea] public string healthFormat = "Health: <color={HealthColor}>+{Health}</color>\n";
+    [TextArea] public string staminaFormat = "Stamina: <color={StaminaColor}>+{Stamina}</color>\n";
+    [TextArea] public string defenseFormat = "Defense: <color={DefenseColor}>+{Defense}%</color>\n";
+    [TextArea] public string critFormat    = "Crit Chance: <color={CritColor}>+{Crit}%</color>\n";
+
     public bool tierAsRoman = true;
 
     // internals
@@ -329,27 +337,77 @@ public class InventoryUI : MonoBehaviour
         t.triggers.Add(entry);
     }
 
-    string BuildTooltipText(SimpleItem it)
-    {
-        if (Inventory.IsEmpty(it)) return "";
-        var d = it.data;
-        string F(float v) => roundValues ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
-        string nameHex = ToHex(nameColor), dmgHex = ToHex(damageColor), hpHex = ToHex(healthColor), tierHex = ToHex(GetTierColor(d));
+string BuildTooltipText(SimpleItem it)
+{
+    if (Inventory.IsEmpty(it)) return "";
 
-        var sb = new StringBuilder(128);
-        if (showName && !string.IsNullOrEmpty(d.displayName))
-            sb.Append(nameFormat.Replace("{NameColor}", nameHex).Replace("{Name}", d.displayName));
-        if (showTier)
-        {
-            string tStr = tierAsRoman ? TierToRoman(d) : ((int)d.tier).ToString();
-            sb.Append(tierFormat.Replace("{TierColor}", tierHex).Replace("{Tier}", tStr));
-        }
-        if (!hideZeroValues || Mathf.Abs(d.addDamage) > 0.0001f)
-            sb.Append(damageFormat.Replace("{DamageColor}", dmgHex).Replace("{Damage}", F(d.addDamage)));
-        if (!hideZeroValues || Mathf.Abs(d.addMaxHealth) > 0.0001f)
-            sb.Append(healthFormat.Replace("{HealthColor}", hpHex).Replace("{Health}", F(d.addMaxHealth)));
-        return sb.ToString().TrimEnd('\n', '\r', ' ');
+    // make sure this instance has rolled values
+    it.EnsureRolled();
+
+    // pulled from THIS item instance (not template)
+    float dmg = it.addDamage;
+    float hp  = it.addMaxHealth;
+    float st  = it.addMaxStamina;
+    float df  = it.addDefensePercent;
+    float cr  = it.addCritChancePercent;
+
+    var d = it.data;
+
+    string F(float v) => roundValues ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
+    string P(float v) => roundValues ? Mathf.RoundToInt(v).ToString() : v.ToString("0.#");
+
+    // colors to hex
+    string nameHex = ToHex(nameColor);
+    string dmgHex  = ToHex(damageColor);
+    string hpHex   = ToHex(healthColor);
+    string stHex   = ToHex(staminaColor);
+    string dfHex   = ToHex(defenseColor);
+    string crHex   = ToHex(critColor);
+    string tierHex = ToHex(GetTierColor(d));
+
+    var sb = new StringBuilder(128);
+
+    // Name
+    if (showName && !string.IsNullOrEmpty(d.displayName))
+        sb.Append(nameFormat.Replace("{NameColor}", nameHex)
+                            .Replace("{Name}", d.displayName));
+
+    // Tier
+    if (showTier)
+    {
+        string tStr = tierAsRoman ? TierToRoman(d) : ((int)d.tier).ToString();
+        sb.Append(tierFormat.Replace("{TierColor}", tierHex)
+                            .Replace("{Tier}", tStr));
     }
+
+    // Damage (instance)
+    if (!hideZeroValues || Mathf.Abs(dmg) > 0.0001f)
+        sb.Append(damageFormat.Replace("{DamageColor}", dmgHex)
+                              .Replace("{Damage}", F(dmg)));
+
+    // Health (instance)
+    if (!hideZeroValues || Mathf.Abs(hp) > 0.0001f)
+        sb.Append(healthFormat.Replace("{HealthColor}", hpHex)
+                              .Replace("{Health}", F(hp)));
+
+    // Stamina (instance)
+    if (!hideZeroValues || Mathf.Abs(st) > 0.0001f)
+        sb.Append(staminaFormat.Replace("{StaminaColor}", stHex)
+                               .Replace("{Stamina}", F(st)));
+
+    // Defense % (instance)
+    if (!hideZeroValues || Mathf.Abs(df) > 0.0001f)
+        sb.Append(defenseFormat.Replace("{DefenseColor}", dfHex)
+                               .Replace("{Defense}", P(df)));
+
+    // Crit % (instance)
+    if (!hideZeroValues || Mathf.Abs(cr) > 0.0001f)
+        sb.Append(critFormat.Replace("{CritColor}", crHex)
+                            .Replace("{Crit}", P(cr)));
+
+    return sb.ToString().TrimEnd('\n', '\r', ' ');
+}
+
 
     static string ToHex(Color c){ Color32 x=c; return $"#{x.r:X2}{x.g:X2}{x.b:X2}{x.a:X2}"; }
     static string TierToRoman(ItemData d){ int n=(int)d.tier; return n switch {1=>"I",2=>"II",3=>"III",_=>n.ToString()}; }
