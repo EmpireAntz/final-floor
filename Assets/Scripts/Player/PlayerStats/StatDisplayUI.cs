@@ -3,62 +3,67 @@ using TMPro;
 
 public class StatDisplayUI : MonoBehaviour
 {
-    [Header("Refs")]
-    public PlayerStats playerStats;                 // auto-found if left empty
-    public EquipmentStatsApplier applier;           // auto-found if left empty
-    public TMP_Text targetText;                     // auto-filled from this object if left empty
+    public PlayerStats stats;
+    public EquipmentStatsApplier applier;   // optional
+    public TMP_Text text;
 
     [Header("Formatting")]
-    [TextArea] public string format =
-        "Damage: {0}(+{1})  Health: {2}(+{3})  Stamina: {4}(+{5})";
     public bool roundToInt = true;
+    public string lineSeparator = "\n";
 
-    [Header("Bonus Appearance")]
-    public bool colorBonuses = false;
-    public Color bonusColor = new Color(0.2f, 1f, 0.2f);
+    [Header("Per-Stat Value Colors")]
+    public bool colorize = true;
+    public Color damageColor  = new Color(1f, 0.5f, 0.5f);   // red-ish
+    public Color healthColor  = new Color(0.5f, 1f, 0.5f);   // green-ish
+    public Color staminaColor = new Color(0.7f, 0.9f, 1f);   // blue-ish
+    public Color defenseColor = new Color(1f, 0.85f, 0.4f);  // gold-ish
+    public Color critColor    = new Color(1f, 0.7f, 1f);     // magenta-ish
 
+    void Reset()  { text = GetComponent<TMP_Text>(); }
     void Awake()
     {
-        if (!playerStats) playerStats = FindObjectOfType<PlayerStats>();
-        if (!applier)     applier     = FindObjectOfType<EquipmentStatsApplier>();
-        if (!targetText)  targetText  = GetComponent<TMP_Text>();
+        if (!stats) stats = FindObjectOfType<PlayerStats>();
+        if (!text)  text  = GetComponent<TMP_Text>();
     }
-
     void OnEnable()
     {
+        if (stats)   stats.OnStatsChanged += Refresh;
         if (applier) applier.OnRecalculated += Refresh;
         Refresh();
     }
-
     void OnDisable()
     {
+        if (stats)   stats.OnStatsChanged -= Refresh;
         if (applier) applier.OnRecalculated -= Refresh;
     }
 
+    string F(float v) => roundToInt ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
+    static string Hex(Color c) { var c32 = (Color32)c; return $"#{c32.r:X2}{c32.g:X2}{c32.b:X2}{c32.a:X2}"; }
+    string ColorWrap(string s, Color c) => colorize ? $"<color={Hex(c)}>{s}</color>" : s;
+
     public void Refresh()
     {
-        if (!playerStats || !targetText) return;
+        if (!stats || !text) return;
 
-        float baseD  = applier ? applier.BaseDamage    : playerStats.damage;
-        float baseHP = applier ? applier.BaseMaxHealth : playerStats.maxHealth;
-        float baseSt = playerStats.maxStamina;
+        // Base + bonus (prefer applier for DMG/HP)
+        float baseD  = applier ? applier.BaseDamage         : stats.damage;
+        float baseHP = applier ? applier.BaseMaxHealth      : stats.maxHealth;
+        float bD     = applier ? applier.LastBonusDamage    : stats.bonusDamage;
+        float bHP    = applier ? applier.LastBonusMaxHealth : stats.bonusMaxHealth;
 
-        float bD  = applier ? applier.LastBonusDamage    : 0f;
-        float bHP = applier ? applier.LastBonusMaxHealth : 0f;
-        float bSt = 0f; // no stamina bonuses yet
+        float totalD  = baseD  + bD;
+        float totalHP = baseHP + bHP;
+        float totalSt = stats.maxStamina;
+        float totalDf = stats.defensePercent    + stats.bonusDefensePercent;
+        float totalCr = stats.critChancePercent + stats.bonusCritChancePercent;
 
-        string F(float v) => roundToInt ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
+        // Labels plain, values colored
+        string dmg = $"Damage: {ColorWrap(F(totalD), damageColor)}";
+        string hp  = $"Health: {ColorWrap(F(totalHP), healthColor)}";
+        string st  = $"Stamina: {ColorWrap(F(totalSt), staminaColor)}";
+        string df  = $"Defense: {ColorWrap(F(totalDf) + "%", defenseColor)}";
+        string cr  = $"Crit Chance: {ColorWrap(F(totalCr) + "%", critColor)}";
 
-        string txt = string.Format(format, F(baseD), F(bD), F(baseHP), F(bHP), F(baseSt), F(bSt));
-
-        if (colorBonuses)
-        {
-            string col = ColorUtility.ToHtmlStringRGB(bonusColor);
-            txt = txt.Replace($"(+{F(bD)})",  $"<color=#{col}>(+{F(bD)})</color>")
-                     .Replace($"(+{F(bHP)})", $"<color=#{col}>(+{F(bHP)})</color>")
-                     .Replace($"(+{F(bSt)})", $"<color=#{col}>(+{F(bSt)})</color>");
-        }
-
-        targetText.text = txt;
+        text.text = string.Join(lineSeparator, new[] { dmg, hp, st, df, cr });
     }
 }
