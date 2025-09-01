@@ -39,7 +39,7 @@ public class InventoryUI : MonoBehaviour
     ChestContainer _activeChest;
 
     // -------- Tooltip (optional) --------
-    [Header("Tooltip (Inspector-wired)")]
+    [Header("Tooltips")]
     public RectTransform tooltipRoot;
     public TMP_Text tooltipLabel;
     [Header("Tooltip Layout")]
@@ -54,7 +54,7 @@ public class InventoryUI : MonoBehaviour
     public Color staminaColor = new Color(0.75f, 1f, 0.5f, 1f);
     public Color defenseColor = new Color(1f, 0.85f, 0.35f, 1f);
     public Color critColor    = new Color(1f, 0.55f, 0.6f, 1f);
-    
+
     [Header("Tier Colors")]
     public Color tier1Color = new Color(0.80f, 0.80f, 0.80f, 1f);
     public Color tier2Color = new Color(0.40f, 0.85f, 1.00f, 1f);
