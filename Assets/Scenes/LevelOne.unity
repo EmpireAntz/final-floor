@@ -3320,8 +3320,8 @@ MonoBehaviour:
   chestPlaceholder: {fileID: 21300000, guid: 561e5bc70c5cfc0e78f526d29d5f7ab2, type: 3}
   feetPlaceholder: {fileID: 21300000, guid: c21898abbf484f9dca008f0642459cdf, type: 3}
   placeholderTint: {r: 0, g: 0, b: 0, a: 0.6862745}
-  chestSectionRoot: {fileID: 0}
-  chestGridParent: {fileID: 0}
+  chestSectionRoot: {fileID: 1284986486}
+  chestGridParent: {fileID: 1426676104}
   chestEmptyBg: {r: 1, g: 1, b: 1, a: 0.08}
   tooltipRoot: {fileID: 1322336497}
   tooltipLabel: {fileID: 752568506}
@@ -5100,14 +5100,11 @@ GameObject:
   - component: {fileID: 2107169971}
   - component: {fileID: 2107169973}
   - component: {fileID: 2107169974}
-  - component: {fileID: 2107169976}
   - component: {fileID: 2107169977}
   - component: {fileID: 2107169978}
   - component: {fileID: 2107169979}
   - component: {fileID: 2107169980}
   - component: {fileID: 2107169981}
-  - component: {fileID: 2107169983}
-  - component: {fileID: 2107169984}
   - component: {fileID: 2107169985}
   - component: {fileID: 2107169986}
   m_Layer: 0
@@ -5227,28 +5224,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2107169976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107169968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c636793979b41f14f97ca92e7ac585be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  inventory: {fileID: 2107169977}
-  animator: {fileID: 2107169974}
-  weaponSlot: 1
-  upperBodyLayerName: UpperBody
-  swordAttackTrigger: Attack
-  upperAttackStateTag: Attack
-  fadeInSpeed: 10
-  fadeOutSpeed: 8
-  maxWeight: 1
-  swordCooldown: 0.05
 --- !u!114 &2107169977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5360,48 +5335,6 @@ MonoBehaviour:
   baseMaxStamina: 0
   baseDefensePct: 0
   baseCritPct: 0
---- !u!114 &2107169983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107169968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52075e30da6fbae4d89731fecb41e5de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EquipUpperBodyLayer
-  inventory: {fileID: 2107169977}
-  animator: {fileID: 2107169974}
-  upperBodyLayerName: UpperBody
-  weaponSlot: 1
-  attackStateTag: Attack
-  fadeInSpeed: 2
-  fadeOutSpeed: 2
-  maxWeight: 1
---- !u!114 &2107169984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107169968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43038ea13841b604cb00e05dedb6b426, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpperBodyCombatController
-  inventory: {fileID: 2107169977}
-  animator: {fileID: 2107169974}
-  upperBodyLayerName: UpperBody
-  attackTrigger: Attack
-  attackStateTag: Attack
-  weaponSlot: 1
-  fadeInSpeed: 10
-  fadeOutSpeed: 0
-  maxWeight: 1
-  attackCooldown: 0
 --- !u!114 &2107169985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5438,9 +5371,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 2107169968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 824f9311660321a468179e1f1257ca88, type: 3}
+  m_Script: {fileID: 11500000, guid: b4d92062feb17d34a96ca5cf2606166e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SwingEventRelay
+  m_EditorClassIdentifier: Assembly-CSharp::UpperBodyComboController
+  inventory: {fileID: 2107169977}
+  animator: {fileID: 2107169974}
+  upperBodyLayerName: UpperBody
+  attackStates:
+  - AttackUpper1
+  - AttackUpper2
+  - AttackUpper3
+  attackStateTag: Attack
+  weaponSlot: 1
+  fadeInSpeed: 10
+  fadeOutSpeed: 8
+  maxWeight: 1
+  crossfade: 0.05
+  comboResetTime: 1
+  clickCooldown: 0.05
 --- !u!1001 &2135771058
 PrefabInstance:
   m_ObjectHideFlags: 0
