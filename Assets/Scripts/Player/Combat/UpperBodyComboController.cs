@@ -11,7 +11,7 @@ public class UpperBodyComboController : MonoBehaviour
     [Header("Animator Setup")]
     public string upperBodyLayerName = "UpperBody";
     public string[] attackStates = { "AttackUpper1", "AttackUpper2", "AttackUpper3" };
-    public string attackStateTag = "Attack";  
+    public string attackStateTag = "Attack";    // optional tag on those states
 
     [Header("Requirements")]
     public EquipSlot weaponSlot = EquipSlot.HandRight;
@@ -32,9 +32,11 @@ public class UpperBodyComboController : MonoBehaviour
     float _nextClick = 0f;
 
     // track combo window and queued click
-    float _comboUntil = 0f;
     bool  _queuedNext = false;
-    
+
+    // NEW: track end-of-attack time + previous attacking state
+    float _lastAttackEndTime = -999f;       // NEW
+    bool  _wasAttacking = false;            // NEW
 
     void Awake()
     {
@@ -62,6 +64,7 @@ public class UpperBodyComboController : MonoBehaviour
         // Drive layer weight
         var st = animator.GetCurrentAnimatorStateInfo(_upperLayer);
         bool attacking = st.tagHash == _attackTagHash || IsAnyAttackState(st);
+
         float target  = attacking ? maxWeight : 0f;
         float current = animator.GetLayerWeight(_upperLayer);
         float speed   = (target > current) ? fadeInSpeed : fadeOutSpeed;
@@ -69,25 +72,33 @@ public class UpperBodyComboController : MonoBehaviour
         if (!Mathf.Approximately(current, next))
             animator.SetLayerWeight(_upperLayer, next);
 
-        // Fire queued attack right after current completes
+        // NEW: detect leaving an attack (robust even if Exit Time < 1.0)
+        if (_wasAttacking && !attacking && !animator.IsInTransition(_upperLayer))
+        {
+            _lastAttackEndTime = Time.time;   // cooldown starts now
+        }
+
+        // CHANGED: release queued attack once current finished OR we've left attack
         if (_queuedNext && !animator.IsInTransition(_upperLayer))
         {
+            // re-fetch in case of transition completion
             st = animator.GetCurrentAnimatorStateInfo(_upperLayer);
-            if (st.normalizedTime >= 1f || !IsAnyAttackState(st))
+            attacking = st.tagHash == _attackTagHash || IsAnyAttackState(st);
+
+            if (!attacking || st.normalizedTime >= 1f)
             {
                 _queuedNext = false;
-                PlayNextAttack(); // uses the preserved combo window
+                PlayNextAttack();
             }
         }
+
+        _wasAttacking = attacking; // NEW: remember for next frame
     }
 
     void TryAttack()
     {
         if (Time.time < _nextClick) return;
         if (!HasItemInSlot(weaponSlot)) return;
-
-        // Extend/refresh combo window on every click
-        _comboUntil = Time.time + comboResetTime;
 
         var st = animator.GetCurrentAnimatorStateInfo(_upperLayer);
         bool inAttack = st.tagHash == _attackTagHash || IsAnyAttackState(st);
@@ -105,8 +116,9 @@ public class UpperBodyComboController : MonoBehaviour
 
     void PlayNextAttack()
     {
-        // Only reset to the first attack if the combo window has actually expired
-        if (Time.time > _comboUntil) _step = -1;
+        // CHANGED: cooldown is based on when the LAST attack actually ended
+        if (Time.time - _lastAttackEndTime > comboResetTime)
+            _step = -1;
 
         _step = (_step + 1) % attackStates.Length;
         animator.CrossFadeInFixedTime(attackStates[_step], crossfade, _upperLayer, 0f);
