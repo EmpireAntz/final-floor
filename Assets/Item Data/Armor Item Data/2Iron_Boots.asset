@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Iron Boots
   icon: {fileID: 21300000, guid: a5bedb9a104132a4cbbc289049e7270b, type: 3}
   category: 2
-  equipSlot: 6
   tier: 2
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 6
+  damage:
+    min: 2
+    max: 8
+  maxHealth:
+    min: 18
+    max: 50
+  maxStamina:
+    min: 15
+    max: 35
+  defensePercent:
+    min: 2
+    max: 4
+  critChancePercent:
+    min: 1
+    max: 3
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

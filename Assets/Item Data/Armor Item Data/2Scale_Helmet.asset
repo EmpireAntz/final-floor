@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Scale Helmet
   icon: {fileID: 21300000, guid: 6c6d1948c2d68984fa3725f50103e6f7, type: 3}
   category: 2
-  equipSlot: 3
   tier: 2
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 3
+  damage:
+    min: 2
+    max: 8
+  maxHealth:
+    min: 8
+    max: 20
+  maxStamina:
+    min: 5
+    max: 25
+  defensePercent:
+    min: 3
+    max: 6
+  critChancePercent:
+    min: 10
+    max: 18
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

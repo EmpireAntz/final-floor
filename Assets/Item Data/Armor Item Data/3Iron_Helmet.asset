@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Iron Helmet
   icon: {fileID: 21300000, guid: e6e13828fa37a624eb11b7d7a296914a, type: 3}
   category: 2
-  equipSlot: 3
   tier: 3
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 3
+  damage:
+    min: 5
+    max: 15
+  maxHealth:
+    min: 30
+    max: 50
+  maxStamina:
+    min: 15
+    max: 40
+  defensePercent:
+    min: 4
+    max: 8
+  critChancePercent:
+    min: 2
+    max: 6
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}
