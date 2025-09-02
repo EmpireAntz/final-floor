@@ -8,9 +8,9 @@ NativeFormatImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 165785
-  packageName: Human Melee Animations FREE
+  productId: 151650
+  packageName: Human Melee Animations
   packageVersion: 2.0.2
   assetPath: Assets/Animations/Human Animations/Unity Demo Scenes/Human Melee Animations/AnimatorControllers/Female/1H/HumanF@RunStrafe01_BackwardLeft
     - 1H.overrideController
-  uploadId: 762275
+  uploadId: 771796
