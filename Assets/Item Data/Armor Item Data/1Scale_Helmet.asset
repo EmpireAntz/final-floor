@@ -19,20 +19,20 @@ MonoBehaviour:
   tier: 1
   equipSlot: 3
   damage:
-    min: 15
-    max: 0
+    min: 1
+    max: 3
   maxHealth:
-    min: 10
-    max: 20
+    min: 2
+    max: 10
   maxStamina:
-    min: 10
-    max: 20
+    min: 1
+    max: 10
   defensePercent:
-    min: 4
-    max: 8
+    min: 1
+    max: 2
   critChancePercent:
-    min: 4
-    max: 8
+    min: 2
+    max: 4
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

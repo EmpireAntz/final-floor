@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Steel Helmet
   icon: {fileID: 21300000, guid: 38915d8de3e7ab649b93cf1cb2def656, type: 3}
   category: 2
-  equipSlot: 3
   tier: 2
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 3
+  damage:
+    min: 2
+    max: 8
+  maxHealth:
+    min: 4
+    max: 18
+  maxStamina:
+    min: 5
+    max: 25
+  defensePercent:
+    min: 5
+    max: 10
+  critChancePercent:
+    min: 1
+    max: 3
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

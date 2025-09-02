@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Drake Boots
   icon: {fileID: 21300000, guid: f814c56e2ff21ac418d2286022906ca7, type: 3}
   category: 2
-  equipSlot: 6
   tier: 3
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 6
+  damage:
+    min: 15
+    max: 35
+  maxHealth:
+    min: 15
+    max: 30
+  maxStamina:
+    min: 20
+    max: 60
+  defensePercent:
+    min: 4
+    max: 8
+  critChancePercent:
+    min: 2
+    max: 6
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Iron Armor
   icon: {fileID: 21300000, guid: 395ade3e3f17f914dbcdb6d2970351e6, type: 3}
   category: 2
-  equipSlot: 4
   tier: 3
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 4
+  damage:
+    min: 5
+    max: 15
+  maxHealth:
+    min: 40
+    max: 100
+  maxStamina:
+    min: 15
+    max: 40
+  defensePercent:
+    min: 6
+    max: 17
+  critChancePercent:
+    min: 2
+    max: 6
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}

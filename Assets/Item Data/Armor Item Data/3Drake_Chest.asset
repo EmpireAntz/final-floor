@@ -16,10 +16,23 @@ MonoBehaviour:
   displayName: Drake Armor
   icon: {fileID: 21300000, guid: bc2c072550051664daacce782213840d, type: 3}
   category: 2
-  equipSlot: 4
   tier: 3
-  addDamage: 0
-  addMaxHealth: 0
+  equipSlot: 4
+  damage:
+    min: 20
+    max: 40
+  maxHealth:
+    min: 20
+    max: 40
+  maxStamina:
+    min: 15
+    max: 40
+  defensePercent:
+    min: 6
+    max: 17
+  critChancePercent:
+    min: 2
+    max: 6
   heldPrefab: {fileID: 0}
   localPosition: {x: 0, y: 0, z: 0}
   localEulerAngles: {x: 0, y: 0, z: 0}
