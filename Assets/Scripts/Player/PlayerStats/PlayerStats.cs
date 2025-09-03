@@ -16,7 +16,7 @@ public class PlayerStats : MonoBehaviour
     public float exhaustionCooldown = 2.0f;
 
     [Header("Offense")]
-    public float damage = 10f;       // base damage
+    public float damage = 0f;       // base damage
     [Range(0f, 100f)] public float critChancePercent = 0f;
     
     [Header("Defense")]
