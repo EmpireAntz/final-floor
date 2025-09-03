@@ -4018,7 +4018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1594107934
 Transform:
   m_ObjectHideFlags: 0
@@ -4147,6 +4147,10 @@ PrefabInstance:
     - target: {fileID: 3661650219869078337, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
       propertyPath: m_Name
       value: Goblin
+      objectReference: {fileID: 0}
+    - target: {fileID: 3661650219869078337, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3661650219869078337, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
       propertyPath: m_TagString
@@ -5387,8 +5391,27 @@ MonoBehaviour:
   fadeOutSpeed: 8
   maxWeight: 1
   crossfade: 0.05
-  comboResetTime: 1
+  comboResetTime: 0.92
   clickCooldown: 0.05
+  slashPrefab: {fileID: 7752102325467070781, guid: 8b9600dc1b52acb4fa88336869b78553, type: 3}
+  slashParent: {fileID: 2107169969}
+  slashOnTimes:
+  - 0.25
+  - 0.3
+  - 0.35
+  slashOffTimes:
+  - 0.45
+  - 0.5
+  - 0.55
+  slashPlayOnEnable: 1
+  slashLocalPositions:
+  - {x: 0.118, y: 1.3890003, z: 0.474}
+  - {x: 0, y: 1.484, z: 0}
+  - {x: -0.07000016, y: 0.83800006, z: 0.000000026775524}
+  slashLocalEulers:
+  - {x: 352.72427, y: 338.53137, z: 337.34506}
+  - {x: 343.66028, y: 67.87489, z: 195.95845}
+  - {x: 301.67557, y: 0.91135067, z: 266.91855}
 --- !u!1001 &2135771058
 PrefabInstance:
   m_ObjectHideFlags: 0
