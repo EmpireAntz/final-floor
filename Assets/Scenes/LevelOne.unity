@@ -4265,6 +4265,135 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5318879822325348508, guid: af2b3e0e3a387f54280b28ca93f98c4b, type: 3}
   m_PrefabInstance: {fileID: 1672393360}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1681065589
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1681065591}
+  - component: {fileID: 1681065590}
+  m_Layer: 0
+  m_Name: Movement Sounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1681065590
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681065589}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1681065591
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681065589}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2107169969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1737100051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5240,6 +5369,7 @@ GameObject:
   - component: {fileID: 2107169981}
   - component: {fileID: 2107169985}
   - component: {fileID: 2107169986}
+  - component: {fileID: 2107169987}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5264,6 +5394,7 @@ Transform:
   - {fileID: 1573971546}
   - {fileID: 34928025}
   - {fileID: 1293190067}
+  - {fileID: 1681065591}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2107169971
@@ -5549,8 +5680,42 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 746901c134e4d6a4a84ce8400160f8b4, type: 3}
   - {fileID: 8300000, guid: 382f4bc2fbf3fbb40b14aa503ce759c0, type: 3}
   impactClips: []
-  whooshVolume: 0.9
+  whooshVolume: 0.55
   impactVolume: 1
+--- !u!114 &2107169987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107169968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2481bb95bbe2747aed33dcf3c228e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepAudioBlendTree
+  animator: {fileID: 2107169974}
+  locomotionLayerName: Base Layer
+  walkTreeState: Walk
+  runTreeState: Run
+  walkLeft: 0.15
+  walkRight: 0.65
+  runLeft: 0.1
+  runRight: 0.6
+  retriggerPadding: 0.08
+  source: {fileID: 1681065590}
+  defaultClips:
+  - {fileID: 8300000, guid: ca9147c51084cee4a8772c819f2be558, type: 3}
+  - {fileID: 8300000, guid: ca9147c51084cee4a8772c819f2be558, type: 3}
+  - {fileID: 8300000, guid: 7a53b4d7727df5741b2523095eb42fa2, type: 3}
+  - {fileID: 8300000, guid: 7b6953e2314707c4691513bdb499d40c, type: 3}
+  - {fileID: 8300000, guid: d8989f6005bbbf1478fea82bc78a3806, type: 3}
+  volume: 0.14
+  groundProbe: {fileID: 0}
+  probeDistance: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &2135771058
 PrefabInstance:
   m_ObjectHideFlags: 0
