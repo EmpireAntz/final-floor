@@ -20,6 +20,25 @@ public class ScreenFader : MonoBehaviour
     [Range(0.05f, 3f)] public float defaultTitleFadeIn = 0.4f;
     [Range(0.05f, 3f)] public float defaultTitleFadeOut = 0.3f;
 
+    [Header("Audio Fade")]
+    public AudioSource musicToFade;
+    public bool stopAndDestroyMusicOnLoad = true;
+    float _musicStartVol = 0.1f;
+    [Range(0.1f, 10f)] public float musicFadeOutDuration = 2f;
+
+
+    // ===== NEW: Boot splash options =====
+    [Header("Boot Splash (optional)")]
+    public bool fadeInOnBoot = true;                  // start black, then reveal menu
+    [TextArea] public string bootTitle = "";          // set text or leave blank for pure black fade
+    [Range(0.05f, 6f)] public float bootTitleFadeIn  = 0.6f;
+    [Range(0.00f, 6f)] public float bootTitleHold    = 0.5f;
+    [Range(0.05f, 6f)] public float bootTitleFadeOut = 0.4f;
+    [Range(0.05f, 6f)] public float bootScreenFadeIn = 0.6f;   // black -> menu UI
+    [Range(0f, 6f)] public float bootScreenHoldBeforeTitle = 1f; // stay black this long before showing title
+
+    // ====================================
+
     CanvasGroup _group;
     Image _img;
     TextMeshProUGUI _titleTMP;
@@ -40,14 +59,14 @@ public class ScreenFader : MonoBehaviour
         canvas.sortingOrder = short.MaxValue;
 
         _group = canvasGO.GetComponent<CanvasGroup>();
-        _group.alpha = 0f;
+        _group.alpha = 1f; // << NEW: start fully black so the menu is hidden at boot
 
         // Fullscreen black image
         var imgGO = new GameObject("FadeImage", typeof(Image));
         imgGO.transform.SetParent(canvasGO.transform, false);
         _img = imgGO.GetComponent<Image>();
         _img.color = fadeColor;
-        _img.raycastTarget = false;   // ← removed stray text
+        _img.raycastTarget = false;
 
         var rt = (RectTransform)imgGO.transform;
         rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
@@ -75,6 +94,15 @@ public class ScreenFader : MonoBehaviour
         trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one;
         trt.offsetMin = new Vector2(titleMargins.x, titleMargins.y);
         trt.offsetMax = new Vector2(-titleMargins.x, -titleMargins.y);
+    }
+
+    void Start()
+    {
+        // << NEW: one-time boot splash → fade into menu
+        if (fadeInOnBoot)
+            StartCoroutine(BootSequence());
+        else
+            StartCoroutine(FadeRoutine(0f, defaultFadeDuration)); // just fade in if you still want a quick reveal
     }
 
     // Simple fade → load → fade in
@@ -111,8 +139,18 @@ public class ScreenFader : MonoBehaviour
     IEnumerator LoadSequence(string sceneName, float outDur, float inDur)
     {
         yield return FadeOut(outDur);
+
         var op = SceneManager.LoadSceneAsync(sceneName);
         while (!op.isDone) yield return null;
+
+        // stop/destroy menu music once the new scene is in
+        if (musicToFade && stopAndDestroyMusicOnLoad)
+        {
+            musicToFade.Stop();
+            Destroy(musicToFade.gameObject);
+            musicToFade = null;
+        }
+
         yield return null; // settle one frame
         yield return FadeIn(inDur);
     }
@@ -123,7 +161,7 @@ public class ScreenFader : MonoBehaviour
         float outDur,
         float holdBefore,
         float holdAfter,
-        float inDur,     // ← was 'inDu' before
+        float inDur,
         float titleIn,
         float titleOut)
     {
@@ -146,6 +184,14 @@ public class ScreenFader : MonoBehaviour
         var op = SceneManager.LoadSceneAsync(sceneName);
         while (!op.isDone) yield return null;
 
+        // stop/destroy menu music once the new scene is in
+        if (musicToFade && stopAndDestroyMusicOnLoad)
+        {
+            musicToFade.Stop();
+            Destroy(musicToFade.gameObject);
+            musicToFade = null;
+        }
+
         // Optional hold after load
         if (holdAfter > 0f) yield return new WaitForSecondsRealtime(holdAfter);
 
@@ -161,21 +207,46 @@ public class ScreenFader : MonoBehaviour
     }
 
     IEnumerator FadeRoutine(float target, float duration)
+{
+    if (duration <= 0f)
     {
-        if (duration <= 0f) { _group.alpha = target; _img.raycastTarget = target > 0.001f; yield break; }
-
-        float start = _group.alpha;
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.unscaledDeltaTime / duration;
-            _group.alpha = Mathf.Lerp(start, target, t);
-            _img.raycastTarget = _group.alpha > 0.001f;
-            yield return null;
-        }
         _group.alpha = target;
         _img.raycastTarget = _group.alpha > 0.001f;
+
+        if (musicToFade && target >= 1f)
+            musicToFade.volume = 0f;
+        yield break;
     }
+
+    float start = _group.alpha;
+    float t = 0f;
+
+    if (musicToFade) _musicStartVol = musicToFade.volume;
+
+    while (t < 1f)
+    {
+        t += Time.unscaledDeltaTime / duration;
+        float a = Mathf.Lerp(start, target, t);
+        _group.alpha = a;
+        _img.raycastTarget = a > 0.001f;
+
+        // separate music fade logic
+        if (musicToFade && target >= 1f)
+        {
+            float musicT = Mathf.Clamp01(t * (duration / musicFadeOutDuration));
+            musicToFade.volume = Mathf.Lerp(_musicStartVol, 0f, musicT);
+        }
+
+        yield return null;
+    }
+
+    _group.alpha = target;
+    _img.raycastTarget = _group.alpha > 0.001f;
+
+    if (musicToFade && target >= 1f)
+        musicToFade.volume = 0f;
+}
+
 
     // Fade the title CanvasGroup alpha
     IEnumerator FadeTitle(float target, float duration)
@@ -193,4 +264,43 @@ public class ScreenFader : MonoBehaviour
         }
         _titleGroup.alpha = target;
     }
+
+    // ===== NEW: one-time boot splash sequence =====
+   // One-time boot splash: black -> title in -> title out -> black out -> menu
+// One-time boot splash: black -> hold -> title in -> title out -> black out -> menu
+IEnumerator BootSequence()
+{
+    // make sure we start fully black and block clicks
+    _group.alpha = 1f;
+    _img.raycastTarget = true;
+
+    // Hold on black before showing the title
+    if (bootScreenHoldBeforeTitle > 0f)
+        yield return new WaitForSecondsRealtime(bootScreenHoldBeforeTitle);
+
+    // If you provided boot text, fade it in, hold, fade it out
+    if (!string.IsNullOrEmpty(bootTitle) && _titleTMP && _titleGroup)
+    {
+        _titleTMP.text = bootTitle;
+        _titleTMP.enabled = true;
+        _titleGroup.alpha = 0f;
+
+        // fade in text over black
+        yield return FadeTitle(1f, bootTitleFadeIn);
+
+        // hold
+        if (bootTitleHold > 0f)
+            yield return new WaitForSecondsRealtime(bootTitleHold);
+
+        // fade text out (still on black)
+        yield return FadeTitle(0f, bootTitleFadeOut);
+        _titleTMP.enabled = false;
+    }
+
+    // finally fade the black overlay away to reveal the menu
+    yield return FadeIn(bootScreenFadeIn);
+}
+
+
+    // ===============================================
 }
