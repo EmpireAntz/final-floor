@@ -18,6 +18,10 @@ public class EnemyStats : MonoBehaviour
         int dmg = Mathf.Max(0, amount);
         currentHealth = Mathf.Max(0, currentHealth - dmg);
 
+        var flash = GetComponent<EnemyFlashMulti>();
+        if (flash) flash.Flash();
+
+
         Debug.Log($"[EnemyStats] {name} took {dmg} dmg from {(source ? source.name : "Unknown")} → HP {currentHealth}/{maxHealth}");
 
         if (currentHealth == 0)

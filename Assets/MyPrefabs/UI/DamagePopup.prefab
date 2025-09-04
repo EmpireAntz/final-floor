@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamagePopup
   text: {fileID: 3111752279063304770}
-  normalColor: {r: 0.7830189, g: 0.6356271, b: 0, a: 1}
-  critColor: {r: 0.7735849, g: 0, b: 0, a: 1}
+  normalColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  critColor: {r: 0.5660378, g: 0, b: 0, a: 1}
   lifetime: 0.8
-  riseSpeed: 0.5
-  jitter: {x: 0.2, y: 0.2, z: 0.2}
-  popScale: 0
+  riseSpeed: 0.2
+  jitter: {x: 0.5, y: 0.5, z: 0.5}
+  popScale: 2
   billboardToCamera: 1
 --- !u!1 &2835884145809068729
 GameObject:
