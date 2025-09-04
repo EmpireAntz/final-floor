@@ -19681,6 +19681,8 @@ GameObject:
   - component: {fileID: 4344482431919804316}
   - component: {fileID: 4262153048703099885}
   - component: {fileID: 5149463029921270666}
+  - component: {fileID: -9220392040027989614}
+  - component: {fileID: 3770597859219511111}
   m_Layer: 0
   m_Name: Stone slash
   m_TagString: Untagged
@@ -19696,7 +19698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7752102325467070781}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.024615759, y: -0.19450344, z: -0.20417802, w: 0.95910054}
+  m_LocalRotation: {x: -0.02461709, y: -0.19450705, z: -0.20417914, w: 0.9590996}
   m_LocalPosition: {x: 0.118, y: 1.3890003, z: 0.474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24568,3 +24570,40 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!135 &-9220392040027989614
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7752102325467070781}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2.11
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3770597859219511111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7752102325467070781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a4e64f63948a34a9e43734fe24f672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageOnHit
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  oneHitPerEnable: 1
