@@ -9895,5 +9895,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   oneHitPerEnable: 1
-  splatterChildName: Splatter
+  splatterFX: {fileID: 6483437337045369401}
   splatterDuration: 0.5

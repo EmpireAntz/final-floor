@@ -8,8 +8,8 @@ public class DamageOnHit : MonoBehaviour
     public bool oneHitPerEnable = true;
 
     PlayerStats _player;
-    UpperBodyComboController _combo;   // NEW
-    int _lastSwingIndex = 0;           // NEW
+    UpperBodyComboController _combo;  
+    int _lastSwingIndex = 0;           
 
     bool _hasHitThisEnable;
     Collider _col;
@@ -17,7 +17,7 @@ public class DamageOnHit : MonoBehaviour
     void Awake()
     {
         _player = GetComponentInParent<PlayerStats>();
-        _combo  = GetComponentInParent<UpperBodyComboController>(); // NEW
+        _combo  = GetComponentInParent<UpperBodyComboController>(); 
         _col = GetComponent<Collider>();
         _col.isTrigger = true;
     }
@@ -25,21 +25,25 @@ public class DamageOnHit : MonoBehaviour
     void OnEnable()
     {
         _hasHitThisEnable = false;
-        if (_combo) _combo.OnAttackStarted += OnAttackStarted;       // NEW
+        if (_combo) _combo.OnAttackStarted += OnAttackStarted;       
     }
 
     void OnDisable()
     {
-        if (_combo) _combo.OnAttackStarted -= OnAttackStarted;       // NEW
+        if (_combo) _combo.OnAttackStarted -= OnAttackStarted;      
     }
 
-    void OnAttackStarted(int step) => _lastSwingIndex = step;        // NEW
+    void OnAttackStarted(int step) => _lastSwingIndex = step;       
 
     void OnTriggerEnter(Collider other)
     {
         if (oneHitPerEnable && _hasHitThisEnable) return;
         if (!other.TryGetComponent(out EnemyStats enemy)) return;
         if ((enemyLayers.value & (1 << other.gameObject.layer)) == 0) return;
+
+        if (ScreenShake.Instance)
+        ScreenShake.Instance.Shake();
+
 
         int baseDmg  = Mathf.RoundToInt(_player ? _player.TotalDamage : 0f);
         float critPc = _player ? _player.TotalCritChancePct : 0f;

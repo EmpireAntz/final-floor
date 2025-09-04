@@ -969,6 +969,30 @@ MonoBehaviour:
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.15
   smoothFadeBack: 1
+--- !u!114 &522496109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522496099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1a356fff498f64ba6227fcac6425fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImpactSFX
+  variants:
+  - hits:
+    - {fileID: 8300000, guid: 3df9bbbc130ccb344af5f3fc793a630f, type: 3}
+    crits:
+    - {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
+  volume: 0.5
+  usePitchJitter: 1
+  pitchMin: 0.95
+  pitchMax: 1.05
+  spatialBlend: 1
+  minDistance: 1
+  maxDistance: 20
 --- !u!1 &541883427
 GameObject:
   m_ObjectHideFlags: 0
@@ -8650,6 +8674,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3661650219869078337, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
       insertIndex: -1
       addedObject: {fileID: 522496107}
+    - targetCorrespondingSourceObject: {fileID: 3661650219869078337, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 522496109}
   m_SourcePrefab: {fileID: 100100000, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
 --- !u!1 &1751602099
 GameObject:
@@ -9850,7 +9877,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 746901c134e4d6a4a84ce8400160f8b4, type: 3}
   - {fileID: 8300000, guid: 382f4bc2fbf3fbb40b14aa503ce759c0, type: 3}
   impactClips: []
-  whooshVolume: 0.55
+  whooshVolume: 0.45
   impactVolume: 1
 --- !u!114 &2107169987
 MonoBehaviour:
