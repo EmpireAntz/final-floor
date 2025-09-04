@@ -62,6 +62,10 @@ public class UpperBodyComboController : MonoBehaviour
     [Range(0f,1f)] public float impactVolume = 1.0f;
     // ------------------------------------
 
+    // ✅ New: expose current swing + event
+    public int CurrentStep => _step;
+    public event System.Action<int> OnAttackStarted;
+
     int   _upperLayer = -1;
     int   _attackTagHash;
     int   _step = -1;
@@ -120,7 +124,6 @@ public class UpperBodyComboController : MonoBehaviour
         }
         else if (_firedOn || _firedOff)
         {
-            // left attack state; reset guards
             _firedOn = _firedOff = false;
         }
 
@@ -132,16 +135,16 @@ public class UpperBodyComboController : MonoBehaviour
         if (!Mathf.Approximately(current, next))
             animator.SetLayerWeight(_upperLayer, next);
 
-        // 5) Detect leaving attack to start cooldown window (and ensure VFX off)
+        // 5) Leaving attack
         if (_wasAttacking && !attacking && !animator.IsInTransition(_upperLayer))
         {
             _lastAttackEndTime = Time.time;
             if (playImpactOnForceOff)
                 PlayOneShotSafe(PickClip(impactClips, Mathf.Clamp(_step,0,attackStates.Length-1)), impactVolume);
-            SlashOff();   // safety-off when leaving state
+            SlashOff();
         }
 
-        // 6) Release queued attack once current finished/left attack
+        // 6) Release queued attack
         if (_queuedNext && !animator.IsInTransition(_upperLayer))
         {
             st = animator.GetCurrentAnimatorStateInfo(_upperLayer);
@@ -164,7 +167,6 @@ public class UpperBodyComboController : MonoBehaviour
         var st = animator.GetCurrentAnimatorStateInfo(_upperLayer);
         bool inAttack = st.tagHash == _attackTagHash || IsAnyAttackState(st);
 
-        // If we're in the middle of an attack, just queue the next
         if (inAttack && st.normalizedTime < 1f)
         {
             _queuedNext = true;
@@ -177,22 +179,22 @@ public class UpperBodyComboController : MonoBehaviour
 
     void PlayNextAttack()
     {
-        // Reset combo if cooldown since last finished attack expired
         if (Time.time - _lastAttackEndTime > comboResetTime)
             _step = -1;
 
-        // ensure previous slash is not lingering when chaining
         if (playImpactOnForceOff)
             PlayOneShotSafe(PickClip(impactClips, Mathf.Clamp(_step,0,attackStates.Length-1)), impactVolume);
-        SlashOff();                 // force-off before starting next attack
+        SlashOff();
 
         _step = (_step + 1) % attackStates.Length;
 
-        // new attack: reset slash guards
         _firedOn = _firedOff = false;
 
         animator.CrossFadeInFixedTime(attackStates[_step], crossfade, _upperLayer, 0f);
         _nextClick = Time.time + clickCooldown;
+
+        // 🔔 notify which swing started (0/1/2)
+        OnAttackStarted?.Invoke(_step);
     }
 
     bool HasItemInSlot(EquipSlot slot)
@@ -211,7 +213,7 @@ public class UpperBodyComboController : MonoBehaviour
         return false;
     }
 
-    // ==================== Slash helpers (pooled under Player) ====================
+    // ==================== Slash helpers ====================
     void EnsureSlashInstance()
     {
         if (_slashInstance || !slashPrefab) return;
@@ -226,7 +228,6 @@ public class UpperBodyComboController : MonoBehaviour
         EnsureSlashInstance();
         if (!_slashInstance) return;
 
-        // Optional per-attack placement
         if (slashLocalPositions != null && idx < slashLocalPositions.Length)
             _slashInstance.transform.localPosition = slashLocalPositions[idx];
         if (slashLocalEulers != null && idx < slashLocalEulers.Length)
@@ -245,13 +246,12 @@ public class UpperBodyComboController : MonoBehaviour
         if (ps) ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _slashInstance.SetActive(false);
     }
-    // ============================================================================
 
     // ==================== SFX helpers ====================
     void PlayOneShotSafe(AudioClip clip, float vol)
     {
         if (!clip || !sfxSource) return;
-        sfxSource.pitch = 1f; // fixed pitch
+        sfxSource.pitch = 1f;
         sfxSource.PlayOneShot(clip, vol);
     }
 
@@ -261,5 +261,4 @@ public class UpperBodyComboController : MonoBehaviour
         if (idx < 0 || idx >= arr.Length) idx = 0;
         return arr[idx] ? arr[idx] : arr[0];
     }
-    // =====================================================
 }
