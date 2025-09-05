@@ -653,7 +653,7 @@ MonoBehaviour:
   bootMusicDelay: 1
   playBootMusicOnBoot: 1
   nextSceneMusic: {fileID: 8300000, guid: 7036e1f27a1570e448ceb27ee9eb76cb, type: 3}
-  nextSceneMusicVolume: 0.04
+  nextSceneMusicVolume: 0.05
   nextSceneMusicFadeInDuration: 3
   interTitleClip: {fileID: 8300000, guid: 6303796f76424da41adaee2a629b1e3e, type: 3}
   interTitleVolume: 0.4
