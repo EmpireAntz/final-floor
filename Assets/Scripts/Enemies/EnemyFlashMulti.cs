@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public class EnemyFlashMulti : MonoBehaviour
 {
     [Header("Flash Settings")]
-    public Color hitColor = Color.red;     // tint color
+    private Color hitColor = new Color(2f, 0f, 0f, 1f);
+
     public float flashDuration = 0.15f;    // how long flash lasts
     public bool smoothFadeBack = true;     // if true, lerps back to original
 

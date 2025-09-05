@@ -31,8 +31,8 @@ MonoBehaviour:
     min: 1
     max: 2
   critChancePercent:
-    min: 25
-    max: 25
+    min: 50
+    max: 50
   heldPrefab: {fileID: 5766980432384555104, guid: 9f9f9023a71fe8c44a658e49b0535516, type: 3}
   localPosition: {x: 0.035, y: 0.11, z: 0.15}
   localEulerAngles: {x: 275.86316, y: 336.78152, z: 203.27626}
