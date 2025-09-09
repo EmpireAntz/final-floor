@@ -90,12 +90,16 @@ public class PlayerStats : MonoBehaviour
     // -------- Health helpers --------
     public void TakeDamage(float amount)
     {
-    
-         float reduction = Mathf.Clamp01(TotalDefensePct / 100f);
-         amount *= (1f - reduction);
+
+        float reduction = Mathf.Clamp01(TotalDefensePct / 100f);
+        amount *= (1f - reduction);
 
         health = Mathf.Max(0f, health - Mathf.Max(0f, amount));
         CallChanged();
+        
+        //trigger flash
+        var flash = GetComponent<PlayerFlash>();
+        if (flash) flash.Flash();
     }
     public void Heal(float amount)
     {
