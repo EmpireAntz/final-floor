@@ -65,13 +65,32 @@ public class EnemyMeleeAttack : MonoBehaviour
     }
 
     // Call this from the attack animation event at impact frame
-    public void DealDamage() {
+    public void DealDamage()
+    {
         var p = attackPoint ? attackPoint.position : transform.position;
-        foreach (var c in Physics.OverlapSphere(p, hitRadius, playerMask)) {
-            if (c.TryGetComponent(out PlayerStats ps)) { ps.TakeDamage(damage); break; }
-            var ps2 = c.GetComponentInParent<PlayerStats>(); if (ps2) { ps2.TakeDamage(damage); break; }
+        bool didHit = false;
+
+        foreach (var c in Physics.OverlapSphere(p, hitRadius, playerMask))
+        {
+            if (c.TryGetComponent(out PlayerStats ps)) {
+                ps.TakeDamage(damage);
+                didHit = true;
+                break;
+            }
+            var ps2 = c.GetComponentInParent<PlayerStats>();
+            if (ps2) {
+                ps2.TakeDamage(damage);
+                didHit = true;
+                break;
+            }
+        }
+
+        if (didHit) {
+            var sfx = GetComponent<EnemySFX>();
+            if (sfx) sfx.PlayImpactSFX();
         }
     }
+
 
     // Optional: call this via an Animation Event at the END of the clip to time unlock precisely
     public void AnimEvent_EndAttack() {
