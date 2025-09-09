@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyMeleeAttackLite : MonoBehaviour
+public class EnemyMeleeAttack : MonoBehaviour
 {
     public Transform player;               // assign or auto-find
     public Animator anim;                  // assign if Animator on a child
