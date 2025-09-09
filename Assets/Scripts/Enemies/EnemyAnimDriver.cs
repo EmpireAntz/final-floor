@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyAnimDriver2D : MonoBehaviour
+public class EnemyAnimDriver : MonoBehaviour
 {
     public Animator anim; // assign in Inspector if Animator is on a child
     NavMeshAgent agent;

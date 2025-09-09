@@ -24,10 +24,13 @@ public class EnemyStats : MonoBehaviour
 
         Debug.Log($"[EnemyStats] {name} took {dmg} dmg from {(source ? source.name : "Unknown")} → HP {currentHealth}/{maxHealth}");
 
-        if (currentHealth == 0)
+        if (currentHealth <= 0)
         {
             Debug.Log($"[EnemyStats] {name} defeated.");
-            // (optional) handle death later
+            currentHealth = 0;
+            var death = GetComponent<EnemyDeath>();
+            if (death) death.Die();
+
         }
     }
 
