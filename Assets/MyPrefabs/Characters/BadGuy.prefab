@@ -6998,6 +6998,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyChase
   player: {fileID: 0}
   chaseRange: 10
+  eye: {fileID: 0}
+  visionBlockers:
+    serializedVersion: 2
+    m_Bits: 9
+  fovDegrees: 360
 --- !u!114 &367503845926626144
 MonoBehaviour:
   m_ObjectHideFlags: 0
