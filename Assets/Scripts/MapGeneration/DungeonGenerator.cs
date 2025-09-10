@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -66,6 +67,17 @@ public class DungeonGenerator : MonoBehaviour
     private Transform startRoomInstance;
     private readonly List<Transform> allRoomInstances = new List<Transform>();
     private RoomBehaviour[] roomRefs;
+
+    [Header("Enemy Spawn")]
+    public GameObject[] enemyPrefabs;
+    public Vector2Int enemiesPerRoom = new Vector2Int(1, 2);
+    public bool skipStartRoomForEnemies = true;
+    public float spawnRadius = 1.5f; // random circle around the marker
+
+    [Header("NavMesh")]
+    public NavMeshSurface navSurface;  // assign in Inspector (on the same object or parent)
+
+
 
     void Start()
     {
@@ -192,7 +204,7 @@ public class DungeonGenerator : MonoBehaviour
         if (player && startRoomInstance)
         {
             Vector3 spawnPos = FindStartSpawnPosition();
-            Vector3 faceDir  = GetFacingTowardOpenDoor(spawnPos);
+            Vector3 faceDir = GetFacingTowardOpenDoor(spawnPos);
             Quaternion lookRot = Quaternion.LookRotation(faceDir, Vector3.up);
 
             var cc = player.GetComponent<CharacterController>();
@@ -206,10 +218,13 @@ public class DungeonGenerator : MonoBehaviour
 
         // Door dedupe, then content
         DeduplicateSharedDoors();
-        SpawnBoxesInRooms();
 
-        // NEW: Spawn start-room props (table + sword)
+        SpawnBoxesInRooms();
         SpawnStartRoomProps();
+
+        RebuildNavMesh();
+        SpawnEnemiesSimple();   
+
     }
 
     // -------- Neighbors / Connections --------
@@ -471,6 +486,52 @@ public class DungeonGenerator : MonoBehaviour
 
         return hasAny;
     }
+
+    void RebuildNavMesh()
+    {
+        if (!navSurface)
+            navSurface = GetComponent<NavMeshSurface>() ?? FindObjectOfType<NavMeshSurface>();
+
+        if (navSurface)
+            navSurface.BuildNavMesh();    // runtime bake
+        else
+            Debug.LogWarning("No NavMeshSurface found — cannot build NavMesh.");
+    }
+
+
+    void SpawnEnemiesSimple()
+    {
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0) return;
+
+        foreach (var room in allRoomInstances)
+        {
+            if (!room) continue;
+            if (skipStartRoomForEnemies && room == startRoomInstance) continue;
+
+            Vector3 basePos;
+            if (!TryGetWorldBounds(room, out Bounds b)) basePos = room.position;
+            else basePos = b.center;
+
+            int count = Random.Range(enemiesPerRoom.x, enemiesPerRoom.y + 1);
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 r = Random.insideUnitCircle * spawnRadius;
+                Vector3 pos = basePos + new Vector3(r.x, 0f, r.y);
+
+                if (Physics.Raycast(pos + Vector3.up * 5f, Vector3.down, out var hit, 20f, groundMask))
+                    pos = hit.point;
+
+                var prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+                if (!prefab) continue;
+
+                var enemy = Instantiate(prefab, pos, Quaternion.identity, transform);
+
+                var chase  = enemy.GetComponent<EnemyChase>();             if (chase  && !chase.player  && player) chase.player = player;
+                var attack = enemy.GetComponent<EnemyMeleeAttack>();   if (attack && !attack.player && player) attack.player = player;
+            }
+        }
+    }
+
 
     void DeduplicateSharedDoors()
     {
